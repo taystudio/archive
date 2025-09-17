@@ -146,6 +146,7 @@
         top: 0;
         left: 0;
         width: 100%;
+        min-height: 600px;
         aspect-ratio: 20 / 9; /* 화면 높이 100% : 원래는 height: 700px 이었음*/ 
         background-image: url('../assets/images/backImage/dark-backgoround.png'); /* 실제 이미지 파일의 경로로 바꾸세요 */
         background-size: cover; /* 이미지를 컨테이너에 맞게 조절합니다. */
