@@ -202,6 +202,15 @@
 }
 
 
+/* 화면이 800px 이하일 때 */
+@media (max-width: 1500px) {
+  .For_details {
+    width: 300px;
+    margin-right:700px;
+    font-size: 18px;
+  }
+}
+
 
 @media screen and (max-width: 1030px){
     
