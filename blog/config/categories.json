@@ -1,0 +1,96 @@
+[
+  {
+    "slug": "web-dev",
+    "name": "Web Development",
+    "children": [
+      {
+        "slug": "spring-boot",
+        "name": "Java: Spring Boot"
+      },
+      {
+        "slug": "fastapi",
+        "name": "Python: FastAPI"
+      },
+      {
+        "slug": "os-settings",
+        "name": "OS Settings"
+      }
+    ]
+  },
+  {
+    "slug": "cloud",
+    "name": "Cloud & Architecture",
+    "children": [
+      {
+        "slug": "aws",
+        "name": "AWS"
+      },
+      {
+        "slug": "server-setup",
+        "name": "Server Setup"
+      },
+      {
+        "slug": "database",
+        "name": "Database"
+      },
+      {
+        "slug": "sub-4",
+        "name": "하위 카테고리"
+      },
+      {
+        "slug": "sub-5",
+        "name": "하위 카테고리"
+      }
+    ]
+  },
+  {
+    "slug": "reviews",
+    "name": "Reviews",
+    "children": [
+      {
+        "slug": "career",
+        "name": "취업 / 이직"
+      },
+      {
+        "slug": "grad-school",
+        "name": "대학원"
+      },
+      {
+        "slug": "conferences",
+        "name": "컨퍼런스"
+      }
+    ]
+  },
+  {
+    "slug": "study",
+    "name": "Study",
+    "children": [
+      {
+        "slug": "system-design",
+        "name": "System Design Book"
+      }
+    ]
+  },
+  {
+    "slug": "errors",
+    "name": "Error Docs",
+    "children": [
+      {
+        "slug": "java",
+        "name": "Java"
+      },
+      {
+        "slug": "python",
+        "name": "Python"
+      }
+    ]
+  },
+  {
+    "slug": "data",
+    "name": "Data Analysis & Statisticss"
+  },
+  {
+    "slug": "finance",
+    "name": "Finance & Stocks"
+  }
+]

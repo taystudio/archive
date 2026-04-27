@@ -1,0 +1,19 @@
+/*
+ * 사용자 커스텀 CSS — Settings 화면에서 편집 가능
+ *
+ * 사용 가능한 CSS 변수 (theme 별로 자동 변경됨):
+ *   --bg, --surface, --fg, --muted, --muted-2,
+ *   --accent, --accent-soft, --border, --border-2,
+ *   --table-head-bg, --table-row-stripe
+ *
+ * 자주 쓰는 셀렉터:
+ *   .prose                  — 발행된 포스트 본문
+ *   .toastui-editor-contents — 에디터 미리보기
+ *   .card-hover             — 포스트 카드
+ *   .ad-slot                — 광고 슬롯 컨테이너
+ *
+ * 예시:
+ *   .prose h1 { font-family: 'Times New Roman', serif; }
+ *   .prose blockquote { border-left-color: gold; }
+ *   .prose pre { background: #1a1a2e !important; }
+ */

@@ -1,0 +1,32 @@
+{
+  "title": "Tay & Eun",
+  "description": "엔지니어 TayLee의 기술/커리어 기록 아카이브",
+  "menu": [
+    {
+      "label": "Home",
+      "href": "/",
+      "external": false
+    },
+    {
+      "label": "Tags",
+      "href": "/tags",
+      "external": false
+    },
+    {
+      "label": "방명록",
+      "href": "/guestbook",
+      "external": false
+    },
+    {
+      "label": "About",
+      "href": "/about",
+      "external": false
+    },
+    {
+      "label": "Portfolio",
+      "href": "/",
+      "external": true,
+      "portfolio": true
+    }
+  ]
+}

@@ -1,0 +1,503 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --fg: #1c1c1e;
+  --muted: #6b6b70;
+  --muted-2: #8a8a8f;
+  --accent: #3f6f54;
+  --accent-soft: #e9f0ec;
+  --border: #ececea;
+  --border-2: #f2f2f0;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 4px 16px rgba(16, 24, 40, 0.06);
+  --ad-label: #9a9aa0;
+}
+
+.dark {
+  --bg: #0f1012;
+  --surface: #16181c;
+  --fg: #ececed;
+  --muted: #9a9aa0;
+  --muted-2: #6b6b70;
+  --accent: #8fb89e;
+  --accent-soft: rgba(143, 184, 158, 0.12);
+  --border: #24262b;
+  --border-2: #1b1d21;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --ad-label: #6b6b70;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Pretendard', 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'ss01', 'cv01';
+}
+
+/* --- Write/Admin button toggle based on gh_pat (set by inline head script) --- */
+.wb-write { display: none; }
+.wb-admin { display: inline-flex; align-items: center; }
+html.has-gh-pat .wb-write { display: inline-flex; align-items: center; }
+html.has-gh-pat .wb-admin { display: none; }
+
+body {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+a { color: var(--accent); transition: color 150ms ease-out; }
+a:hover { text-decoration: underline; }
+
+::selection { background: var(--accent-soft); color: var(--fg); }
+
+button, a { transition: background-color 150ms ease-out, color 150ms ease-out, border-color 150ms ease-out, opacity 150ms ease-out; }
+
+/* --- Text alignment utilities (used by editor alignment buttons) --- */
+.prose .text-left,
+.toastui-editor-contents .text-left { text-align: left !important; }
+.prose .text-center,
+.toastui-editor-contents .text-center { text-align: center !important; }
+.prose .text-right,
+.toastui-editor-contents .text-right { text-align: right !important; }
+
+/* Force children (Toast UI wraps content in <p> with its own left align) to inherit */
+.prose .text-left *,
+.prose .text-center *,
+.prose .text-right *,
+.toastui-editor-contents .text-left *,
+.toastui-editor-contents .text-center *,
+.toastui-editor-contents .text-right * {
+  text-align: inherit !important;
+}
+
+/* Kill the default <p> margin collapse that creates a visible blank line
+   above/below the wrapped paragraph. */
+.prose .text-left > *:first-child,
+.prose .text-center > *:first-child,
+.prose .text-right > *:first-child,
+.toastui-editor-contents .text-left > *:first-child,
+.toastui-editor-contents .text-center > *:first-child,
+.toastui-editor-contents .text-right > *:first-child {
+  margin-top: 0 !important;
+}
+.prose .text-left > *:last-child,
+.prose .text-center > *:last-child,
+.prose .text-right > *:last-child,
+.toastui-editor-contents .text-left > *:last-child,
+.toastui-editor-contents .text-center > *:last-child,
+.toastui-editor-contents .text-right > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* Tables inside alignment wrappers — align the whole table, not only cell text */
+.prose .text-center table,
+.toastui-editor-contents .text-center table {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.prose .text-right table,
+.toastui-editor-contents .text-right table {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+.prose .text-left table,
+.toastui-editor-contents .text-left table {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+.custom-toolbar-btn:hover,
+.align-toolbar-btn:hover,
+.tbl-toolbar-btn:hover {
+  background: var(--accent-soft) !important;
+  color: var(--accent) !important;
+}
+
+/* Sit alongside Toast UI's native toolbar icons at matching height */
+.toastui-editor-toolbar .custom-toolbar-btn {
+  margin: 0;
+}
+
+/* --- Reading progress bar (top) --- */
+.reading-progress {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 2px;
+  background: var(--accent);
+  z-index: 50;
+  width: 0%;
+  transition: width 80ms linear;
+}
+
+/* --- Ad slot reserve (CLS prevention) --- */
+.ad-slot {
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.ad-slot::before {
+  content: 'Sponsored';
+  position: absolute;
+  top: 6px;
+  left: 10px;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ad-label);
+  z-index: 1;
+  pointer-events: none;
+}
+.ad-slot--inline { min-height: 280px; }
+.ad-slot--rail { min-height: 600px; }
+.ad-slot--mobile-sticky { min-height: 60px; margin: 0; border-radius: 0; border-left: 0; border-right: 0; border-bottom: 0; }
+.ad-slot--infeed { min-height: 140px; }
+
+/* --- Post card hover lift --- */
+.card-hover {
+  transition: transform 180ms ease-out, box-shadow 180ms ease-out, border-color 180ms ease-out;
+}
+.card-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-soft);
+}
+
+pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+}
+
+/* --- Prose (article body) tuning --- */
+.prose {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--fg);
+}
+.prose :where(h1, h2, h3, h4) { color: var(--fg); letter-spacing: -0.01em; }
+.prose :where(h2) { margin-top: 2.4em; margin-bottom: 0.8em; }
+.prose :where(h3) { margin-top: 1.8em; margin-bottom: 0.6em; }
+.prose :where(p, li) { color: var(--fg); }
+.prose :where(p) { margin: 1.2em 0; }
+.prose :where(a) { color: var(--accent); text-underline-offset: 3px; }
+.prose :where(blockquote) {
+  border-left: 3px solid var(--accent-soft);
+  background: var(--accent-soft);
+  padding: 0.8em 1.1em;
+  border-radius: 0 8px 8px 0;
+  color: var(--fg);
+  font-style: normal;
+}
+.prose :where(hr) { border-color: var(--border); margin: 2.5em 0; }
+
+/* Toast UI Editor overrides */
+.toastui-editor-defaultUI {
+  border: none !important;
+  height: 100% !important;
+}
+.toastui-editor-main {
+  background: var(--bg) !important;
+}
+.dark .toastui-editor-defaultUI,
+.dark .toastui-editor-toolbar,
+.dark .toastui-editor-defaultUI-toolbar {
+  background: transparent !important;
+}
+.dark .toastui-editor-contents,
+.dark .toastui-editor-md-container,
+.dark .toastui-editor-ww-container {
+  background: var(--bg) !important;
+  color: var(--fg) !important;
+}
+.dark .toastui-editor-contents * {
+  color: var(--fg) !important;
+}
+
+/* --- Code block language autocomplete dropdown --- */
+.codeblock-lang-autocomplete {
+  position: fixed;
+  z-index: 9999;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  max-height: 280px;
+  overflow-y: auto;
+  font-size: 13px;
+  padding: 4px;
+  box-sizing: border-box;
+}
+.codeblock-lang-autocomplete .item {
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.codeblock-lang-autocomplete .item:hover,
+.codeblock-lang-autocomplete .item.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.codeblock-lang-autocomplete .item strong {
+  font-weight: 600;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.codeblock-lang-autocomplete .item .id {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+.codeblock-lang-autocomplete .item .aliases {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-width: 0;
+}
+.codeblock-lang-autocomplete .empty {
+  padding: 10px 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* --- Table styling — theme-adaptive via color-mix --- */
+:root {
+  --table-head-bg: color-mix(in srgb, var(--fg) 7%, var(--surface));
+  --table-head-fg: var(--fg);
+  --table-row-stripe: color-mix(in srgb, var(--fg) 2%, var(--surface));
+  --table-hover: var(--accent-soft);
+}
+
+/* --- classic (default) --- */
+.prose table,
+.toastui-editor-contents table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: auto;
+  width: auto;
+  max-width: 100%;
+  margin: 1.4em 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.92em;
+}
+.prose table th,
+.prose table td,
+.toastui-editor-contents table th,
+.toastui-editor-contents table td {
+  padding: 10px 14px;
+  min-width: 80px;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+  word-break: break-word;
+}
+.prose table th:last-child,
+.prose table td:last-child,
+.toastui-editor-contents table th:last-child,
+.toastui-editor-contents table td:last-child {
+  border-right: none;
+}
+.prose table tr:last-child td,
+.toastui-editor-contents table tr:last-child td {
+  border-bottom: none;
+}
+.prose thead th,
+.toastui-editor-contents table thead th {
+  background: var(--table-head-bg);
+  color: var(--table-head-fg);
+  font-weight: 600;
+}
+/* Force descendant text color (Toast UI wraps cell content in <p>) */
+.prose thead th,
+.prose thead th *,
+.toastui-editor-contents table thead th,
+.toastui-editor-contents table thead th * {
+  color: var(--table-head-fg) !important;
+}
+.prose tbody td,
+.prose tbody td *,
+.toastui-editor-contents table tbody td,
+.toastui-editor-contents table tbody td * {
+  color: var(--fg) !important;
+}
+.prose tbody tr:nth-child(even) td,
+.toastui-editor-contents table tbody tr:nth-child(even) td {
+  background: var(--table-row-stripe);
+}
+.prose tbody tr:hover td,
+.toastui-editor-contents table tbody tr:hover td {
+  background: var(--table-hover);
+}
+
+/* Custom drag-to-resize cursors — override Toast UI cell defaults */
+.ProseMirror.tbl-col-resize,
+.ProseMirror.tbl-col-resize * { cursor: col-resize !important; }
+.ProseMirror.tbl-row-resize,
+.ProseMirror.tbl-row-resize * { cursor: row-resize !important; }
+
+/* Preserve newlines inside table cells (editor + published) so Enter-induced
+   \n in text nodes renders as visible line breaks. Target ALL descendants of
+   cells to beat Toast UI's default whitespace-normal on <p>. */
+.toastui-editor-contents td,
+.toastui-editor-contents th,
+.toastui-editor-contents td *,
+.toastui-editor-contents th *,
+.prose td,
+.prose th,
+.prose td *,
+.prose th * {
+  white-space: pre-wrap !important;
+  word-break: break-word;
+}
+
+/* Editor preview uses !important due to Toast UI defaults */
+.toastui-editor-contents table { border: 1px solid var(--border) !important; border-radius: 8px !important; overflow: hidden !important; }
+.toastui-editor-contents table thead th { background: var(--table-head-bg) !important; color: var(--table-head-fg) !important; font-weight: 600 !important; }
+.toastui-editor-contents table th, .toastui-editor-contents table td {
+  border: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  border-right: 1px solid var(--border) !important;
+}
+.toastui-editor-contents table th:last-child, .toastui-editor-contents table td:last-child { border-right: none !important; }
+.toastui-editor-contents table tr:last-child td { border-bottom: none !important; }
+
+/* --- Table style: minimal (no outer border, bottom-line header) --- */
+html[data-table-style="minimal"] .prose table,
+html[data-table-style="minimal"] .toastui-editor-contents table {
+  border: none;
+  border-radius: 0;
+  margin: 1.4em 0;
+}
+html[data-table-style="minimal"] {
+  --table-head-bg: transparent;
+  --table-head-fg: var(--fg);
+}
+html[data-table-style="minimal"] .prose thead th,
+html[data-table-style="minimal"] .toastui-editor-contents table thead th {
+  background: transparent !important;
+  border-bottom: 2px solid var(--fg) !important;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  padding: 8px 12px;
+}
+html[data-table-style="minimal"] .prose td,
+html[data-table-style="minimal"] .toastui-editor-contents table td {
+  border-right: none !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 8px 12px !important;
+}
+html[data-table-style="minimal"] .prose tbody tr:nth-child(even) td,
+html[data-table-style="minimal"] .toastui-editor-contents table tbody tr:nth-child(even) td {
+  background: transparent !important;
+}
+
+/* --- Table style: striped (strong alternating) --- */
+html[data-table-style="striped"] {
+  --table-head-bg: var(--accent);
+  --table-head-fg: #ffffff;
+}
+html[data-table-style="striped"] .prose tbody tr:nth-child(odd) td,
+html[data-table-style="striped"] .toastui-editor-contents table tbody tr:nth-child(odd) td {
+  background: var(--surface);
+}
+html[data-table-style="striped"] .prose tbody tr:nth-child(even) td,
+html[data-table-style="striped"] .toastui-editor-contents table tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--fg) 5%, var(--surface)) !important;
+}
+html[data-table-style="striped"] .prose thead th,
+html[data-table-style="striped"] .toastui-editor-contents table thead th {
+  text-transform: uppercase;
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+}
+
+/* --- Table style: card (each row = card with gap) --- */
+html[data-table-style="card"] .prose table,
+html[data-table-style="card"] .toastui-editor-contents table {
+  border: none !important;
+  border-radius: 0 !important;
+  border-collapse: separate !important;
+  border-spacing: 0 8px !important;
+  background: transparent !important;
+}
+html[data-table-style="card"] {
+  --table-head-bg: transparent;
+  --table-head-fg: var(--muted);
+}
+html[data-table-style="card"] .prose thead th,
+html[data-table-style="card"] .toastui-editor-contents table thead th {
+  background: transparent !important;
+  text-transform: uppercase;
+  font-size: 0.75em;
+  letter-spacing: 0.06em;
+  padding: 4px 12px !important;
+  border: none !important;
+}
+html[data-table-style="card"] .prose tbody tr td,
+html[data-table-style="card"] .toastui-editor-contents table tbody tr td {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-right: 1px solid var(--border) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 12px 14px !important;
+}
+html[data-table-style="card"] .prose tbody tr td:first-child,
+html[data-table-style="card"] .toastui-editor-contents table tbody tr td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-right: 0 !important;
+}
+html[data-table-style="card"] .prose tbody tr td:last-child,
+html[data-table-style="card"] .toastui-editor-contents table tbody tr td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+html[data-table-style="card"] .prose tbody tr td:not(:first-child):not(:last-child),
+html[data-table-style="card"] .toastui-editor-contents table tbody tr td:not(:first-child):not(:last-child) {
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+/* --- Table style: compact (dense) --- */
+html[data-table-style="compact"] .prose th,
+html[data-table-style="compact"] .prose td,
+html[data-table-style="compact"] .toastui-editor-contents table th,
+html[data-table-style="compact"] .toastui-editor-contents table td {
+  padding: 5px 10px !important;
+  font-size: 0.85em !important;
+}

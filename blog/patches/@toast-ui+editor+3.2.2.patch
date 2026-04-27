@@ -1,0 +1,160 @@
+diff --git a/node_modules/@toast-ui/editor/dist/esm/index.js b/node_modules/@toast-ui/editor/dist/esm/index.js
+index d966ba8..20d8f34 100644
+--- a/node_modules/@toast-ui/editor/dist/esm/index.js
++++ b/node_modules/@toast-ui/editor/dist/esm/index.js
+@@ -15137,7 +15137,9 @@ function getChildrenHTML(node, typeName) {
+         .trim();
+ }
+ function getHTMLAttrsByHTMLString(html) {
+-    html = html.match(reHTMLTag)[0];
++    var _tagMatch = html.match(reHTMLTag);
++    if (!_tagMatch) return {};
++    html = _tagMatch[0];
+     var attrs = html.match(new RegExp(ATTRIBUTE$1, 'g'));
+     return attrs
+         ? attrs.reduce(function (acc, attr) {
+@@ -16276,7 +16278,7 @@ var CellSelection = /** @class */ (function (_super) {
+         var map = TableOffsetMap.create(startCellPos);
+         var selectionInfo = map.getRectOffsets(startCellPos, endCellPos);
+         var ranges = getSelectionRanges(doc, map, selectionInfo);
+-        _this = _super.call(this, ranges[0].$from, ranges[0].$to, ranges) || this;
++        _this = Reflect.construct(_super, [ranges[0].$from, ranges[0].$to, ranges], CellSelection) || this;
+         _this.startCell = startCellPos;
+         _this.endCell = endCellPos;
+         _this.offsetMap = map;
+@@ -18830,7 +18832,7 @@ var TableRow = /** @class */ (function (_super) {
+         get: function () {
+             return {
+                 content: '(tableHeadCell | tableBodyCell)*',
+-                attrs: __assign$1({ rawHTML: { default: null } }, getDefaultCustomAttrs()),
++                attrs: __assign$1({ rawHTML: { default: null }, rowHeight: { default: null } }, getDefaultCustomAttrs()),
+                 parseDOM: [
+                     {
+                         tag: 'tr',
+@@ -18846,7 +18848,11 @@ var TableRow = /** @class */ (function (_super) {
+                 ],
+                 toDOM: function (_a) {
+                     var attrs = _a.attrs;
+-                    return ['tr', getCustomAttrs(attrs), 0];
++                    var customAttrs = getCustomAttrs(attrs);
++                    if (attrs.rowHeight) {
++                        customAttrs.style = (customAttrs.style ? customAttrs.style + ';' : '') + 'height:' + attrs.rowHeight + 'px';
++                    }
++                    return ['tr', customAttrs, 0];
+                 },
+             };
+         },
+@@ -18872,12 +18878,15 @@ var TableHeadCell = /** @class */ (function (_super) {
+         get: function () {
+             return {
+                 content: 'paragraph+',
+-                attrs: __assign$1({ align: { default: null }, className: { default: null }, rawHTML: { default: null }, colspan: { default: null }, extended: { default: null } }, getDefaultCustomAttrs()),
++                attrs: __assign$1({ align: { default: null }, className: { default: null }, rawHTML: { default: null }, colspan: { default: null }, extended: { default: null }, cellWidth: { default: null } }, getDefaultCustomAttrs()),
+                 isolating: true,
+                 parseDOM: [createParsedCellDOM('th')],
+                 toDOM: function (_a) {
+                     var attrs = _a.attrs;
+                     var cellAttrs = createCellAttrs(attrs);
++                    if (attrs.cellWidth) {
++                        cellAttrs.style = (cellAttrs.style ? cellAttrs.style + ';' : '') + 'width:' + attrs.cellWidth + 'px;min-width:' + attrs.cellWidth + 'px;max-width:' + attrs.cellWidth + 'px';
++                    }
+                     return ['th', __assign$1(__assign$1({}, cellAttrs), getCustomAttrs(attrs)), 0];
+                 },
+             };
+@@ -18911,12 +18920,16 @@ var TableBodyCell = /** @class */ (function (_super) {
+                     colspan: { default: null },
+                     rowspan: { default: null },
+                     extended: { default: null },
++                    cellWidth: { default: null },
+                 },
+                 isolating: true,
+                 parseDOM: [createParsedCellDOM('td')],
+                 toDOM: function (_a) {
+                     var attrs = _a.attrs;
+                     var cellAttrs = createCellAttrs(attrs);
++                    if (attrs.cellWidth) {
++                        cellAttrs.style = (cellAttrs.style ? cellAttrs.style + ';' : '') + 'width:' + attrs.cellWidth + 'px;min-width:' + attrs.cellWidth + 'px;max-width:' + attrs.cellWidth + 'px';
++                    }
+                     return ['td', cellAttrs, 0];
+                 },
+             };
+diff --git a/node_modules/@toast-ui/editor/dist/toastui-editor.js b/node_modules/@toast-ui/editor/dist/toastui-editor.js
+index dd572b1..32ec9d2 100644
+--- a/node_modules/@toast-ui/editor/dist/toastui-editor.js
++++ b/node_modules/@toast-ui/editor/dist/toastui-editor.js
+@@ -16397,7 +16397,9 @@ function getChildrenHTML(node, typeName) {
+         .trim();
+ }
+ function getHTMLAttrsByHTMLString(html) {
+-    html = html.match(reHTMLTag)[0];
++    var _tagMatch = html.match(reHTMLTag);
++    if (!_tagMatch) return {};
++    html = _tagMatch[0];
+     var attrs = html.match(new RegExp(ATTRIBUTE, 'g'));
+     return attrs
+         ? attrs.reduce(function (acc, attr) {
+@@ -17586,7 +17588,7 @@ var CellSelection = /** @class */ (function (_super) {
+         var map = TableOffsetMap.create(startCellPos);
+         var selectionInfo = map.getRectOffsets(startCellPos, endCellPos);
+         var ranges = getSelectionRanges(doc, map, selectionInfo);
+-        _this = _super.call(this, ranges[0].$from, ranges[0].$to, ranges) || this;
++        _this = Reflect.construct(_super, [ranges[0].$from, ranges[0].$to, ranges], CellSelection) || this;
+         _this.startCell = startCellPos;
+         _this.endCell = endCellPos;
+         _this.offsetMap = map;
+@@ -20307,7 +20309,7 @@ var TableRow = /** @class */ (function (_super) {
+         get: function () {
+             return {
+                 content: '(tableHeadCell | tableBodyCell)*',
+-                attrs: __assign({ rawHTML: { default: null } }, getDefaultCustomAttrs()),
++                attrs: __assign({ rawHTML: { default: null }, rowHeight: { default: null } }, getDefaultCustomAttrs()),
+                 parseDOM: [
+                     {
+                         tag: 'tr',
+@@ -20323,7 +20325,11 @@ var TableRow = /** @class */ (function (_super) {
+                 ],
+                 toDOM: function (_a) {
+                     var attrs = _a.attrs;
+-                    return ['tr', getCustomAttrs(attrs), 0];
++                    var customAttrs = getCustomAttrs(attrs);
++                    if (attrs.rowHeight) {
++                        customAttrs.style = (customAttrs.style ? customAttrs.style + ';' : '') + 'height:' + attrs.rowHeight + 'px';
++                    }
++                    return ['tr', customAttrs, 0];
+                 },
+             };
+         },
+@@ -20354,12 +20360,15 @@ var TableHeadCell = /** @class */ (function (_super) {
+         get: function () {
+             return {
+                 content: 'paragraph+',
+-                attrs: __assign({ align: { default: null }, className: { default: null }, rawHTML: { default: null }, colspan: { default: null }, extended: { default: null } }, getDefaultCustomAttrs()),
++                attrs: __assign({ align: { default: null }, className: { default: null }, rawHTML: { default: null }, colspan: { default: null }, extended: { default: null }, cellWidth: { default: null } }, getDefaultCustomAttrs()),
+                 isolating: true,
+                 parseDOM: [createParsedCellDOM('th')],
+                 toDOM: function (_a) {
+                     var attrs = _a.attrs;
+                     var cellAttrs = createCellAttrs(attrs);
++                    if (attrs.cellWidth) {
++                        cellAttrs.style = (cellAttrs.style ? cellAttrs.style + ';' : '') + 'width:' + attrs.cellWidth + 'px;min-width:' + attrs.cellWidth + 'px;max-width:' + attrs.cellWidth + 'px';
++                    }
+                     return ['th', __assign(__assign({}, cellAttrs), getCustomAttrs(attrs)), 0];
+                 },
+             };
+@@ -20398,12 +20407,16 @@ var TableBodyCell = /** @class */ (function (_super) {
+                     colspan: { default: null },
+                     rowspan: { default: null },
+                     extended: { default: null },
++                    cellWidth: { default: null },
+                 },
+                 isolating: true,
+                 parseDOM: [createParsedCellDOM('td')],
+                 toDOM: function (_a) {
+                     var attrs = _a.attrs;
+                     var cellAttrs = createCellAttrs(attrs);
++                    if (attrs.cellWidth) {
++                        cellAttrs.style = (cellAttrs.style ? cellAttrs.style + ';' : '') + 'width:' + attrs.cellWidth + 'px;min-width:' + attrs.cellWidth + 'px;max-width:' + attrs.cellWidth + 'px';
++                    }
+                     return ['td', cellAttrs, 0];
+                 },
+             };

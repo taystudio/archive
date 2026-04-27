@@ -1,0 +1,16 @@
+{
+  "slots": {
+    "sidebar": [
+      { "type": "categories", "enabled": true },
+      { "type": "recent-posts", "enabled": true, "props": { "count": 5 } },
+      { "type": "visitor-counter", "enabled": true, "props": { "provider": "goatcounter" } },
+      { "type": "popular-posts", "enabled": true, "props": { "count": 5 } },
+      { "type": "tag-cloud", "enabled": true, "props": { "max": 30 } },
+      { "type": "stats", "enabled": true }
+    ],
+    "home_hero": [],
+    "post_bottom": [
+      { "type": "post-stats", "enabled": true }
+    ]
+  }
+}
