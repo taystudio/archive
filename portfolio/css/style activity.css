@@ -1,167 +1,111 @@
 .Activity_frame{
     display: flex;
     flex-direction: column;
+    padding-top: 40px;
 }
 
+/* ---- section header ---- */
 .Extra-activity{
-    display: inline; 
-    text-align: left;
-
-    /*font-family: "Montserrat", sans-serif;*/
-    font-size: 25px;
-    font-weight: 500;
-    color: balck;
+    display: block;
+    margin: 0 0 6px;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
 }
 
 .Clubs{
-    display: inline; 
-    text-align: left;
-    margin-top: 0;
-    /*font-family: "Montserrat", sans-serif;*/
-    font-size: 18px;
-    font-weight: 500;
-    margin-left: 30px;
-    color: black;
+    display: block;
+    margin: 0 0 28px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted);
 }
 
+/* ---- club cards ---- */
 .Club-frame{
     display: flex;
     flex-direction: row;
-    justify-content: left; 
-    align-items: left;    
-    margin-bottom: 60px;
-    /*justify-content: space-between; */
-}
-
-/*-------------------------Match point--------------------*/
-.Match-logo{
-    margin-top: 35px;
-    margin-left: 50px;
-    margin-right: 50px;
-}
-
-.Match-image{
-    margin-top: 30px;
-    display: flex;
     align-items: center;
-}
-
-.match-point-script{
-    margin-right: 50px;
-}
-
-/*----------------------- Yonsei Tea club ------------------*/
-.Tea-logo{
-    margin-top: 27px;
-    margin-left: 50px;
-    margin-right: 50px;
-}
-
-.Tea-image{
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.Tea-script{
-    margin-right: 50px;
-}
-
-/*---------------------------- YK club ----------------------*/
-.YK-logo{
-    margin-top: 27px;
-    margin-left: 50px;
-    margin-right: 50px;
-}
-
-.YK-image{
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.YK-script{
-    margin-right: 50px;
-}
-
-/*---------------------------- TZ club ----------------------*/
-.TZ-logo{
-    margin-top: 10px;
-    margin-left: 50px;
-    margin-right: 50px;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 22px 30px;
     margin-bottom: 20px;
+    transition: transform .28s cubic-bezier(.4,0,.2,1),
+                box-shadow .28s ease,
+                border-color .28s ease;
+}
+.Club-frame:hover{
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--accent);
 }
 
-.TZ-image{
-    margin-top: 10px;
+/* logo tile (first child div) — neutralises the old per-club margins */
+.Club-frame > div:first-child{
+    flex: 0 0 110px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    margin: 0 26px 0 0 !important;
+    padding: 0;
+}
+.Club-frame > div:first-child img{
+    width: 84px !important;
+    height: 84px !important;
+    object-fit: contain;
+    margin: 0 !important;
+    border-radius: 12px;
 }
 
-.TZ-script{
-    margin-right: 50px;
+/* description (second child div) */
+.Club-frame > div:last-child{ flex: 1; min-width: 0; }
+.Club-frame h3{
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.4;
 }
-
-/*---------------------------- ALC club ----------------------*/
-.ALC-logo{
-    margin-top: 25px;
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-bottom: 20px;
+.Club-frame p{
+    margin: 0 0 6px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--body);
 }
+.Club-frame p:last-child{ margin-bottom: 0; color: var(--muted); font-size: 13.5px; }
+.Club-frame .match-point-script,
+.Club-frame .Tea-script,
+.Club-frame .YK-script,
+.Club-frame .TZ-script,
+.Club-frame .ALC-script,
+.Club-frame .YCC-script,
+.Club-frame .Robo-script{ margin-right: 0; }
 
-.ALC-image{
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
+.Orga_menu{
+    color: var(--accent-2);
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0,72,167,.25);
+    transition: border-color .2s ease;
 }
+.Orga_menu:hover{ border-bottom-color: var(--accent-2); }
 
-.ALC-script{
-    margin-right: 50px;
-}
-
-/*---------------------------- YCC club ----------------------*/
-.YCC-logo{
-    margin-top: 25px;
-    margin-left: 50px;
-    margin-right: 50px;
-}
-
-.YCC-image{
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.YCC-script{
-    margin-right: 50px;
-}
-
-/*---------------------------- Roboin club ----------------------*/
-.Robo-logo{
-    margin-top: 25px;
-    margin-left: 50px;
-    margin-right: 50px;
-}
-
-.Robo-image{
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.Robo-script{
-    margin-right: 50px;
-}
-
-
-/*-------------- space null -------------------*/
-.space-null{
-    margin-bottom: 150px;
-}
+.space-null{ margin-bottom: 120px; }
 
 @media screen and (max-width: 1030px){
-.Activity_frame{
-    margin-top:50px;
+    .Activity_frame{ padding-top: 20px; }
+    .Club-frame{ padding: 18px 18px; }
+    .Club-frame > div:first-child{ flex-basis: 84px; margin-right: 16px !important; }
+    .Club-frame > div:first-child img{ width: 64px !important; height: 64px !important; }
 }
+
+@media screen and (max-width: 560px){
+    .Club-frame{ flex-direction: column; align-items: flex-start; text-align: left; }
+    .Club-frame > div:first-child{ margin: 0 0 14px 0 !important; }
 }

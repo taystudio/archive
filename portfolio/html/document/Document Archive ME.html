@@ -2,131 +2,147 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Document</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Document">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/Document%20Archive%20ME.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Document">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../../css/style document.css">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../../css/style document.css?v=20260605-18">
 
     <!--Java script event-->
-    <script src="../../js/main.js" defer></script>
-    <script src="../../js/components/nav.js" sync></script>
-    <script src="../../js/components/footer.js" sync></script>
-    <script src="../../js/components/header.js" sync></script>
+    <script src="../../js/main.js?v=20260605-18" defer></script>
+    <script src="../../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../../js/components/header.js?v=20260605-18" sync></script>
+    <script src="../../js/components/img_comp/imgComponent.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
-</head>
 
+</head>
 
 
 <body bgproperties="fixed" oncontextmenu='return false'>
 
-    <other-nav-component></other-nav-component>
+    <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
+    <div class="frame">
 
-        <div class="Archive_box">
-            <h4 class="Archive_title"><a href="../TAYLEE documents.html"> Archive with notion </a></h4> 
-            <h2 class="For_details"> Mechanical Engineering</h2>  
-            <div class="Archive_list">
+        <section class="docs-page">
 
-                <!--Machnine Learning-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/Fundamental-of-Machine-Learning-9839000e38a84472a7ce4ca5d4cd09af'" style="cursor:pointer;" target='_blank'>
+            <header class="docs-page__header">
+                <p class="docs-page__eyebrow"><a href="../TAYLEE documents.html">← Documents</a></p>
+                <h1 class="docs-page__title">Mechanical Engineering</h1>
+                <p class="docs-page__subtitle">대학원 시절 정리한 머신러닝 · 수치해석 · 수학 학습 기록</p>
+            </header>
 
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/AI Logo.png" width=230 height=120>
+            <div class="docs-grid">
+
+                <a class="docs-card" href="posts/ml-fundamentals.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <ml-img></ml-img>
+                        <span class="docs-card__badge">Machine Learning</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Fundamental of M.L</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Fundamental of M.L</h2>
+                        <p class="docs-card__meta">Study notes · 2020</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--Reinforcement Learning-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/Reinforcement-Learning-74b856c89e624792b26bc1916f79d808'" style="cursor:pointer;" target='_blank'>
-    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/Alphago.jpg" width=230 height=120>
+                <a class="docs-card" href="posts/reinforcement-learning.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <rl-img></rl-img>
+                        <span class="docs-card__badge">Reinforcement Learning</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Reinforcement learning</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Reinforcement Learning</h2>
+                        <p class="docs-card__meta">Study notes</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-                
-                <!--ChannelFlow-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/8e2838b6e2ae42dd8ade5dfebfe6348f'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/Numerical Method.png" width=230 height=120>
+                <a class="docs-card" href="posts/numerical-flow.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <cfd-img></cfd-img>
+                        <span class="docs-card__badge">CFD</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Numerical method for flow</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Numerical Method for Flow</h2>
+                        <p class="docs-card__meta">Channel flow analysis</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-                
-                <!--Fourier Transform-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/Understanding-of-Fourier-Transform-6bf95ecb0201461983cc23c058acd3f6'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/Fourier.png" width=230 height=120>
+                <a class="docs-card" href="posts/fourier.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <fourier-img></fourier-img>
+                        <span class="docs-card__badge">Signal</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Understanding of Fourier Series</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Understanding of Fourier Series</h2>
+                        <p class="docs-card__meta">Math intuition</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--Math & Stat-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/Relation-between-math-stat-9c10eec41230439991f4fd1680a25c29'" style="cursor:pointer;" target='_blank'>
-    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/math.jpg" width=230 height=120>
+                <a class="docs-card" href="posts/math-stat.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <mathstat-img></mathstat-img>
+                        <span class="docs-card__badge">Mathematics</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Relation between math & stat</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Relation between Math &amp; Stat</h2>
+                        <p class="docs-card__meta">Essay</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--DTW-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/Dynamic-Time-Warping-2e9c129956c849bfaf3930d80450aeb1'" style="cursor:pointer;" target='_blank'>
-
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/DynamicTimeWarping.png" width=230 height=120>
+                <a class="docs-card" href="posts/dtw.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <dtw-img></dtw-img>
+                        <span class="docs-card__badge">Algorithm</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Dynamic Time Warping</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Dynamic Time Warping</h2>
+                        <p class="docs-card__meta">Sequence alignment</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
-
+                </a>
 
             </div>
 
-        </div>
+        </section>
+
     </div>
 
-    <other-footer-component></other-footer-component>
+    <footer-component></footer-component>
 
 </body>
 </html>

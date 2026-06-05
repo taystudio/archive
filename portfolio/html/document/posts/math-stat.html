@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Relation between math &amp; stat — TAYLEE Archive</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="Relation between math &amp; stat — TAYLEE Archive">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/posts/math-stat.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Relation between math &amp; stat — TAYLEE Archive">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="../../../css/style.css?v=20260605-18">
+<link rel="stylesheet" type="text/css" href="../posts.css?v=20260605-18">
+
+<script src="../../../js/main.js?v=20260605-18" defer></script>
+<script src="../../../js/components/nav.js?v=20260605-18" sync></script>
+<script src="../../../js/components/footer.js?v=20260605-18" sync></script>
+<script src="../../../js/components/header.js?v=20260605-18" sync></script>
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+<common-header-component></common-header-component>
+</head>
+<body>
+<nav-component></nav-component>
+
+<main class="docs-post">
+  <article class="docs-post__article">
+    <header class="docs-post__header">
+      <p class="docs-post__eyebrow"><a href="../../TAYLEE documents.html">← Documents</a></p>
+      <h1 class="docs-post__title">수학과 통계의 관계</h1>
+    </header>
+    <div class="docs-post__body">
+
+<p class="docs-p">내가 생각하는 수학과 통계에 대한 생각을 풀어놓은 글이다. 2020년에 ppt에 정리함으로써 위의 관계에 대해 생각해보았다. 전부터 자신이 이해한 방식대로 수학에서 중요한 부분들을 서술해보고자 했는데, 이번 기회에 한 번 서술해 보고자 한다.</p>
+
+<p class="docs-p">내 생각의 결론은 다음과 같다.</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">📌</div>
+  <div class="docs-callout__body">
+    <div class="docs-equation">\[ (\text{수학} - \text{Deterministic}) \; + \; \text{uncertainty} \;=\; (\text{통계} - \text{Stochastic}) \]</div>
+    <p class="docs-p">간단하게 uncertainty(불확실성)를 독립적으로 더했지만, 단순하게 표현하기 위함이다. 위와 같이 Linear 한 성질이 아니라 내재되어 있는 Non-linear 성질일지도 모른다. 그리고 난 <strong>수학을 통계에 포함된다고 보았고</strong>, 통계에서 <strong>Averaged 된 값을 가지고 Deterministic 하게 다루는 것</strong>이라 보았다.</p>
+  </div>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">1. 수학에서 문제를 푼다는 것은?</h2>
+
+<p class="docs-p">우리가 현실 또는 가상에서 접하는 문제(물리적 문제)를 수학적으로 정의된 <strong>실제 공간(Real space)</strong> 이든 <strong>가상 공간(Complex space)</strong> 이든 그 위에 점, 직선, 곡선, 평면, 곡면, 또는 부피 등의 조합으로 표현이 가능하며, 공간상 표현된 수식(물리적 문제)에 대해 연산을 통하여 조정하고 연산하여 원하는 값(의미적으로 원하는 현상)을 얻어내는 것을 의미한다.</p>
+
+<p class="docs-p">즉, 우리가 원하는 어떤 현상 \(g(x,y,z,t)\) 를 또 다른 수학적 표현 \(f(x,y,z,t)\) 로 옮겨 다루는 것이 수학인 셈이다.</p>
+
+<h2 class="docs-h2">2. 현상의 분류 — Vector와 Scalar</h2>
+
+<p class="docs-p">일반적인 물리적, 인간적 현상은 힘, 속도 등과 같이 <strong>방향과 크기를 가지고 있는 현상을 Vector</strong>, 압력, 온도, 금액, 양 등과 같이 <strong>크기만을 가지고 있는 현상을 Scalar</strong> 라 한다. 그렇다면 이런 실제 문제를 어떻게 수학으로 가져올 것인가(<em>How to take a real problem into math?</em>) 가 출발점이 된다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 520 130" width="520" height="130" xmlns="http://www.w3.org/2000/svg">
+  <line x1="60" y1="95" x2="160" y2="40" stroke="#003B62" stroke-width="3"/>
+  <polygon points="160,40 150,42 154,52" fill="#003B62"/>
+  <text x="80" y="115" font-family="Montserrat,sans-serif" font-size="14" fill="#475569" text-anchor="middle">Vector</text>
+  <text x="80" y="34" font-family="Montserrat,sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">방향 + 크기</text>
+  <circle cx="380" cy="70" r="9" fill="#0048A7"/>
+  <text x="380" y="115" font-family="Montserrat,sans-serif" font-size="14" fill="#475569" text-anchor="middle">Scalar</text>
+  <text x="380" y="34" font-family="Montserrat,sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">크기만</text>
+</svg>
+<figcaption>방향성의 유무로 나뉘는 두 현상</figcaption>
+</div>
+
+<h2 class="docs-h2">3. 실험 데이터 기반의 수식 모델링 (귀납적 방법)</h2>
+
+<p class="docs-p"><strong>[실험 Data 기반의 수식 Modeling] – 귀납적 방법(inductive)</strong> 이다. 자연 현상들 사이에서는 ‘규칙’이라는 것이 존재하는데, 이 규칙의 신뢰도(그 규칙의 정밀도, 얼마나 잘 맞는 규칙인가, 밀접한 관계) 또한 존재한다. 이 ‘규칙’을 <strong>상관관계</strong> 라 하며, 규칙에 대한 신뢰도(밀접한 정도)를 <strong>상관관계의 계수</strong> 로 표현한다.</p>
+
+<p class="docs-p">상관관계의 존재 이유는 곧 <strong>불확실성</strong> 이다. (사회가 설명하지 못하는 다른 변수들이 존재하여 수식에 반영하지 못하는 경우다.) 두 변수 \(A,B\) 의 상관관계는 보통 다음 선형식으로 나타낸다.</p>
+
+<div class="docs-equation">\[ B = wA + b \;\cdots\,(1) \qquad (\rho:\ \text{상관계수}) \]</div>
+
+<p class="docs-p">위 [Figure 01] 의 (a), (b) 처럼 \(A\) 가 증가함에 \(B\) 가 증가하는 경향을 보인다(양의 상관관계). 즉 <strong>상관관계라는 것은 상관성에 의해 하나의 변수의 변화에 따라 다른 변수로 영향(변화)을 주는 경우</strong> 를 의미한다.</p>
+
+<h2 class="docs-h2">4. 상관관계 ≠ 인과관계</h2>
+
+<p class="docs-p">하지만, 두 변수 사이에는 <strong>원인과 결과에 대한 관계가 규명되어 있다고 말할 수 없다</strong>. 이 말은 무슨 말을 하고 하나? 두 가지로 나눠 보자.</p>
+
+<h3 class="docs-h3">① A가 B의 원인인지, B가 A의 원인인지 단정지을 수 없다  <span style="color:#0048A7">(Key word: 시간의 우선성)</span></h3>
+<p class="docs-p">우리가 알고 있는 사실은 단순히 \(A\) 와 \(B\) 가 같이 증가하는 경향(상관성)이 있다라는 것이지, \(A\) 가 증가해서 \(B\) 가 증가하는지 \(B\) 가 증가해서 \(A\) 가 증가하는지는 알 수 없다(시간의 우선성이 정해져 있지 않는 것).</p>
+
+<h3 class="docs-h3">② ‘A가 B의 직접적인 원인인가?’ or ‘B가 A의 직접적인 원인인가?’  <span style="color:#0048A7">(Key word: 직접적인 원인)</span></h3>
+<p class="docs-p">시간의 우선성이 정해져 \(A\) 에 의해 \(B\) 의 사건이 일어난다고 한다면, 과연 \(A\) 는 \(B\) 의 직접적인 원인이 될 것인가? \(A\) 라는 변수는 사실 \(C\) 라는 변수를 움직이게 되고, 실질적으로 \(C\) 가 \(B\) 라는 변수의 원인이 될 수 있지 않을까 하는 것이다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 560 150" width="560" height="150" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif">
+  <text x="140" y="22" font-size="13" fill="#64748b" text-anchor="middle">상관관계 (간접 · 큰 불확실성)</text>
+  <g font-size="15" fill="#0f172a">
+    <rect x="20" y="45" width="48" height="40" rx="8" fill="#eef2f7" stroke="#94a3b8"/><text x="44" y="70" text-anchor="middle">A</text>
+    <rect x="116" y="45" width="48" height="40" rx="8" fill="#e8f3fc" stroke="#0078d7"/><text x="140" y="70" text-anchor="middle">C</text>
+    <rect x="212" y="45" width="48" height="40" rx="8" fill="#eef2f7" stroke="#94a3b8"/><text x="236" y="70" text-anchor="middle">B</text>
+  </g>
+  <line x1="68" y1="65" x2="112" y2="65" stroke="#475569" stroke-width="2"/><polygon points="116,65 106,60 106,70" fill="#475569"/>
+  <line x1="164" y1="65" x2="208" y2="65" stroke="#475569" stroke-width="2"/><polygon points="212,65 202,60 202,70" fill="#475569"/>
+  <text x="140" y="108" font-size="11" fill="#94a3b8" text-anchor="middle">Noise (uncertainty) ↑</text>
+  <text x="430" y="22" font-size="13" fill="#64748b" text-anchor="middle">인과관계 (직접 · 작은 불확실성)</text>
+  <g font-size="15" fill="#0f172a">
+    <rect x="356" y="45" width="48" height="40" rx="8" fill="#eef2f7" stroke="#94a3b8"/><text x="380" y="70" text-anchor="middle">A</text>
+    <rect x="468" y="45" width="48" height="40" rx="8" fill="#eef2f7" stroke="#94a3b8"/><text x="492" y="70" text-anchor="middle">B</text>
+  </g>
+  <line x1="404" y1="65" x2="464" y2="65" stroke="#003B62" stroke-width="2.5"/><polygon points="468,65 458,60 458,70" fill="#003B62"/>
+  <text x="430" y="108" font-size="11" fill="#94a3b8" text-anchor="middle">Noise (uncertainty) ↓</text>
+</svg>
+<figcaption>같은 “A→B” 라도 숨은 변수 C가 끼면 불확실성이 커진다</figcaption>
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🧭</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>결론: 상관관계와 인과관계는 다르다</strong> (상관관계 안에 인과관계가 포함된다). 상관관계는 <em>단순 통계적 분석</em> 이고, 인과관계는 통계적 분석에서 <em>과학적 분석과 해석으로 넘어간 경우</em> 다.</p>
+  </div>
+</div>
+
+<h2 class="docs-h2">5. 수학적으로 본 두 관계의 차이 = 분산</h2>
+
+<p class="docs-p">수학적으로 상관관계와 인과관계의 차이를 알아보고자 한다(여기에 통계적 개념이 같이 들어가게 된다). 다시 [Figure 01] 을 참고해 보도록 하자. (a)와 (b)의 차이는 무엇일까? 바로 <strong>상관관계식 \(B=wA+b\) 선 위에 실제 측정한 데이터들이 흩어져 있는 정도가 다르다(분산이 다르다)</strong> 는 것이다.</p>
+
+<div class="docs-fig-row">
+  <figure class="docs-fig">
+    <canvas id="cvVarA" width="360" height="300"></canvas>
+    <figcaption>(a) 같은 \(A\) 값에서 분산이 크게 존재 → 여러 경우의 \(B\) → <strong>상관관계</strong></figcaption>
+  </figure>
+  <figure class="docs-fig">
+    <canvas id="cvVarB" width="360" height="300"></canvas>
+    <figcaption>(b) 같은 \(A\) 값에서 분산이 작게 존재 → \(B\) 가 일정 → <strong>인과관계</strong></figcaption>
+  </figure>
+</div>
+
+<p class="docs-p"><strong>(a)의 경우</strong> 같은 \(A\) 값에서 분산이 크게 존재하여 상대적으로 여러 경우의 \(B\) 의 값이 존재한다(불확실성이 크다. 직접적인 원인이 아닌 경우 중간 단계의 불확실성이 첨가되어 분산이 더 커질 가능성이 존재한다). <strong>(b)의 경우</strong> 같은 \(A\) 값에서 분산이 작게 존재하여 상대적으로 \(B\) 의 값이 일정하다(직접적인 원인일 경우 중간 변수를 거치지 않고 바로 \(B\) 가 일어나기 때문에 불확실성이 적어 분산이 작아진다).</p>
+
+<h2 class="docs-h2">6. 신뢰 정도의 척도 — 상관계수</h2>
+
+<p class="docs-p">(a)의 경우 규칙에 대한 신뢰정도(일정정도)가 작고(같은 \(A\) 일 때 다양한 경우의 \(B\) 가 많이 존재하니까 → 상관계수 작다), (b)의 경우 규칙에 대한 신뢰정도가 높다(같은 \(A\) 일 때 거의 일정한 \(B\) 가 존재하니까 → 상관계수 크다). 이에 대한 신뢰정도(일정한 정도)를 나타내는 것은 ‘<strong>상관계수(Correlation coefficient)</strong>’ 라는 통계량으로 알아본다.</p>
+
+<div class="docs-equation">\[ \gamma_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{\sigma_X \sigma_Y} = \frac{E\big[(X-\mu_X)(Y-\mu_Y)\big]}{\sigma_X \sigma_Y} \]</div>
+
+<p class="docs-p">여기서는 \((X=A,\ Y=B)\) 로 간주한다. 위의 식에 대한 의미는 <strong>각 평균으로부터의 거리에 대해서 정도를 측정해 놓은 것</strong> 이다. 그리고 실제로 우리가 가지고 있는 것은 모집단이 아닌 <strong>표본</strong> 을 가지고 있으므로, DOF(자유도)에 의해 평균은 \(n\) 이 아닌 \(n-1\) 로 나눈다.</p>
+
+<div class="docs-equation">\[ \gamma_{X,Y} = \frac{\mathrm{Cov}(X,Y)}{S_X S_Y} = \frac{\sum (X-\bar X)(Y-\bar Y)}{(n-1)\,S_X S_Y} \;\cdots\,(3) \]</div>
+
+<div class="docs-fig">
+  <canvas id="cvCorr" width="720" height="170"></canvas>
+  <figcaption>[Figure 02] \(\gamma_{X,Y}\) 값에 따른 데이터 분포 (좌 → 우: \(+0.9,\ +0.5,\ 0,\ -0.5,\ -0.9\))</figcaption>
+</div>
+
+<p class="docs-p">즉 (a)의 상관계수 \(\rho_1\) 보다 (b)의 상관계수 \(\rho_2\) 가 크다 \((\rho_1 < \rho_2)\).</p>
+
+<h2 class="docs-h2">7. 수학과 통계학의 연결지점 — 평균(average)</h2>
+
+<p class="docs-p">위에서 내릴 결론은, 상관관계(관계의 여부)가 있어도 상관계수(관계의 일정도)에 따라 그 상관관계식에 대한 신뢰도는 달라진다는 것이다(실제로 그 상관관계식을 믿어야 할지에 대한 여부).</p>
+
+<p class="docs-p">여기서 \(A, B\) 는 실제로는 <strong>확률변수(Random variable)</strong> 이다. 이는 본질적으로 분포를 갖는 <strong>Stochastic 한 문제</strong> 다. 그런데 <strong>Deterministic 한 상관관계식을 어떻게 세울까?</strong> 분포를 갖는다면 우리는 이 불확실성을 정량화시켜 판단하는 통계학이 들어갈 수밖에 없다. 그리고 우리는 보통 <strong>모수 통계학</strong> 을 기반으로 가정하는데, 모수-통계학에서는 모집단은 <strong>Gaussian distribution</strong> 을 갖는다고 가정을 한다.</p>
+
+<p class="docs-p">그리고 하나의 Deterministic 한 상관관계식을 세우기 위해 ‘<strong>Least square method</strong>’ 를 이용하여 관계식 – (회귀식)을 세운다. 이때 <strong>오차에 대한 4가지 가정(가우스-마코프 가정)</strong> 이 따라온다.</p>
+
+<div class="docs-equation">\[ Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i \qquad(\text{Linear curve fitting example}) \]</div>
+
+<ol class="docs-list">
+  <li>임의의 주어진 \(X_i\) 값에 대한 오차 \(\varepsilon_i\) 의 평균 \(E(\varepsilon_i)=0\) 이다.</li>
+  <li>모든 \(X_i\) 값에 대한 오차의 분산 \(\mathrm{Var}(\varepsilon_i)=\sigma^2\) 으로 일정하다 (등분산).</li>
+  <li>오차 \(\varepsilon_i\) 는 정규성 Normality 를 따른다.</li>
+  <li>각 오차들 간에는 독립적이다. \(\big(\varepsilon_i \overset{iid}{\sim} N(0,\sigma^2)\big)\)</li>
+</ol>
+
+<p class="docs-p">이때 동시에 모집단의 상관관계식에서의 오차에 대한 가정들이 맞아야 상관관계식의 신뢰도가 보증된다.</p>
+
+<h2 class="docs-h2">8. 회귀식과 최소자승법</h2>
+
+<p class="docs-p">오차에 대한 4가지 가정 하에서, <strong>모든 \(X_i\) 들마다에 대한 모든 \(Y_i\) 의 분포에서 대푯값(평균)이 이루는 값들을 선으로 이을 수 있는데, 이 직선이 회귀식이 된다.</strong> 동시에 모든 데이터들과 임의의 직선 사이의 거리의 합 \(\big(\sum d_i^2\big)\) 이 최소가 되는 값을 계산하여 직선식을 세운다(최소 자승법).</p>
+
+<div class="docs-fig">
+  <canvas id="cvFig03" width="560" height="330"></canvas>
+  <figcaption>[Figure 03] 각 \(X_i\) 마다 \(Y_i\) 는 분포를 갖고, 그 <strong>대푯값(평균)</strong> 들을 이은 빨간 점선이 곧 회귀선이 된다</figcaption>
+</div>
+
+<div class="docs-equation">\[ \min \sum_i d_i^{\,2} = \min \sum_i \big(Y_i - \hat Y_i\big)^2 \]</div>
+
+<div class="docs-fig">
+  <canvas id="cvReg" width="540" height="340"></canvas>
+  <figcaption>최소자승법: 각 점과 직선 사이 거리(잔차) \(d_i\) 의 제곱합 \(\sum d_i^2\) 을 최소화</figcaption>
+</div>
+
+<p class="docs-p">우리는 통계학(Stochastic)과 수학(Deterministic) 사이를 이어주는 개념으로써, <strong>분포(Stochastic domain)에서 평균(Average)을 넘음으로써 그 평균값(하나의 대푯값)을 이용하여 수식을 만들고(직선, 곡선, 평면 등) 미분 방정식 등을 풀어낸다.</strong></p>
+
+<div class="docs-equation">\[ B = A \quad\Longrightarrow\quad \bar B = \bar A \qquad(\bar A:\ \text{average of } A) \]</div>
+
+<p class="docs-p">하나 이슈가 될 수 있는 것은 분포(Distribution)이다. 왜냐하면 \(y\) 값이라는 것이 어느 정도의 분포를 가지고 있는데, 이를 하나의 대푯값으로써 평균의 개념을 써서 Deterministic 한 변수로서 사용하기 때문이다.</p>
+
+<h2 class="docs-h2">9. 만약 4가지 가정이 맞지 않는다면?</h2>
+
+<p class="docs-p">만약 위의 4가지 가정들이 맞지 않고 단순히 최소 자승법을 한다면 어떻게 될까? 하나씩 보자.</p>
+
+<div class="docs-fig">
+  <canvas id="cvAssume" width="640" height="440"></canvas>
+  <figcaption>4가지 가정이 깨진 경우 — 분포의 평균(빨간 점)이 회귀선(파란선)에서 벗어나거나 대표성을 잃는다</figcaption>
+</div>
+
+<ul class="docs-list">
+  <li><strong>① \(E(\varepsilon_i)\neq 0\) 이면</strong> — 4가지 가정 하에서는 최소자승법으로 만든 회귀식과 분포의 평균이 일치하는데, 이 경우는 편향이 생겨 달라진다. 분포의 평균과 회귀곡선식(최소자승법으로 그려진)이 편향이 되어버려 정확한 평균값을 예측하기 힘들어진다.</li>
+  <li><strong>② \(\mathrm{Var}(\varepsilon_i)=\sigma^2 \neq C\) (등분산이 아니라면)</strong> — \(Y_i \sim N(\beta_0+\beta_1 X_i,\ \sigma^2)\) 에서 분산이 더 달라지므로 위와 같은 일정한 분산은 더 이상 성립하지 않을 것이다. 계산상 Distribution 형태가 분산에 따라 계속 달라지므로 힘들어진다.</li>
+  <li><strong>③ 정규성(Normality)을 따르지 않으면</strong> — (1) 정규성이 보장되어 있지 않으면 분포에 대한 평균이 직선에서 벗어날 수도 있다(편향). (2) 평균이 직선 위에 있다 해도 분포상 양쪽으로 치우쳐 있는 분포라면 평균값에 대한 대표성이 사라진다.</li>
+  <li><strong>④ 각 오차가 독립적이지 않으면</strong> — 서로 다른 \(X_i\) 에 대한 분포가 서로 영향을 주게 된다(\(N(Y_i\mid X_1),\ N(Y_i\mid X_2)\)). 독립적이지 않으면 상관관계를 추적하는 것도 힘들고 계산량도 많아진다.</li>
+</ul>
+
+<p class="docs-p">→ 즉, 4가지 가정이 맞지 않을수록 최소자승법을 사용한 결과의 값들(상관관계식 위의 값)은 더 이상 분포상의 평균(기댓값)과 일치하지 않게 된다.</p>
+
+<h2 class="docs-h2">10. 모집단 vs 표본</h2>
+
+<p class="docs-p">여태까지는 모집단에 대해서 알아 보았다. 하지만, 실제로 우리는 <strong>모집단은 추정 할 수만 있을 뿐 알 수 없는 집단</strong> 이다. 그래서 <strong>표본을 뽑아서 모집단을 추정하는 것을 모수 통계학의 목표</strong> 로 두고 있다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 560 200" width="560" height="200" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif">
+  <ellipse cx="150" cy="100" rx="130" ry="80" fill="#f1f5f9" stroke="#94a3b8"/>
+  <text x="150" y="36" font-size="13" fill="#475569" text-anchor="middle">모집단 (Universe)</text>
+  <text x="150" y="96" font-size="14" fill="#0f172a" text-anchor="middle">Y&#8336; = &#946;&#8320; + &#946;&#8321;X&#8336;</text>
+  <text x="150" y="120" font-size="12" fill="#64748b" text-anchor="middle">&#956;, &#963;&#178; (모수)</text>
+  <rect x="98" y="138" width="104" height="40" rx="8" fill="#fff" stroke="#0078d7" stroke-dasharray="5 4"/>
+  <text x="150" y="163" font-size="13" fill="#0f172a" text-anchor="middle">Sample Data</text>
+  <line x1="288" y1="100" x2="372" y2="100" stroke="#475569" stroke-width="2"/><polygon points="376,100 366,95 366,105" fill="#475569"/>
+  <text x="332" y="90" font-size="12" fill="#64748b" text-anchor="middle">추정</text>
+  <rect x="388" y="60" width="160" height="80" rx="10" fill="#fff" stroke="#94a3b8"/>
+  <text x="468" y="96" font-size="14" fill="#0f172a" text-anchor="middle">&#375; = b&#8320; + b&#8321;x</text>
+  <text x="468" y="120" font-size="12" fill="#64748b" text-anchor="middle">표본 회귀식</text>
+</svg>
+<figcaption>우리가 가진 데이터는 표본이며, 표본 Curve fitting ≠ 모집단 Curve fitting</figcaption>
+</div>
+
+<p class="docs-p">우리가 보통 가지고 있는 데이터는 모두 표본의 데이터로 Curve fitting 을 하는 것이지 모집단의 데이터로 Curve fitting 하는 것이 아니다(표본: \(\hat y = b_0 + b_1 x_i\), 모집단: \(Y_i = \beta_0 + \beta_1 X_i\)). <strong>① 이에 따라 가설검정을 하여 모수에 대한 신뢰구간까지 표기해 주어야 한다.</strong></p>
+
+<h2 class="docs-h2">11. 잔차로 4가지 가정을 확인</h2>
+
+<p class="docs-p"><strong>② 그리고 모집단에서 상관관계식을 만들 때 사용되었던 오차에 대한 4가지 가정이 잔차에서도 성립하는지 확인해야 한다.</strong> 앞에서 (4가지 가정 하에) 모집단에서의 상관관계식의 특징은 ‘각 분포의 평균값 = 상관관계의 값’ 이었다. 우리는 확률적인 요소를 하나의 대푯값으로써 Deterministic 하게 사용하고 싶은 것이다.</p>
+
+<p class="docs-p">그런데 오차에 대한 개념은 모집단의 상관관계식(모수)과 실제 값의 차이이기 때문에 우리는 알 수 없다. 이 때문에 우리가 가지고 있는 것은 표본이고, 실제로 측정 가능한 것은 <strong>잔차</strong> 이므로 잔차에 대한 평균을 구해 보는 것이다. <strong>잔차는 오차에 대한 최상의 정보를 제공하고 있다.</strong> 데이터를 가지고 상관관계식을 세울 때 세부적으로 봐야 할 순서는 다음과 같다(무작정 Least square method 로 수식 세우고 끝내는 게 아니다).</p>
+
+<ol class="docs-list">
+  <li>상관관계가 존재하는지 확인한다.</li>
+  <li>Least square method 를 사용하여 상관관계식을 얻는다.</li>
+  <li>표본에 대한 상관식이기에 모수 추정을 하여 신뢰구간을 표시해보자.</li>
+  <li>잔차에 대해 앞서 알아본 오차에 대한 4가지 가정이 잘 맞는지 확인해야 한다. (과연 평균을 통하여 Deterministic 하게 표현을 해도 유효한가? — 평균에 대한 신뢰도를 알아보기 위함)</li>
+  <li>각 \(X_i\) 값에 대한 \(Y_i\) 의 분산(표준편차)에 대해서도 확인해야 한다 (상관계수).</li>
+</ol>
+
+<h2 class="docs-h2">12. 정리 (Summary)</h2>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🧩</div>
+  <div class="docs-callout__body">
+    <p class="docs-p">표본(Sample)에서, <strong>평균(Average)</strong> 을 통해 Stochastic 을 Deterministic 으로 넘긴다.</p>
+    <div class="docs-equation">\[ \underbrace{y = b_0 + b_1 x_i}_{\text{Stochastic}} \;\xrightarrow{\ \text{Average}\ }\; \underbrace{\bar y = b_0 + b_1 \bar x_i}_{\text{Deterministic}} \]</div>
+    <p class="docs-p">“\(y = f(x)\) Deterministic equation 이 Stochastic 의 \(Y=f(x)\) 식을 충분히 대표할 수 있을까?” 를 확인하려면:</p>
+    <ul class="docs-list">
+      <li><strong>Check A.</strong> 잔차에 대해 앞서 알아본 오차에 대한 4가지 가정이 잘 맞는지 확인 → <strong>정확도</strong></li>
+      <li><strong>Check B.</strong> 각 \(X_i\) 값에 대한 \(Y_i\) 의 분산(표준편차)도 확인 (상관계수) → <strong>정밀도</strong></li>
+      <li><strong>Check C.</strong> 표본에 대한 상관식이기에 모수 추정을 하여 신뢰구간을 표시</li>
+    </ul>
+    <p class="docs-p">그렇게 모집단(Universe) \(Y_i=\beta_0+\beta_1 X_i\) 로 향한다. 이것이 곧 <strong>통계식에서 수학식으로 넘어가는 과정(불확실성을 처리하는 방법)</strong> 이다.</p>
+  </div>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">참고 ① Control factor</h2>
+
+<p class="docs-p">전체 분포 \(f(Y_i)\) 만 따져 보았을 때는 \(p_2\) 가 가장 커서 빨간 부분에서 많이 추출되어야 한다. 그런데 <strong>조건부 확률</strong> — \(X_1\) 일 때, \(X_2\) 또는 \(X_3\) 일 때 \(f(Y_i\mid X_k)\) — 에 따라 많이 추출되는 부분이 달라진다. 즉, 조건부로 하나의 확률변수를 <strong>Control</strong> 함으로써 다른 확률변수의 분포를 다르게 Control 할 수 있음을 암시한다. 이것이 \(X\) 와 \(Y\) 사이의 상관관계 때문에 발생하는 현상이다(상관식을 보면 알 수 있다).</p>
+
+<div class="docs-fig">
+  <canvas id="cvControl" width="720" height="250"></canvas>
+  <figcaption>(좌) 전체 분포 \(f(Y_i)\) 와 조건 \(X_k\) 에 따른 조건부 분포 &nbsp;·&nbsp; (우) 조건부 분포들이 이루는 분포 surface 예시</figcaption>
+</div>
+
+<h2 class="docs-h2">참고 ② 과학적 사고의 수식 모델링 — 연역적 방법(deductive)</h2>
+
+<p class="docs-p">위가 귀납적 방법이었다면, <strong>[과학적 사고의 수식 Modeling] – 연역적 방법(deductive)</strong> 도 있다. 열역학, 유체역학, 고체역학, 동역학 등에서 과학적 현상을 기반으로(법칙 등을 믿고) 모델링하는 경우가 이에 해당된다. 모델링부터 Deterministic 하게 작동한다고 가정하기 때문에(일정 Error 를 믿고 시작한다), Homogeneous · 1-Dimensional · Isotropic 등의 가정이 이에 해당된다.</p>
+
+<ul class="docs-list">
+  <li><strong>열역학</strong> — 하나의 System 을 보기 때문에 Control volume, System 단위 Equation 을 만드는 경우가 많다.</li>
+  <li><strong>고체역학</strong> — Torsion, Tension, Compression, Bending 등 Differential(element) 단위에서 시작해서 전체로 합치는 경우가 많다 (Stress point 개념을 주로 쓰기 때문에).</li>
+  <li><strong>동역학</strong> — Material 의 한 지점에 대한 응력을 계산하는 것이 아닌, (Kinetics &amp; Kinematics) \(F=ma\) 를 기반으로 Motion 에 대해 알아보기 때문에 이 또한 System 단위로 보는 경우가 많다.</li>
+  <li><strong>유체역학</strong> — Control volume, System 단위로 보는 경우(Reynolds Transport theorem)와 Differential(element) 단위로 보는 경우(Navier–Stokes equation)가 다 존재한다.</li>
+</ul>
+
+<p class="docs-p">Motion 을 알아볼 때 기반이 되는 관계식은 \(F=ma\), Energy 에 대한 Equation 은 Energy conservation 이다(운동량 보존법칙, 열역학 제2법칙(엔트로피) 등도 존재). 위 두 식이 거의 관계식의 시작점이 된다. 시작점부터 Stochastic 한 수식에서 넘어온 Deterministic 한 수식을 사용하는 셈이다.</p>
+
+<p class="docs-p">위의 경우는 불확실성 요소를 다루기 위한 하나의 방법을 제시한 것뿐이다. 위에서 통계학의 개념과 수학의 개념을 이은 방법은 <strong>적률법(Moment method)</strong> 이라는 전통통계학적인 방법으로 보여 준 것이다. 위의 전통적인 Moment method estimate 말고도 <strong>MLE(Maximum Likelihood Estimate)</strong> 또한 존재한다.</p>
+
+<!-- ============ 원본 PPT 슬라이드 (접이식) ============ -->
+<details class="docs-slides">
+  <summary>원본 PPT 슬라이드 보기 <span class="docs-slides__hint">(2020년에 정리한 원본 15장)</span></summary>
+  <div class="docs-slides__grid">
+    <img src="assets/math-stat/bba35da9f8e9.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/86aa96d4fd8e.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/1529aa8e406a.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/519fd278d149.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/f90c2b439d95.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/b5f149166f37.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/e11b1c024e2e.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/c7ca3ff3d503.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/5dc2a0df5e0e.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/1eb77cd60322.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/f44239576c15.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/13b5af81692e.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/dca96a76c3ff.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/8b02b19c5fa2.png" alt="slide" loading="lazy">
+    <img src="assets/math-stat/86c484b80a0b.png" alt="slide" loading="lazy">
+  </div>
+</details>
+
+    </div>
+  </article>
+</main>
+
+<footer-component></footer-component>
+
+<script>
+(function(){
+  function rng(seed){var s=seed>>>0;return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
+  function gauss(r){var u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v);}
+  var INK="#0f172a", AX="#94a3b8", DOT="#3b82f6", LINE="#003B62";
+
+  function drawScatter(id,opt){
+    var c=document.getElementById(id); if(!c) return;
+    var ctx=c.getContext('2d'), W=c.width, H=c.height;
+    ctx.clearRect(0,0,W,H);
+    var pad=42, x0=pad, y0=H-pad, w=W-pad*1.5, h=H-pad*1.6;
+    ctx.strokeStyle=AX; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.moveTo(x0,y0); ctx.lineTo(x0,y0-h);
+    ctx.moveTo(x0,y0); ctx.lineTo(x0+w,y0); ctx.stroke();
+    ctx.fillStyle="#475569"; ctx.font="13px Montserrat, sans-serif";
+    ctx.fillText("A", x0+w-6, y0+18);
+    ctx.fillText("B", x0-22, y0-h+12);
+    function mx(x){return x0+x*w;}
+    function my(y){return y0-Math.max(0,Math.min(1,y))*h;}
+    var r=rng(opt.seed), n=opt.n||60, pts=[];
+    for(var i=0;i<n;i++){
+      var x=0.08+0.84*r();
+      var y=opt.slope*x+opt.intercept+gauss(r)*opt.spread;
+      pts.push([x,y]);
+    }
+    if(opt.resid){
+      ctx.strokeStyle="rgba(0,72,167,.30)"; ctx.lineWidth=1;
+      pts.forEach(function(p){ctx.beginPath();ctx.moveTo(mx(p[0]),my(p[1]));ctx.lineTo(mx(p[0]),my(opt.slope*p[0]+opt.intercept));ctx.stroke();});
+    }
+    ctx.strokeStyle=LINE; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.moveTo(mx(0.04),my(opt.slope*0.04+opt.intercept));
+    ctx.lineTo(mx(0.96),my(opt.slope*0.96+opt.intercept)); ctx.stroke();
+    ctx.fillStyle=DOT;
+    pts.forEach(function(p){ctx.beginPath();ctx.arc(mx(p[0]),my(p[1]),3,0,6.2832);ctx.fill();});
+  }
+
+  function drawCorrRow(id){
+    var c=document.getElementById(id); if(!c) return;
+    var ctx=c.getContext('2d'), W=c.width, H=c.height;
+    ctx.clearRect(0,0,W,H);
+    var rs=[0.9,0.5,0,-0.5,-0.9], panel=W/rs.length, cy=H/2-6, s=44;
+    rs.forEach(function(rho,k){
+      var cx=panel*k+panel/2, r=rng(11+k*7);
+      for(var i=0;i<90;i++){
+        var z1=gauss(r), z2=gauss(r);
+        var x=z1, y=rho*z1+Math.sqrt(1-rho*rho)*z2;
+        var px=cx+x*s, py=cy-y*s;
+        if(Math.abs(x*s)>panel/2-8||Math.abs(y*s)>H/2-22) continue;
+        ctx.fillStyle="#3b82f6"; ctx.globalAlpha=.7;
+        ctx.beginPath(); ctx.arc(px,py,1.7,0,6.2832); ctx.fill();
+      }
+      ctx.globalAlpha=1; ctx.fillStyle=INK; ctx.font="13px Montserrat, sans-serif"; ctx.textAlign="center";
+      ctx.fillText((rho>0?"+":"")+rho.toFixed(1), cx, H-8);
+    });
+    ctx.textAlign="left";
+  }
+
+  // 회귀선을 따라 각 X_i 의 조건부 분포를 '입체(3D 원근)'로 세워 그리는 핵심 헬퍼
+  // - 회귀선: 오른쪽·위로 상승(L), 각 분포는 깊이(D, 앞쪽)로 늘어서며 위(amp)로 솟는다
+  function bells(ctx,R,opt){
+    var O={x:R.x0+R.w*0.07, y:R.y0-R.h*0.14};
+    var Lx=R.w*0.72, Ly=R.h*0.44;          // 회귀선 방향 (오른쪽·위)
+    var Dx=R.w*0.085, Dy=R.h*0.135;        // 깊이(앞쪽) half-vector → 입체감
+    var amp=(opt.amp!=null?opt.amp:R.h*0.30);
+    var N=opt.n||5, sg=0.42, wmax=1.1;
+    var biasPx=(opt.bias||0)*R.h;
+    function P(t){return {x:O.x+t*Lx, y:O.y-t*Ly};}
+    if(opt.axes!==false){
+      ctx.strokeStyle="#cbd5e1";ctx.lineWidth=1;ctx.beginPath();
+      ctx.moveTo(R.x0+2,R.y0-R.h);ctx.lineTo(R.x0+2,R.y0);ctx.lineTo(R.x0+R.w,R.y0);ctx.stroke();
+    }
+    // 회귀선 (분포 중심들의 자취)
+    ctx.strokeStyle="#003B62";ctx.lineWidth=2;var pa=P(0.03),pb=P(0.99);
+    ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+    var st=[];
+    for(var i=0;i<N;i++){
+      var t=0.13+0.74*(N>1?i/(N-1):0.5), base=P(t);
+      st.push({t:t, cx:base.x, cy:base.y-biasPx,
+        widen:opt.hetero?(0.55+1.0*t):1, aMp:amp*(opt.hetero?(0.65+0.7*t):1)});
+    }
+    // 뒤(먼 곳)부터 그려 앞 분포가 뒤를 덮도록 (occlusion)
+    for(var idx=N-1; idx>=0; idx--){
+      var s=st[idx], pts=[];
+      for(var w=-wmax; w<=wmax+1e-9; w+=0.05){
+        var sgw=opt.skew?(w<0?sg*1.5:sg*0.62):sg;
+        var dens=Math.exp(-(w*w)/(2*sgw*sgw));
+        pts.push([s.cx+w*Dx*s.widen, s.cy+w*Dy*s.widen - dens*s.aMp]);
+      }
+      var e0=[s.cx-wmax*Dx*s.widen, s.cy-wmax*Dy*s.widen];
+      var e1=[s.cx+wmax*Dx*s.widen, s.cy+wmax*Dy*s.widen];
+      // 흰색 채우기로 뒤 분포 가림
+      ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+      for(var q=1;q<pts.length;q++)ctx.lineTo(pts[q][0],pts[q][1]);
+      ctx.lineTo(e1[0],e1[1]);ctx.lineTo(e0[0],e0[1]);ctx.closePath();
+      ctx.fillStyle="rgba(255,255,255,.92)";ctx.fill();
+      // 바닥(깊이) 선
+      ctx.strokeStyle="rgba(148,163,184,.5)";ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(e0[0],e0[1]);ctx.lineTo(e1[0],e1[1]);ctx.stroke();
+      // 분포 곡선
+      ctx.strokeStyle=opt.bell||"#0078d7";ctx.lineWidth=1.7;
+      ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+      for(var q2=1;q2<pts.length;q2++)ctx.lineTo(pts[q2][0],pts[q2][1]);
+      ctx.stroke();
+      // 분포 중심(평균) 점
+      ctx.fillStyle=opt.dot||(opt.bias?"#e11d48":"#0e8b87");
+      ctx.beginPath();ctx.arc(s.cx,s.cy,3,0,6.2832);ctx.fill();
+    }
+    if(opt.meanLine){
+      ctx.strokeStyle="rgba(225,29,72,.8)";ctx.setLineDash([5,4]);ctx.lineWidth=1.6;ctx.beginPath();
+      st.forEach(function(s,i){i?ctx.lineTo(s.cx,s.cy):ctx.moveTo(s.cx,s.cy);});ctx.stroke();ctx.setLineDash([]);
+    }
+    if(opt.connect){
+      ctx.strokeStyle="rgba(180,83,9,.6)";ctx.lineWidth=1.3;
+      for(var k=0;k<st.length-1;k++){var p1=st[k],p2=st[k+1], y1=p1.cy-p1.aMp, y2=p2.cy-p2.aMp;
+        ctx.beginPath();ctx.moveTo(p1.cx,y1);ctx.bezierCurveTo((p1.cx+p2.cx)/2,y1-16,(p1.cx+p2.cx)/2,y2-16,p2.cx,y2);ctx.stroke();}
+    }
+  }
+
+  function fig03(id){
+    var c=document.getElementById(id);if(!c)return;var ctx=c.getContext('2d'),W=c.width,H=c.height;ctx.clearRect(0,0,W,H);
+    var R={x0:46,y0:H-30,w:W-92,h:H-66};
+    bells(ctx,R,{n:5});
+    ctx.fillStyle="#475569";ctx.font="13px Montserrat,sans-serif";
+    ctx.fillText("Xᵢ",R.x0+R.w-4,R.y0+16);ctx.fillText("Yᵢ",R.x0-22,R.y0-R.h+12);
+    ctx.fillStyle="#0e8b87";ctx.font="12px Montserrat,sans-serif";
+    ctx.fillText("● 각 분포의 평균(대푯값) → 회귀선 위에 놓인다",R.x0+R.w*0.16,R.y0-R.h+14);
+  }
+
+  function assume(id){
+    var c=document.getElementById(id);if(!c)return;var ctx=c.getContext('2d'),W=c.width,H=c.height;ctx.clearRect(0,0,W,H);
+    var cw=W/2-12, ch=H/2-44;
+    var cells=[
+      {x:8,ty:20,o:{slope:0.5,intercept:0.3,n:5,sig:0.055,bias:0.16,meanLine:true},t:"① E(ε)≠0  (편향)"},
+      {x:W/2+4,ty:20,o:{slope:0.5,intercept:0.2,n:5,sig:0.045,hetero:true},t:"② 이분산 (분산 불일정)"},
+      {x:8,ty:H/2+16,o:{slope:0.5,intercept:0.2,n:5,sig:0.06,skew:true},t:"③ 비정규성 (치우침)"},
+      {x:W/2+4,ty:H/2+16,o:{slope:0.5,intercept:0.2,n:5,sig:0.055,connect:true},t:"④ 비독립 (서로 영향)"}
+    ];
+    cells.forEach(function(cell){
+      ctx.fillStyle="#0f172a";ctx.font="700 13px Montserrat,sans-serif";ctx.fillText(cell.t,cell.x+8,cell.ty);
+      var R={x0:cell.x+26,y0:cell.ty+ch+10,w:cw-34,h:ch-6};
+      bells(ctx,R,cell.o);
+    });
+  }
+
+  function control(id){
+    var c=document.getElementById(id);if(!c)return;var ctx=c.getContext('2d'),W=c.width,H=c.height;ctx.clearRect(0,0,W,H);
+    function g(x,mu,sd,amp){return amp*Math.exp(-Math.pow((x-mu)/sd,2)/2);}
+    // 좌: f(Y_i) + 조건부 슬라이스
+    var lx=42, lw=300, axisY=H-44;
+    ctx.strokeStyle="#94a3b8";ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(lx,axisY);ctx.lineTo(lx+lw,axisY);ctx.stroke();
+    ctx.fillStyle="#475569";ctx.font="12px Montserrat,sans-serif";ctx.fillText("Yᵢ",lx+lw-4,axisY+15);
+    var mu=lx+lw*0.5, sd=lw*0.15, amp=H*0.42;
+    ctx.strokeStyle="#0078d7";ctx.lineWidth=2.2;ctx.beginPath();
+    for(var x=lx;x<=lx+lw;x+=2){var y=axisY-g(x,mu,sd,amp);(x===lx?ctx.moveTo:ctx.lineTo).call(ctx,x,y);}
+    ctx.stroke();
+    ctx.fillStyle="#0f172a";ctx.font="13px Montserrat,sans-serif";ctx.fillText("f(Yᵢ)",mu+sd+6,axisY-amp+10);
+    [{x:mu-sd*1.4,l:"p₁"},{x:mu,l:"p₂"},{x:mu+sd*1.2,l:"p₃"}].forEach(function(s){
+      var top=axisY-g(s.x,mu,sd,amp);
+      ctx.strokeStyle="#cbd5e1";ctx.setLineDash([4,3]);ctx.beginPath();ctx.moveTo(s.x,axisY);ctx.lineTo(s.x,top);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle="#64748b";ctx.font="11px Montserrat,sans-serif";ctx.fillText(s.l,s.x-6,top-4);
+    });
+    // 우: 조건부 분포들이 이루는 surface (joyplot 원근)
+    var rx=408, rw=270, by=H-46, rows=6, sk=20, dy=15;
+    for(var k=rows;k>=0;k--){
+      var oy=by-k*dy, ox=rx+k*sk;
+      ctx.beginPath();
+      for(var i=0;i<=60;i++){var t=i/60,X=ox+t*rw;var h=g(t,0.32,0.12,1)+0.7*g(t,0.72,0.13,1);(i===0?ctx.moveTo:ctx.lineTo).call(ctx,X,oy-h*38);}
+      ctx.lineTo(ox+rw,oy);ctx.lineTo(ox,oy);ctx.closePath();
+      ctx.fillStyle="rgba(255,255,255,0.93)";ctx.fill();
+      ctx.strokeStyle="#0078d7";ctx.lineWidth=1.2;ctx.beginPath();
+      for(var i2=0;i2<=60;i2++){var t2=i2/60,X2=ox+t2*rw;var h2=g(t2,0.32,0.12,1)+0.7*g(t2,0.72,0.13,1);(i2===0?ctx.moveTo:ctx.lineTo).call(ctx,X2,oy-h2*38);}
+      ctx.stroke();
+    }
+    ctx.fillStyle="#64748b";ctx.font="12px Montserrat,sans-serif";ctx.fillText("(Distribution 예시)",rx+rw*0.3,28);
+  }
+
+  function run(){
+    drawScatter("cvVarA",{slope:0.62,intercept:0.16,spread:0.135,seed:7,n:70});
+    drawScatter("cvVarB",{slope:0.62,intercept:0.16,spread:0.04,seed:23,n:70});
+    drawCorrRow("cvCorr");
+    fig03("cvFig03");
+    drawScatter("cvReg",{slope:0.7,intercept:0.12,spread:0.075,seed:41,n:26,resid:true});
+    assume("cvAssume");
+    control("cvControl");
+  }
+  if(document.readyState!=="loading") run(); else document.addEventListener("DOMContentLoaded",run);
+})();
+</script>
+
+</body>
+</html>

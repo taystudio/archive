@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API Gateway Solution (BEAST) — TAYLEE Archive</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="API Gateway Solution (BEAST) — TAYLEE Archive">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/posts/api-gateway.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="API Gateway Solution (BEAST) — TAYLEE Archive">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="../../../css/style.css?v=20260605-18">
+<link rel="stylesheet" type="text/css" href="../posts.css?v=20260605-18">
+
+<script src="../../../js/main.js?v=20260605-18" defer></script>
+<script src="../../../js/components/nav.js?v=20260605-18" sync></script>
+<script src="../../../js/components/footer.js?v=20260605-18" sync></script>
+<script src="../../../js/components/header.js?v=20260605-18" sync></script>
+
+<common-header-component></common-header-component>
+</head>
+<body>
+<nav-component></nav-component>
+
+<main class="docs-post">
+  <article class="docs-post__article">
+    <header class="docs-post__header">
+      <p class="docs-post__eyebrow"><a href="../../TAYLEE documents.html">← Documents</a></p>
+      <h1 class="docs-post__title">API Gateway Solution (BEAST)</h1>
+    </header>
+    <div class="docs-post__body">
+
+<div class="docs-langtabs" role="tablist">
+  <button class="docs-langbtn is-active" data-lang="en">English</button>
+  <button class="docs-langbtn" data-lang="ko">한국어</button>
+</div>
+
+<!-- ============================ ENGLISH ============================ -->
+<div class="docs-lang" data-lang="en">
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">⚡</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>One line</strong> — A single API Gateway that unifies many different provider APIs (Netflix, Disney, Kakao …) under one authentication / routing layer. Now the core engine of <strong>KT API-Link</strong>, reliably handling <strong>50M+ requests/day</strong>.</p>
+  </div>
+</div>
+
+<dl class="docs-meta">
+  <dt>Period</dt><dd>March 2022 ~ December 2023</dd>
+  <dt>Role</dt><dd>Backend Server Developer · Performance Optimization</dd>
+  <dt>Scope</dt><dd>Solutions for both internal and external use</dd>
+</dl>
+
+<h2 class="docs-h2">What it does</h2>
+<p class="docs-p">The solution consists of an <strong>API Gateway Core System</strong> and a <strong>back-office portal</strong> for monitoring and managing APIs. It unifies different API interfaces and centralizes authentication / authorization, collapsing a complex integration structure into a single gateway.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <!-- clients -->
+  <text x="80" y="60" text-anchor="middle" fill="#64748b" font-weight="700">Clients</text>
+  <g fill="#0f172a">
+    <rect x="24" y="71" width="112" height="30" rx="7" fill="#eef2f7" stroke="#94a3b8"/><text x="80" y="91" text-anchor="middle">Netflix / OTT</text>
+    <rect x="24" y="115" width="112" height="30" rx="7" fill="#eef2f7" stroke="#94a3b8"/><text x="80" y="135" text-anchor="middle">Kakao</text>
+    <rect x="24" y="159" width="112" height="30" rx="7" fill="#eef2f7" stroke="#94a3b8"/><text x="80" y="179" text-anchor="middle">Partners …</text>
+  </g>
+  <!-- gateway (center axis y=130) -->
+  <rect x="250" y="40" width="220" height="180" rx="14" fill="#e8f3fc" stroke="#0078d7" stroke-width="1.5"/>
+  <text x="360" y="64" text-anchor="middle" fill="#003B62" font-weight="700" font-size="14">API Gateway (BEAST)</text>
+  <g fill="#0f172a">
+    <rect x="270" y="78" width="180" height="30" rx="7" fill="#fff" stroke="#0078d7"/><text x="360" y="98" text-anchor="middle">Auth / AuthZ</text>
+    <rect x="270" y="116" width="180" height="30" rx="7" fill="#fff" stroke="#0078d7"/><text x="360" y="136" text-anchor="middle">Routing</text>
+    <rect x="270" y="154" width="180" height="30" rx="7" fill="#fff" stroke="#0078d7"/><text x="360" y="174" text-anchor="middle">Handlers (JSON ↔ XML, transform)</text>
+  </g>
+  <!-- backends (same rows as clients) -->
+  <text x="628" y="60" text-anchor="middle" fill="#64748b" font-weight="700">Backend APIs</text>
+  <g fill="#0f172a">
+    <rect x="568" y="71" width="120" height="30" rx="7" fill="#e9f7f3" stroke="#0e8b87"/><text x="628" y="91" text-anchor="middle">Provider A</text>
+    <rect x="568" y="115" width="120" height="30" rx="7" fill="#e9f7f3" stroke="#0e8b87"/><text x="628" y="135" text-anchor="middle">Provider B</text>
+    <rect x="568" y="159" width="120" height="30" rx="7" fill="#e9f7f3" stroke="#0e8b87"/><text x="628" y="179" text-anchor="middle">Provider …</text>
+  </g>
+  <!-- arrows (horizontal on center axis y=130) -->
+  <g stroke="#475569" stroke-width="1.6" fill="#475569">
+    <line x1="136" y1="130" x2="246" y2="130"/><polygon points="250,130 242,126 242,134"/>
+    <line x1="470" y1="130" x2="564" y2="130"/><polygon points="568,130 560,126 560,134"/>
+  </g>
+  <!-- back-office -->
+  <rect x="270" y="240" width="180" height="34" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="5 4"/>
+  <text x="360" y="261" text-anchor="middle" fill="#475569">Back-office portal (monitoring · 관리)</text>
+  <line x1="360" y1="220" x2="360" y2="238" stroke="#94a3b8" stroke-dasharray="4 3"/>
+  <text x="200" y="295" fill="#64748b">50M+ requests / day</text>
+</svg>
+<figcaption>One gateway in front of many provider APIs — unified auth, routing and request transformation</figcaption>
+</div>
+
+<h2 class="docs-h2">Impact</h2>
+<ul class="docs-list">
+  <li>Unified different API interfaces (e.g., Netflix, Disney) and centralized authentication / authorization, simplifying a complex integration structure into a single gateway.</li>
+  <li>Integrated into <strong>KT API-Link</strong>, where it now operates as the core engine of the API integration platform, reliably handling over <strong>50 million requests per day</strong>.</li>
+</ul>
+<p class="docs-p">Live service: <a href="https://apilink.kt.co.kr/" target="_blank" rel="noopener">KT API-Link</a>.</p>
+
+<h2 class="docs-h2">Tech stack</h2>
+<div class="docs-chips">
+  <span class="docs-chip docs-chip--key">API Gateway</span><span class="docs-chip docs-chip--key">Handler</span><span class="docs-chip docs-chip--key">RESTful API</span><span class="docs-chip docs-chip--key">Protocol / Network</span>
+  <span class="docs-chip">Java</span><span class="docs-chip">Spring Boot</span><span class="docs-chip">Spring WebFlux</span><span class="docs-chip">Spring Cloud</span>
+  <span class="docs-chip">PostgreSQL</span><span class="docs-chip">MongoDB</span><span class="docs-chip">JPA</span><span class="docs-chip">R2DBC</span><span class="docs-chip">Reactive MongoDB</span>
+  <span class="docs-chip">Linux (Ubuntu)</span><span class="docs-chip">AWS</span><span class="docs-chip">On-premise</span>
+</div>
+
+<h2 class="docs-h2">Key roles &amp; achievements</h2>
+<p class="docs-p">The project was carried out in <strong>three phases over two years</strong>.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 720 130" width="720" height="130" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <g>
+    <rect x="14" y="34" width="216" height="62" rx="10" fill="#eef2f7" stroke="#94a3b8"/>
+    <text x="122" y="58" text-anchor="middle" fill="#0f172a" font-weight="700">Phase 1</text>
+    <text x="122" y="78" text-anchor="middle" fill="#64748b">Back-Office Portal</text>
+    <rect x="252" y="34" width="216" height="62" rx="10" fill="#e8f3fc" stroke="#0078d7"/>
+    <text x="360" y="58" text-anchor="middle" fill="#0f172a" font-weight="700">Phase 2</text>
+    <text x="360" y="78" text-anchor="middle" fill="#64748b">KT API-Link Integration</text>
+    <rect x="490" y="34" width="216" height="62" rx="10" fill="#e9f7f3" stroke="#0e8b87"/>
+    <text x="598" y="58" text-anchor="middle" fill="#0f172a" font-weight="700">Phase 3</text>
+    <text x="598" y="78" text-anchor="middle" fill="#64748b">WebFlux / Reactive Core</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="#475569">
+    <line x1="230" y1="65" x2="250" y2="65"/><polygon points="252,65 244,61 244,69"/>
+    <line x1="468" y1="65" x2="488" y2="65"/><polygon points="490,65 482,61 482,69"/>
+  </g>
+</svg>
+<figcaption>Three sequential phases over two years</figcaption>
+</div>
+
+<h3 class="docs-h3">⊙ Phase 1 — Back-Office Portal</h3>
+<ul class="docs-list">
+  <li><strong>Dashboard:</strong> real-time monitoring of API status and performance.</li>
+  <li><strong>API Management:</strong> registration, modification, deletion and lifecycle management.</li>
+  <li><strong>Data Collection &amp; Aggregation:</strong> scheduled periodic log aggregation.</li>
+  <li><strong>Community Support:</strong> announcements and user-community features.</li>
+</ul>
+
+<h3 class="docs-h3">⊙ Phase 2 — System Integration (KT API-Link)</h3>
+<ul class="docs-list">
+  <li>Integrated the gateway into <strong>KT API-Link</strong> and improved system performance.</li>
+  <li><strong>Query Performance Optimization:</strong> composite indexes and optimized data structures.</li>
+  <li><strong>Handler Management:</strong> customizable deployment and configuration.</li>
+  <li><strong>Security:</strong> adjustments for infrastructure such as firewall environments (added bypass functions).</li>
+</ul>
+
+<h3 class="docs-h3">⊙ Phase 3 — Core Enhancement &amp; WebFlux Migration</h3>
+<ul class="docs-list">
+  <li>Migrated to a <strong>Reactive REST API</strong> with WebFlux for high-performance processing.</li>
+  <li><strong>Non-blocking ORM:</strong> applied R2DBC and Reactive MongoDB.</li>
+  <li><strong>Thread Pool Optimization:</strong> resolved blocking I/O by leveraging Netty’s event-loop and offloading async tasks to separate thread pools (TaskScheduler).</li>
+  <li><strong>Performance Testing:</strong> TPS / response-time analysis with Apache Bench, then optimization.</li>
+</ul>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">Troubleshooting — Thread-pool exhaustion bottleneck</h2>
+<p class="docs-p"><strong>Issue:</strong> After certain APIs were registered, request processing slowed dramatically — some requests were delayed for tens of seconds or never responded. The cause and the responsible API were initially unclear, causing continuous response delays across the whole system.</p>
+
+<p class="docs-p"><strong>Root cause:</strong> The gateway lets you insert <strong>custom handlers</strong> at intermediate stages (JSON↔XML conversion, format transformation, external API calls). Many handlers made <strong>blocking calls</strong> to external providers. When an external response was slow, the blocking code held Netty <strong>Worker Threads</strong> for a long time → <strong>EventLoop exhaustion</strong> → throughput collapse. JPA-based DB access added further small blocking.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 720 270" width="720" height="270" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="11.5">
+  <!-- BEFORE -->
+  <text x="180" y="24" text-anchor="middle" fill="#e11d48" font-weight="700">Before — blocking on EventLoop</text>
+  <rect x="40" y="40" width="280" height="200" rx="10" fill="#fef2f2" stroke="#fecaca"/>
+  <rect x="60" y="60" width="240" height="48" rx="8" fill="#fff" stroke="#e11d48"/>
+  <text x="180" y="80" text-anchor="middle" fill="#0f172a" font-weight="700">Netty EventLoop</text>
+  <text x="180" y="98" text-anchor="middle" fill="#64748b">Worker Threads (I/O)</text>
+  <rect x="78" y="126" width="204" height="40" rx="8" fill="#fee2e2" stroke="#e11d48"/>
+  <text x="180" y="151" text-anchor="middle" fill="#b91c1c">blocking handler → external API ⏳</text>
+  <text x="180" y="196" text-anchor="middle" fill="#b91c1c" font-weight="700">threads held → exhaustion</text>
+  <text x="180" y="218" text-anchor="middle" fill="#64748b">requests pile up / time out</text>
+  <!-- AFTER -->
+  <text x="540" y="24" text-anchor="middle" fill="#0e8b87" font-weight="700">After — offload + reactive</text>
+  <rect x="400" y="40" width="280" height="200" rx="10" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <rect x="420" y="60" width="240" height="40" rx="8" fill="#fff" stroke="#0078d7"/>
+  <text x="540" y="85" text-anchor="middle" fill="#0f172a">Netty EventLoop — pure I/O only</text>
+  <rect x="420" y="116" width="240" height="40" rx="8" fill="#e9f7f3" stroke="#0e8b87"/>
+  <text x="540" y="141" text-anchor="middle" fill="#0f172a">Dedicated pool (TaskScheduler) — blocking ops</text>
+  <rect x="420" y="172" width="240" height="40" rx="8" fill="#e8f3fc" stroke="#0078d7"/>
+  <text x="540" y="197" text-anchor="middle" fill="#0f172a">R2DBC · Reactive MongoDB (non-blocking)</text>
+  <text x="540" y="230" text-anchor="middle" fill="#0e8b87" font-weight="700">stable high throughput</text>
+</svg>
+<figcaption>Blocking work moved off the EventLoop into a dedicated pool; DB access made reactive</figcaption>
+</div>
+
+<p class="docs-p"><strong>Resolution:</strong></p>
+<ul class="docs-list">
+  <li>Separated blocking operations into <strong>dedicated thread pools</strong> (e.g., TaskScheduler), letting the main EventLoop do pure I/O only.</li>
+  <li>Converted blocking calls to <strong>multi-threaded asynchronous execution</strong>, so one slow handler no longer affects the whole system.</li>
+  <li>Migrated DB operations (e.g., log insertion) to <strong>Reactive MongoDB and R2DBC</strong>, minimizing blocking.</li>
+  <li>After restructuring, the gateway reliably handled high traffic without degradation, preventing recurrence of operational incidents.</li>
+</ul>
+
+</div>
+
+<!-- ============================ 한국어 ============================ -->
+<div class="docs-lang" data-lang="ko" hidden>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">⚡</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>한 줄 요약</strong> — 서로 다른 공급사 API(Netflix, Disney, Kakao …)를 하나의 인증·라우팅 계층으로 통합한 단일 <strong>API Gateway</strong>. 현재 <strong>KT API-Link</strong> 의 핵심 엔진으로 <strong>하루 5,000만 건 이상</strong> 의 요청을 안정적으로 처리한다.</p>
+  </div>
+</div>
+
+<dl class="docs-meta">
+  <dt>기간</dt><dd>2022년 3월 ~ 2023년 12월</dd>
+  <dt>역할</dt><dd>백엔드 서버 개발 · 성능 최적화</dd>
+  <dt>범위</dt><dd>사내·사외 양쪽을 위한 솔루션 개발</dd>
+</dl>
+
+<h2 class="docs-h2">무엇을 하는가</h2>
+<p class="docs-p">이 솔루션은 <strong>API Gateway Core System</strong> 과 API 모니터링·관리를 위한 <strong>백오피스 포털</strong> 로 구성된다. 서로 다른 API 인터페이스를 통합하고 인증·인가를 중앙화하여, 복잡한 연동 구조를 하나의 게이트웨이로 단순화한다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 720 300" width="720" height="300" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <text x="80" y="32" text-anchor="middle" fill="#64748b" font-weight="700">클라이언트</text>
+  <g fill="#0f172a">
+    <rect x="24" y="48" width="112" height="30" rx="7" fill="#eef2f7" stroke="#94a3b8"/><text x="80" y="68" text-anchor="middle">Netflix / OTT</text>
+    <rect x="24" y="90" width="112" height="30" rx="7" fill="#eef2f7" stroke="#94a3b8"/><text x="80" y="110" text-anchor="middle">Kakao</text>
+    <rect x="24" y="132" width="112" height="30" rx="7" fill="#eef2f7" stroke="#94a3b8"/><text x="80" y="152" text-anchor="middle">파트너사 …</text>
+  </g>
+  <rect x="250" y="40" width="220" height="180" rx="14" fill="#e8f3fc" stroke="#0078d7" stroke-width="1.5"/>
+  <text x="360" y="64" text-anchor="middle" fill="#003B62" font-weight="700" font-size="14">API Gateway (BEAST)</text>
+  <g fill="#0f172a">
+    <rect x="270" y="78" width="180" height="30" rx="7" fill="#fff" stroke="#0078d7"/><text x="360" y="98" text-anchor="middle">인증 / 인가</text>
+    <rect x="270" y="116" width="180" height="30" rx="7" fill="#fff" stroke="#0078d7"/><text x="360" y="136" text-anchor="middle">라우팅</text>
+    <rect x="270" y="154" width="180" height="30" rx="7" fill="#fff" stroke="#0078d7"/><text x="360" y="174" text-anchor="middle">핸들러 (JSON ↔ XML 변환)</text>
+  </g>
+  <text x="624" y="32" text-anchor="middle" fill="#64748b" font-weight="700">백엔드 API</text>
+  <g fill="#0f172a">
+    <rect x="568" y="62" width="120" height="30" rx="7" fill="#e9f7f3" stroke="#0e8b87"/><text x="628" y="82" text-anchor="middle">공급사 A</text>
+    <rect x="568" y="104" width="120" height="30" rx="7" fill="#e9f7f3" stroke="#0e8b87"/><text x="628" y="124" text-anchor="middle">공급사 B</text>
+    <rect x="568" y="146" width="120" height="30" rx="7" fill="#e9f7f3" stroke="#0e8b87"/><text x="628" y="166" text-anchor="middle">공급사 …</text>
+  </g>
+  <g stroke="#475569" stroke-width="1.6" fill="#475569">
+    <line x1="138" y1="105" x2="246" y2="120"/><polygon points="250,121 240,116 241,124"/>
+    <line x1="472" y1="120" x2="564" y2="105"/><polygon points="568,104 558,103 561,111"/>
+  </g>
+  <rect x="270" y="240" width="180" height="34" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="5 4"/>
+  <text x="360" y="261" text-anchor="middle" fill="#475569">백오피스 포털 (모니터링·관리)</text>
+  <line x1="360" y1="220" x2="360" y2="238" stroke="#94a3b8" stroke-dasharray="4 3"/>
+  <text x="200" y="295" fill="#64748b">하루 5,000만+ 요청</text>
+</svg>
+<figcaption>여러 공급사 API 앞단의 단일 게이트웨이 — 인증·라우팅·요청 변환을 통합</figcaption>
+</div>
+
+<h2 class="docs-h2">성과</h2>
+<ul class="docs-list">
+  <li>서로 다른 API 인터페이스(예: Netflix, Disney)를 통합하고 인증·인가를 중앙화하여, 복잡한 연동 구조를 하나의 게이트웨이로 단순화했다.</li>
+  <li><strong>KT API-Link</strong> 에 통합되어 API 통합 플랫폼의 핵심 엔진으로 동작하며, <strong>하루 5,000만 건 이상</strong> 의 요청을 안정적으로 처리한다.</li>
+</ul>
+<p class="docs-p">실서비스: <a href="https://apilink.kt.co.kr/" target="_blank" rel="noopener">KT API-Link</a>.</p>
+
+<h2 class="docs-h2">기술 스택</h2>
+<div class="docs-chips">
+  <span class="docs-chip docs-chip--key">API Gateway</span><span class="docs-chip docs-chip--key">Handler</span><span class="docs-chip docs-chip--key">RESTful API</span><span class="docs-chip docs-chip--key">Protocol / Network</span>
+  <span class="docs-chip">Java</span><span class="docs-chip">Spring Boot</span><span class="docs-chip">Spring WebFlux</span><span class="docs-chip">Spring Cloud</span>
+  <span class="docs-chip">PostgreSQL</span><span class="docs-chip">MongoDB</span><span class="docs-chip">JPA</span><span class="docs-chip">R2DBC</span><span class="docs-chip">Reactive MongoDB</span>
+  <span class="docs-chip">Linux (Ubuntu)</span><span class="docs-chip">AWS</span><span class="docs-chip">On-premise</span>
+</div>
+
+<h2 class="docs-h2">핵심 역할 &amp; 성과</h2>
+<p class="docs-p">프로젝트는 <strong>2년에 걸쳐 3단계</strong> 로 진행되었다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 720 130" width="720" height="130" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <g>
+    <rect x="14" y="34" width="216" height="62" rx="10" fill="#eef2f7" stroke="#94a3b8"/>
+    <text x="122" y="58" text-anchor="middle" fill="#0f172a" font-weight="700">1단계</text>
+    <text x="122" y="78" text-anchor="middle" fill="#64748b">백오피스 포털</text>
+    <rect x="252" y="34" width="216" height="62" rx="10" fill="#e8f3fc" stroke="#0078d7"/>
+    <text x="360" y="58" text-anchor="middle" fill="#0f172a" font-weight="700">2단계</text>
+    <text x="360" y="78" text-anchor="middle" fill="#64748b">KT API-Link 통합</text>
+    <rect x="490" y="34" width="216" height="62" rx="10" fill="#e9f7f3" stroke="#0e8b87"/>
+    <text x="598" y="58" text-anchor="middle" fill="#0f172a" font-weight="700">3단계</text>
+    <text x="598" y="78" text-anchor="middle" fill="#64748b">WebFlux / Reactive 코어</text>
+  </g>
+  <g stroke="#475569" stroke-width="2" fill="#475569">
+    <line x1="230" y1="65" x2="250" y2="65"/><polygon points="252,65 244,61 244,69"/>
+    <line x1="468" y1="65" x2="488" y2="65"/><polygon points="490,65 482,61 482,69"/>
+  </g>
+</svg>
+<figcaption>2년에 걸친 3단계 순차 진행</figcaption>
+</div>
+
+<h3 class="docs-h3">⊙ 1단계 — 백오피스 포털 개발</h3>
+<ul class="docs-list">
+  <li><strong>대시보드:</strong> API 상태·성능 실시간 모니터링.</li>
+  <li><strong>API 관리:</strong> 등록·수정·삭제 및 생명주기(lifecycle) 관리.</li>
+  <li><strong>데이터 수집·집계:</strong> 주기적 로그 집계 스케줄링.</li>
+  <li><strong>커뮤니티 지원:</strong> 공지·사용자 커뮤니티 기능.</li>
+</ul>
+
+<h3 class="docs-h3">⊙ 2단계 — 시스템 통합 (KT API-Link)</h3>
+<ul class="docs-list">
+  <li>게이트웨이 솔루션을 <strong>KT API-Link</strong> 에 통합하고 시스템 성능을 개선.</li>
+  <li><strong>쿼리 성능 최적화:</strong> 복합 인덱스 적용 및 데이터 구조 최적화.</li>
+  <li><strong>핸들러 관리:</strong> 커스터마이즈 가능한 배포·설정 기능 구현.</li>
+  <li><strong>보안 대응:</strong> 방화벽 환경 등 인프라 특성에 맞춘 기능 조정(우회 기능 추가).</li>
+</ul>
+
+<h3 class="docs-h3">⊙ 3단계 — 코어 고도화 &amp; WebFlux 전환</h3>
+<ul class="docs-list">
+  <li>고성능 처리를 위해 WebFlux 기반 <strong>Reactive REST API</strong> 로 전환.</li>
+  <li><strong>논블로킹 ORM:</strong> R2DBC, Reactive MongoDB 적용.</li>
+  <li><strong>스레드 풀 최적화:</strong> Netty 이벤트 루프 구조를 활용하고 비동기 작업을 별도 스레드 풀(TaskScheduler)로 재구성하여 blocking I/O 해소.</li>
+  <li><strong>성능 테스트:</strong> Apache Bench 로 TPS·응답시간 분석 후 최적화.</li>
+</ul>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">트러블슈팅 — 스레드 풀 고갈 병목</h2>
+<p class="docs-p"><strong>문제:</strong> 특정 API 들이 등록된 이후 클라이언트 요청 처리가 크게 느려졌고, 일부 요청은 수십 초간 지연되거나 아예 응답하지 못했다. 처음에는 원인과 어떤 API 가 문제인지 불분명해 시스템 전반의 응답 지연이 계속되었다.</p>
+
+<p class="docs-p"><strong>원인 분석:</strong> API Gateway 구조는 중간 처리 단계에 <strong>커스텀 핸들러</strong> 를 삽입해 JSON↔XML 변환, 요청 포맷 변환, 외부 API 호출 등을 처리한다. 그런데 많은 핸들러가 외부 공급사 API 호출 시 <strong>blocking 방식</strong> 으로 동작했다. 외부 응답이 지연되면 blocking 코드가 Netty <strong>Worker Thread</strong> 를 오래 점유하여 <strong>EventLoop 스레드 고갈</strong> 이 발생, 전체 처리량이 급감했다. 또한 코어가 <strong>JPA 기반 ORM</strong> 으로 DB 에 접근하면서 소규모 blocking 이 추가로 더해졌다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 720 270" width="720" height="270" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="11.5">
+  <text x="180" y="24" text-anchor="middle" fill="#e11d48" font-weight="700">Before — EventLoop 위 blocking</text>
+  <rect x="40" y="40" width="280" height="200" rx="10" fill="#fef2f2" stroke="#fecaca"/>
+  <rect x="60" y="60" width="240" height="48" rx="8" fill="#fff" stroke="#e11d48"/>
+  <text x="180" y="80" text-anchor="middle" fill="#0f172a" font-weight="700">Netty EventLoop</text>
+  <text x="180" y="98" text-anchor="middle" fill="#64748b">Worker Threads (I/O)</text>
+  <rect x="78" y="126" width="204" height="40" rx="8" fill="#fee2e2" stroke="#e11d48"/>
+  <text x="180" y="151" text-anchor="middle" fill="#b91c1c">blocking 핸들러 → 외부 API ⏳</text>
+  <text x="180" y="196" text-anchor="middle" fill="#b91c1c" font-weight="700">스레드 점유 → 고갈</text>
+  <text x="180" y="218" text-anchor="middle" fill="#64748b">요청 적체 / 타임아웃</text>
+  <text x="540" y="24" text-anchor="middle" fill="#0e8b87" font-weight="700">After — 분리 + 리액티브</text>
+  <rect x="400" y="40" width="280" height="200" rx="10" fill="#f0fdf4" stroke="#bbf7d0"/>
+  <rect x="420" y="60" width="240" height="40" rx="8" fill="#fff" stroke="#0078d7"/>
+  <text x="540" y="85" text-anchor="middle" fill="#0f172a">Netty EventLoop — 순수 I/O 전담</text>
+  <rect x="420" y="116" width="240" height="40" rx="8" fill="#e9f7f3" stroke="#0e8b87"/>
+  <text x="540" y="141" text-anchor="middle" fill="#0f172a">전용 풀 (TaskScheduler) — blocking 작업</text>
+  <rect x="420" y="172" width="240" height="40" rx="8" fill="#e8f3fc" stroke="#0078d7"/>
+  <text x="540" y="197" text-anchor="middle" fill="#0f172a">R2DBC · Reactive MongoDB (논블로킹)</text>
+  <text x="540" y="230" text-anchor="middle" fill="#0e8b87" font-weight="700">안정적 고처리량</text>
+</svg>
+<figcaption>blocking 작업을 EventLoop 밖 전용 풀로 분리하고 DB 접근을 리액티브로 전환</figcaption>
+</div>
+
+<p class="docs-p"><strong>해결 및 핵심 조치:</strong></p>
+<ul class="docs-list">
+  <li>blocking 작업을 <strong>전용 스레드 풀</strong>(예: TaskScheduler)로 분리하여, 메인 EventLoop 은 순수 I/O 처리만 담당하도록 함.</li>
+  <li>blocking 호출을 <strong>멀티스레드 비동기 실행</strong> 으로 전환하여, 한 핸들러의 지연이 전체 시스템에 영향을 주지 않도록 함.</li>
+  <li>로그 적재 등 DB 작업을 <strong>Reactive MongoDB·R2DBC</strong> 로 이전하여 시스템 전반의 blocking 최소화.</li>
+  <li>재구성 이후 게이트웨이는 성능 저하 없이 고트래픽을 안정적으로 처리하여 운영 장애 재발을 방지.</li>
+</ul>
+
+</div>
+
+    </div>
+  </article>
+</main>
+
+<footer-component></footer-component>
+
+<script>
+(function(){
+  var btns = document.querySelectorAll('.docs-langbtn');
+  var panes = document.querySelectorAll('.docs-lang');
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var lang = b.getAttribute('data-lang');
+      btns.forEach(function(x){ x.classList.toggle('is-active', x.getAttribute('data-lang')===lang); });
+      panes.forEach(function(p){ p.hidden = (p.getAttribute('data-lang')!==lang); });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

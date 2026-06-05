@@ -249,7 +249,7 @@
 }
 
 .down_report:hover{
-    color: rgb(165, 17, 17) ;
+    color: var(--accent-2) ;
     transition: 0.5s
 }
 

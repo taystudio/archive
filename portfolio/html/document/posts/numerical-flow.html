@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>채널 유동 수치해석 — TAYLEE Archive</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="채널 유동 수치해석 — TAYLEE Archive">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/posts/numerical-flow.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="채널 유동 수치해석 — TAYLEE Archive">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="../../../css/style.css?v=20260605-18">
+<link rel="stylesheet" type="text/css" href="../posts.css?v=20260605-18">
+
+<script src="../../../js/main.js?v=20260605-18" defer></script>
+<script src="../../../js/components/nav.js?v=20260605-18" sync></script>
+<script src="../../../js/components/footer.js?v=20260605-18" sync></script>
+<script src="../../../js/components/header.js?v=20260605-18" sync></script>
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+<common-header-component></common-header-component>
+</head>
+<body>
+<nav-component></nav-component>
+
+<main class="docs-post">
+  <article class="docs-post__article">
+    <header class="docs-post__header">
+      <p class="docs-post__eyebrow"><a href="../../TAYLEE documents.html">← Documents</a></p>
+      <h1 class="docs-post__title">채널 유동 수치해석 (Channel Flow DNS)</h1>
+    </header>
+    <div class="docs-post__body">
+
+<p class="docs-p">3차원 비압축성 <strong>채널 유동(channel flow)</strong> 을 직접 수치해석(DNS)하기 위한 솔버를 정리한 글이다. 큰 줄기는 다음 한 줄로 요약된다 — <em>지배방정식 무차원화 → Projection method → (Adams–Bashforth + Crank–Nicolson) 시간적분 → (Spectral + FDM) 공간 이산화 → 비균일·엇갈림(staggered) 격자 → TDMA → 압력 Poisson</em>.</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🌊</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>핵심 설계</strong> — 벽에 평행한 \(x\)(주류)·\(z\)(스팬) 방향은 주기적이므로 <strong>스펙트럴(Fourier)</strong> 로 정확히 미분하고, 벽에 수직한 \(y\) 방향만 <strong>유한차분(FDM)</strong> + 비균일 격자로 다룬다. 비선형 항은 explicit(Adams–Bashforth), 점성 항은 implicit(Crank–Nicolson)으로 처리해 안정성과 정확도를 함께 잡는다.</p>
+  </div>
+</div>
+
+<div class="docs-fig">
+<svg viewBox="0 0 560 230" width="560" height="230" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif">
+  <rect x="60" y="40" width="440" height="150" fill="#f8fafc" stroke="#cbd5e1"/>
+  <line x1="60" y1="40" x2="500" y2="40" stroke="#0f172a" stroke-width="3"/>
+  <line x1="60" y1="190" x2="500" y2="190" stroke="#0f172a" stroke-width="3"/>
+  <g stroke="#94a3b8" stroke-width="1">
+    <line x1="60" y1="34" x2="72" y2="40"/><line x1="100" y1="34" x2="112" y2="40"/><line x1="140" y1="34" x2="152" y2="40"/><line x1="180" y1="34" x2="192" y2="40"/><line x1="220" y1="34" x2="232" y2="40"/><line x1="260" y1="34" x2="272" y2="40"/><line x1="300" y1="34" x2="312" y2="40"/><line x1="340" y1="34" x2="352" y2="40"/><line x1="380" y1="34" x2="392" y2="40"/><line x1="420" y1="34" x2="432" y2="40"/><line x1="460" y1="34" x2="472" y2="40"/>
+    <line x1="60" y1="196" x2="72" y2="190"/><line x1="100" y1="196" x2="112" y2="190"/><line x1="140" y1="196" x2="152" y2="190"/><line x1="180" y1="196" x2="192" y2="190"/><line x1="220" y1="196" x2="232" y2="190"/><line x1="260" y1="196" x2="272" y2="190"/><line x1="300" y1="196" x2="312" y2="190"/><line x1="340" y1="196" x2="352" y2="190"/><line x1="380" y1="196" x2="392" y2="190"/><line x1="420" y1="196" x2="432" y2="190"/><line x1="460" y1="196" x2="472" y2="190"/>
+  </g>
+  <g stroke="#0078d7" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <line x1="150" y1="60" x2="200" y2="60"/><line x1="150" y1="85" x2="245" y2="85"/><line x1="150" y1="115" x2="265" y2="115"/><line x1="150" y1="145" x2="245" y2="145"/><line x1="150" y1="170" x2="200" y2="170"/>
+  </g>
+  <g fill="#0078d7">
+    <polygon points="200,60 192,56 192,64"/><polygon points="245,85 237,81 237,89"/><polygon points="265,115 257,111 257,119"/><polygon points="245,145 237,141 237,149"/><polygon points="200,170 192,166 192,174"/>
+  </g>
+  <line x1="520" y1="190" x2="520" y2="120" stroke="#475569" stroke-width="1.5"/><polygon points="520,116 516,126 524,126" fill="#475569"/>
+  <text x="528" y="125" font-size="12" fill="#475569">y (벽수직)</text>
+  <line x1="520" y1="190" x2="545" y2="205" stroke="#475569" stroke-width="1.5"/><text x="512" y="218" font-size="12" fill="#475569">z (스팬)</text>
+  <text x="270" y="216" font-size="12" fill="#475569" text-anchor="middle">x (주류, 주기적) →</text>
+</svg>
+<figcaption>채널 유동: 위·아래 벽 사이의 유동. \(x,z\) 는 주기적, \(y\) 는 벽으로 막혀 있다</figcaption>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">1. 지배방정식과 무차원화</h2>
+
+<p class="docs-p">채널 유동(Channel flow)의 Navier–Stokes 운동량 방정식부터 시작한다. Momentum equation 은 벡터형과 성분형으로 다음과 같다.</p>
+
+<div class="docs-equation">\[ \rho\left(\frac{\partial \mathbf u}{\partial t} + \mathbf u\cdot(\nabla \mathbf u)\right) = \rho \mathbf g + \nabla p + \mu\nabla^2 \mathbf u \;\cdots\,① \]</div>
+<div class="docs-equation">\[ \rho\left(\frac{\partial \mathbf u}{\partial t} + u\frac{\partial \mathbf u}{\partial x} + v\frac{\partial \mathbf u}{\partial y} + w\frac{\partial \mathbf u}{\partial z}\right) = \rho \mathbf g + \frac{\partial p}{\partial x_j} + \mu\nabla^2 \mathbf u \]</div>
+
+<p class="docs-p"><strong>무차원화(nondimensionalization)</strong> 를 한다. 대표 길이 \(L\), 대표 속도 \(U\) 를 기준으로 \(\dfrac{u}{U}=u^{*},\ \dfrac{x}{L}=x^{*}\) 로 정규화하여 대입하면</p>
+
+<div class="docs-equation">\[ \rho\left(U\frac{\partial u^*}{\partial t} + \frac{U^2}{L}u^*\frac{\partial u^*}{\partial x^*} + \frac{U^2}{L}v^*\frac{\partial u^*}{\partial y^*} + \frac{U^2}{L}w^*\frac{\partial u^*}{\partial z^*}\right) = \rho \mathbf g + \frac{\partial p}{\partial x_j} + \frac{U}{L^2}\mu\frac{\partial^2 u^*/U \cdot U}{\partial x_j^{*2}} \]</div>
+<div class="docs-equation">\[ \rho\left(U\frac{\partial u^*}{\partial t} + \frac{U^2}{L}\,u^*\cdot(\nabla u^*)\right) = \rho \mathbf g + \frac{1}{L}\frac{\partial p}{\partial x_j} + \frac{U}{L^2}\mu\,\nabla^2 u^* \;\cdots\,② \]</div>
+
+<p class="docs-p">②식의 양변에 \(\dfrac{L}{U^2}\) 를 곱해 정리하면 — Result(nondimensionalization: Velocity, length) —</p>
+
+<div class="docs-equation">\[ \frac{L}{U}\frac{\partial u^*}{\partial t} + u^*\cdot(\nabla u^*) = \frac{L}{U^2}\mathbf g + \frac{1}{\rho U^2}\frac{\partial p}{\partial x_j} + \frac{1}{Re}\nabla^2 u^* \]</div>
+<div class="docs-equation">\[ \frac{\partial u^*}{\partial(tU/L)} + u^*\cdot(\nabla u^*) = g^* + \frac{\partial p^*}{\partial x_j} + \frac{1}{Re}\nabla^2 u^* \;\cdots\,③ \]</div>
+
+<p class="docs-p">즉 단 하나의 무차원 수 <strong>레이놀즈 수</strong> 만 남는다.</p>
+
+<div class="docs-equation">\[ t^* = \frac{tU}{L}, \qquad g^* = \frac{g}{U^2/L}, \qquad p^* = \frac{p}{\rho U^2}, \qquad Re = \frac{UL}{\nu} \]</div>
+
+<p class="docs-p">정리된 무차원 운동량 방정식 ③ 을 이제 Numerical method 로 풀어 Solution 을 구해야 한다(이후 \(^*\) 는 생략).</p>
+
+<div class="docs-equation">\[ \frac{\partial \mathbf u}{\partial t} + \mathbf u\cdot(\nabla\mathbf u) = \mathbf g + \nabla p + \frac{1}{Re}\nabla^2\mathbf u, \qquad \nabla\cdot\mathbf u = 0 \]</div>
+
+<h2 class="docs-h2">2. Projection method</h2>
+
+<p class="docs-p">비압축성 유동의 난점은 <strong>압력–속도 결합(closure problem)</strong> 이다. 압력에 대한 독립 방정식이 없기 때문이다. <strong>Projection method</strong> 는 이를 2단계로 분리한다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 580 120" width="580" height="120" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="13">
+  <g fill="#0f172a">
+    <rect x="14" y="40" width="150" height="48" rx="10" fill="#eef2f7" stroke="#94a3b8"/>
+    <text x="89" y="60" text-anchor="middle" font-weight="700">① 중간속도 û</text>
+    <text x="89" y="78" text-anchor="middle" fill="#64748b" font-size="11">압력 없이 적분 (AB+CN)</text>
+    <rect x="214" y="40" width="150" height="48" rx="10" fill="#e8f3fc" stroke="#0078d7"/>
+    <text x="289" y="60" text-anchor="middle" font-weight="700">② Poisson</text>
+    <text x="289" y="78" text-anchor="middle" fill="#64748b" font-size="11">∇²φ = (1/Δt)∇·û</text>
+    <rect x="414" y="40" width="152" height="48" rx="10" fill="#e9f7f3" stroke="#0e8b87"/>
+    <text x="490" y="60" text-anchor="middle" font-weight="700">③ 투영(보정)</text>
+    <text x="490" y="78" text-anchor="middle" fill="#64748b" font-size="11">∇·uⁿ⁺¹ = 0</text>
+  </g>
+  <line x1="164" y1="64" x2="210" y2="64" stroke="#475569" stroke-width="2"/><polygon points="214,64 204,59 204,69" fill="#475569"/>
+  <line x1="364" y1="64" x2="410" y2="64" stroke="#475569" stroke-width="2"/><polygon points="414,64 404,59 404,69" fill="#475569"/>
+</svg>
+<figcaption>Projection method: 압력 없이 중간속도를 구하고, Poisson으로 의사압력을 푼 뒤, 발산이 0이 되도록 보정</figcaption>
+</div>
+
+<p class="docs-p">먼저 압력을 빼고 <strong>중간속도(intermediate velocity)</strong> \(\hat{\mathbf u}\) 를 구한 뒤, 의사압력(pseudo pressure) \(\phi\) 에 대한 Poisson 방정식을 풀고, 마지막에 보정해 발산이 0인 속도장을 얻는다.</p>
+
+<div class="docs-equation">\[ \nabla^2 \phi = \frac{1}{\Delta t}\,\nabla\cdot\hat{\mathbf u}, \qquad \mathbf u^{\,n+1} = \hat{\mathbf u} - \Delta t\,\nabla\phi \]</div>
+
+<h2 class="docs-h2">3. 시간 적분 — Adams–Bashforth + Crank–Nicolson</h2>
+
+<p class="docs-p">Intermediate velocity 를 구하기 위해 ④식을 우선 풀어야 한다. 텐서 표기(tensor notation)로 쓰면 — 정상유체라 증명은 되었으나 편의상 위와 같이 표현한다(참고) —</p>
+
+<div class="docs-equation">\[ \frac{\partial \hat u_i}{\partial t} + \hat u_j\frac{\partial}{\partial x_j}(\hat u_i \hat u_j) = \frac{1}{Re}\frac{\partial^2}{\partial x_j^2}\hat u_i \]</div>
+
+<p class="docs-p">여기서 항의 성질에 따라 시간 적분 방법을 다르게 쓴다 — <strong>비선형(대류) 항은 Adams–Bashforth</strong>, <strong>점성(viscous) 항은 Crank–Nicolson</strong> 으로 차분한다. 시간 항은 Euler 로 이산화한다.</p>
+
+<div class="docs-equation">\[ \frac{\hat u_i - u_i^{\,t}}{\Delta t} + \underbrace{\left(\tfrac{3}{2}\frac{\partial}{\partial x_j}(u_i^{t}u_j^{t}) - \tfrac{1}{2}\frac{\partial}{\partial x_j}(u_i^{t-1}u_j^{t-1})\right)}_{\text{Adams–Bashforth (대류)}} = \underbrace{\frac{1}{Re}\frac{\partial^2}{\partial x_j^2}\,\tfrac{1}{2}\big(\hat u_i + u_i^{t}\big)}_{\text{Crank–Nicolson (점성)}} \]</div>
+
+<p class="docs-p">증분 \(\delta u_i = \hat u_i - u_i^{\,t}\) 로 치환하여 \(\delta u_i\) 에 대해 정리하면,</p>
+
+<div class="docs-equation">\[ \frac{\delta u_i}{\Delta t} = -\left(\tfrac{3}{2}\frac{\partial}{\partial x_j}(u_i^{t}u_j^{t}) - \tfrac{1}{2}\frac{\partial}{\partial x_j}(u_i^{t-1}u_j^{t-1})\right) + \frac{1}{2Re}\frac{\partial^2}{\partial x_j^2}\delta u_i + \frac{1}{Re}\frac{\partial^2}{\partial x_j^2}u_i^{t} \;\cdots\,⑤ \]</div>
+
+<p class="docs-p">\(\delta u_i\) 에 대해 한 번 더 정리하면 LHS(미지수 \(\delta u_i\) 의 implicit 연산자)와 RHS(직전 시점으로 계산되는 \(f_{(x,y,z)}\))로 깔끔히 나뉜다.</p>
+
+<div class="docs-equation">\[ \underbrace{\left(1 - \frac{\Delta t}{2Re}\frac{\partial^2}{\partial x_j^2}\right)\delta u_i}_{\text{LHS}} = \underbrace{-\frac{\Delta t}{2}\left(3\frac{\partial}{\partial x_j}(u_i^{t}u_j^{t}) - \frac{\partial}{\partial x_j}(u_i^{t-1}u_j^{t-1})\right) + \frac{\Delta t}{Re}\frac{\partial^2}{\partial x_j^2}u_i^{t}}_{\text{RHS} = f_{(x,y,z)}} \;\cdots\,⑥ \]</div>
+
+<h2 class="docs-h2">4. 공간 이산화 — Spectral(x, z) + FDM(y)</h2>
+
+<p class="docs-p">방향별로 가장 알맞은 이산화를 섞어 쓴다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 520 150" width="520" height="150" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="13">
+  <rect x="20" y="30" width="220" height="90" rx="10" fill="#e8f3fc" stroke="#0078d7"/>
+  <text x="130" y="56" text-anchor="middle" font-weight="700" fill="#0f172a">x, z 방향</text>
+  <text x="130" y="78" text-anchor="middle" fill="#0f172a">Spectral (Fourier)</text>
+  <text x="130" y="98" text-anchor="middle" fill="#64748b" font-size="11">주기적 → 정확한 미분</text>
+  <rect x="280" y="30" width="220" height="90" rx="10" fill="#e9f7f3" stroke="#0e8b87"/>
+  <text x="390" y="56" text-anchor="middle" font-weight="700" fill="#0f172a">y 방향</text>
+  <text x="390" y="78" text-anchor="middle" fill="#0f172a">FDM + TDMA</text>
+  <text x="390" y="98" text-anchor="middle" fill="#64748b" font-size="11">벽 경계 → 비균일 격자</text>
+</svg>
+</div>
+
+<h3 class="docs-h3">FDM(Finite difference method) — Factorization 과 TDMA</h3>
+
+<p class="docs-p">⑥식의 좌변(LHS)을 \(y\) 뿐 아니라 모든 방향을 FDM 으로 푼다고 하면, 라플라시안 연산자를 방향별로 <strong>factorization</strong> 한다.</p>
+
+<div class="docs-equation">\[ \left(1 - \frac{\Delta t}{2Re}\frac{\partial^2}{\partial x_j^2}\right)\delta u_i \;\approx\; \left(1 - \frac{\Delta t}{2Re}\frac{\partial^2}{\partial x_1^2}\right)\left(1 - \frac{\Delta t}{2Re}\frac{\partial^2}{\partial x_2^2}\right)\left(1 - \frac{\Delta t}{2Re}\frac{\partial^2}{\partial x_3^2}\right)\delta u_i \quad(\text{Factorization}) \]</div>
+
+<p class="docs-p">Factorization 에 의해 생기는 Error 는 어쩔 수 없다. 2D case 로 곱을 풀어 보면, 원래 식에 없던 교차항이 <strong>Error term</strong> 으로 더해진다.</p>
+
+<div class="docs-equation">\[ \left(1 - \tfrac{\Delta t}{2Re}\tfrac{\partial^2}{\partial x_1^2}\right)\left(1 - \tfrac{\Delta t}{2Re}\tfrac{\partial^2}{\partial x_2^2}\right) = 1 - \tfrac{\Delta t}{2Re}\tfrac{\partial^2}{\partial x_1^2} - \tfrac{\Delta t}{2Re}\tfrac{\partial^2}{\partial x_2^2} + \underbrace{\frac{\Delta t^2}{4Re^2}\frac{\partial^2}{\partial x_1^2}\frac{\partial^2}{\partial x_2^2}}_{\text{Error term}} \]</div>
+
+<p class="docs-p">TDMA 를 풀기 위한 꼴로 factorization 한 식을 재정리하면 다음과 같다. 각 인수를 \(g_{(x,y,z)}\), \(h_{(x,y,z)}\), \(\delta u_i\) 로 두고 순서대로 푼다.</p>
+
+<div class="docs-equation">\[ \underbrace{\left(1 - \tfrac{\Delta t}{2Re}\tfrac{\partial^2}{\partial x_1^2}\right)}_{g_{(x,y,z)}}\underbrace{\left(1 - \tfrac{\Delta t}{2Re}\tfrac{\partial^2}{\partial x_2^2}\right)}_{h_{(x,y,z)}}\left(1 - \tfrac{\Delta t}{2Re}\tfrac{\partial^2}{\partial x_3^2}\right)\delta u_i = -\frac{\Delta t}{2}\left(3\frac{\partial}{\partial x_j}(u_i^{t}u_j^{t}) - \frac{\partial}{\partial x_j}(u_i^{t-1}u_j^{t-1})\right) + \frac{\Delta t}{Re}\frac{\partial^2}{\partial x_j^2}u_i^{t} \;\cdots\,⑦ \]</div>
+
+<p class="docs-p">우변 \(\text{RHS}=f_{(x,y,z)}\). <strong>Protocol</strong> 은 다음과 같다 — <strong>1ˢᵗ TDMA</strong> 로 \(g_{(x,y,z)}\) → <strong>2ⁿᵈ TDMA</strong> 로 \(h_{(x,y,z)}\) → <strong>3ʳᵈ TDMA</strong> 로 \(\delta u_i{}_{(x,y,z)}\) 를 구한다. 즉 위의 순서대로 풀어 \(\delta u\) 를 구하면 되고, 이후 아래의 Poisson equation 을 풀어 다음 step 을 구한다.</p>
+
+<div class="docs-equation">\[ \text{Divergence}\left(\frac{\partial u^{\,t+0.5}}{\partial t^*} = \nabla\phi^{*}\right) \;\Longrightarrow\; \frac{\partial}{\partial t}\frac{\partial u_j^{\,t+1}}{\partial x_j} = \nabla^2\phi_{(x,y,z)} \quad(\text{Poisson equation}) \]</div>
+
+<p class="docs-p">Divergence 를 취하는 이유는, Navier–Stokes 를 풀 때 우리는 momentum eqn 을 풀지만 <strong>divergence-free condition(continuity equation)</strong> 으로 맞춰주지 않으면 안 되기 때문이다. 이에 따라 위 momentum eqn 에 Divergence 를 취해 풀어낸다. ⑦식에 대해 \(x,y,z\) 각 방향으로 <strong>Central difference method</strong> 등을 사용해 차분하고 풀면 그것이 곧 Finite difference method 가 된다(앞서 Cavity 에서 풀어보았으니 참조).</p>
+
+<hr class="docs-divider">
+
+<p class="docs-p"><strong>Spectral method</strong> 를 간단히 보자. Fourier transform 은 모든 물리량을 파동으로 이루어져 있다고 본다.</p>
+
+<div class="docs-equation">\[ f(x) = \int_{-\infty}^{\infty} F(\alpha)\,e^{i\alpha x}\,d\alpha, \qquad F(\alpha) = \int_{-\infty}^{\infty} f(x)\,e^{-i\alpha x}\,dx \qquad(\alpha:\ \text{wave number}) \]</div>
+
+<p class="docs-p">이를 Discretization 시키면 \(f(x)\) 는 각 basis 파동 \(\hat f_n(x)\) 들의 합으로 표현된다.</p>
+
+<div class="docs-equation">\[ f(x) = \sum_{n} F(\alpha_n)e^{i\alpha_n x} = \hat f_1(x) + \hat f_2(x) + \hat f_3(x) + \cdots \]</div>
+
+<p class="docs-p">미분하면 FDM 과 달리 Spectral 은 <strong>exact 하게 대수적으로</strong> 떨어진다(미분 → 곱셈).</p>
+
+<div class="docs-equation">\[ \frac{df(x)}{dx} = \sum_{n} i\alpha_n F(\alpha_n)e^{i\alpha_n x} \;\Longrightarrow\; \frac{d\hat f_n}{dx} = i\alpha_n \hat f_n \;\Longrightarrow\; \frac{d^2\hat f_n}{dx^2} = -\alpha_n^2\,\hat f_n \]</div>
+
+<p class="docs-p">앞의 Navier–Stokes 를 구성하는 하나의 Fourier mode \(\hat u_n\) 으로 해석하면, \(x,z\) 방향(파수 \(\alpha,\gamma\))의 2계 미분이 다음처럼 떨어진다.</p>
+
+<div class="docs-equation">\[ \frac{\partial^2(\delta\hat u_i)}{\partial x_1^2} = -\alpha^2\,\delta\hat u_i, \qquad \frac{\partial^2(\delta\hat u_i)}{\partial x_3^2} = -\gamma^2\,\delta\hat u_i \]</div>
+
+<p class="docs-p">이를 ⑥ 식에 넣으면 \(x,z\) 의 라플라시안이 상수로 떨어져, 실제로 차분해야 할 방향은 \(y\) 하나만 남는다.</p>
+
+<div class="docs-equation">\[ \left(1 + \frac{\Delta t}{2Re}\alpha^2 + \frac{\Delta t}{2Re}\gamma^2 - \frac{\Delta t}{2Re}\frac{\partial^2}{\partial x_2^2}\right)\delta\hat u_i = f_{(x,y,z)} \;\cdots\,⑧ \]</div>
+
+<p class="docs-p">덕분에 \(x,z\) 방향에는 차분 오차나 factorization 이 필요 없다(FDM 으로 풀 경우엔 \(\big(1-\tfrac{\Delta t}{2Re}\partial_{x_1}^2\big)\big(1-\tfrac{\Delta t}{2Re}\partial_{x_2}^2\big)\big(1-\tfrac{\Delta t}{2Re}\partial_{x_3}^2\big)\) 로 <strong>factorization</strong> 한 뒤 방향마다 TDMA 를 풀어야 하고, factorization 에서 \(\tfrac{\Delta t^2}{4Re^2}\) 차수의 Error term 이 생긴다). 다만 비선형 항을 스펙트럴로 계산하면 <strong>aliasing</strong> 오차가 생기므로 곱(convolution)을 구할 때 <strong>zero-padding(2/3 law)</strong> 으로 제거한다. 반면 \(y\) 방향은 벽 때문에 주기적이지 않아 FDM 으로 차분한다.</p>
+
+<h2 class="docs-h2">5. 비균일 격자 (벽 근처 클러스터링)</h2>
+
+<p class="docs-p">벽 근처에서는 경계층의 급격한 변화를 잡기 위해 해상도를 높여야 한다. 그래서 \(y\) 방향은 <strong>Chebyshev 형</strong> 의 비균일 격자(벽 쪽으로 촘촘)를 쓴다.</p>
+
+<div class="docs-fig">
+  <canvas id="cvGrid" width="540" height="220"></canvas>
+  <figcaption>비균일 격자: 벽(위·아래)으로 갈수록 격자가 촘촘해진다 (Chebyshev 분포)</figcaption>
+</div>
+
+<p class="docs-p">간격이 일정하지 않으므로 미분도 <strong>Taylor expansion</strong> 으로 다시 유도해야 한다. 인접 간격을 \(dy_1\)(아래), \(dy_2\)(위)라 하고 점 \(y\) 주변을 전개하면</p>
+
+<div class="docs-equation">\[ f(y+dy_2) = f(y) + dy_2 f'(y) + \frac{dy_2^{\,2}}{2!}f''(y) + \frac{dy_2^{\,3}}{3!}f'''(y) + \cdots \;\cdots\,⑨ \]</div>
+<div class="docs-equation">\[ f(y-dy_1) = f(y) - dy_1 f'(y) + \frac{dy_1^{\,2}}{2!}f''(y) - \frac{dy_1^{\,3}}{3!}f'''(y) + \cdots \;\cdots\,⑩ \]</div>
+
+<h3 class="docs-h3">2계 미분 \(f''(y)\)</h3>
+<p class="docs-p">\(f'(y)\) 항을 소거하기 위해 \(\dfrac{dy_1}{dy_2}\times⑨ + ⑩\) 을 만든다.</p>
+
+<div class="docs-equation">\[ \frac{dy_1}{dy_2}f(y+dy_2) + f(y-dy_1) = \left(\frac{dy_1}{dy_2}+1\right)f(y) + \left(\frac{dy_1 dy_2}{2!}+\frac{dy_1^{\,2}}{2!}\right)f''(y) + \left(\frac{dy_1 dy_2^{\,2}}{3!}-\frac{dy_1^{\,3}}{3!}\right)f'''(y) + \cdots \]</div>
+
+<p class="docs-p">\(f''(y)\) 의 계수는 \(\dfrac{dy_1}{2}(dy_1+dy_2)\) 이므로, 이에 대해 정리하면 <strong>2차 오차(second order error)</strong> 의 비균일 중심차분 2계 미분을 얻는다.</p>
+
+<div class="docs-equation">\[ f''(y) = \frac{2}{dy_2(dy_1+dy_2)}f(y+dy_2) - \frac{2}{dy_1 dy_2}f(y) + \frac{2}{dy_1(dy_1+dy_2)}f(y-dy_1) + O(dy) \;\cdots\,⑪ \]</div>
+
+<h3 class="docs-h3">1계 미분 \(f'(y)\)</h3>
+<p class="docs-p">반대로 \(⑨-⑩\) 으로 \(f''(y)\) 를 일부 소거하면 1계 미분이 나온다.</p>
+
+<div class="docs-equation">\[ f(y+dy_2) - f(y-dy_1) = (dy_1+dy_2)f'(y) + \frac{dy_2^{\,2}-dy_1^{\,2}}{2!}f''(y) + \cdots \]</div>
+<div class="docs-equation">\[ f'(y) = \frac{f(y+dy_2) - f(y-dy_1)}{dy_1+dy_2} - \frac{dy_2^{\,2}-dy_1^{\,2}}{2(dy_1+dy_2)}f''(y) + \cdots \quad(\text{first order error}) \]</div>
+
+<p class="docs-p">격자가 <strong>균일(\(dy_1=dy_2=dy\))</strong> 해지면 \(dy_2^{\,2}-dy_1^{\,2}=0\) 이 되어 1차 오차항이 사라지고, 익숙한 2차 정확도 중심차분으로 돌아간다.</p>
+
+<div class="docs-equation">\[ f'(y) = \frac{f(y+dy) - f(y-dy)}{2\,dy} + O(dy^2), \qquad f''(y) = \frac{f(y+dy) - 2f(y) + f(y-dy)}{dy^2} + O(dy^2) \]</div>
+
+<p class="docs-p">이렇게 어떤 grid 를 쓰든 points 사이의 관계를 Taylor expansion 으로 대수적으로 나타내는 작업을 마무리했다. 이 차분식이 곧 \(y\) 방향 FDM 의 계수가 된다.</p>
+
+<h2 class="docs-h2">6. 격자 배치 — Collocated vs Staggered</h2>
+
+<p class="docs-p">속도와 압력을 격자 위 <strong>어디에 둘지</strong> 가 또 하나의 핵심이다. 흔히 빨간 dashed-line 을 staggered grid, 파란 선을 collocated grid 라고 <em>오해</em> 하기 쉬운데, 우리가 쓰는 격자는 파란 선 하나다. 둘의 진짜 차이는 “속도 성분과 압력이 <strong>한 지점에 몰려 있느냐(Coupling)</strong> 아니면 <strong>따로 떨어져 있느냐(Decoupling)</strong>” 일 뿐이다.</p>
+
+<div class="docs-fig-row">
+  <figure class="docs-fig">
+    <svg viewBox="0 0 300 215" width="300" height="215" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="11">
+      <g stroke="#0078d7" stroke-width="1.4">
+        <line x1="50" y1="40" x2="50" y2="190"/><line x1="140" y1="40" x2="140" y2="190"/><line x1="230" y1="40" x2="230" y2="190"/>
+        <line x1="50" y1="40" x2="230" y2="40"/><line x1="50" y1="115" x2="230" y2="115"/><line x1="50" y1="190" x2="230" y2="190"/>
+      </g>
+      <g fill="#0078d7">
+        <circle cx="50" cy="40" r="4"/><circle cx="140" cy="40" r="4"/><circle cx="230" cy="40" r="4"/>
+        <circle cx="50" cy="115" r="4"/><circle cx="140" cy="115" r="4"/><circle cx="230" cy="115" r="4"/>
+        <circle cx="50" cy="190" r="4"/><circle cx="140" cy="190" r="4"/><circle cx="230" cy="190" r="4"/>
+      </g>
+      <text x="148" y="110" fill="#0f172a">u, v, p</text>
+      <text x="140" y="208" text-anchor="middle" fill="#64748b">Collocated (한 점에 모두)</text>
+    </svg>
+    <figcaption>속도·압력이 한 점 → 결합은 쉽지만 압력 <em>checkerboard</em> 디커플링 위험</figcaption>
+  </figure>
+  <figure class="docs-fig">
+    <svg viewBox="0 0 300 215" width="300" height="215" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="11">
+      <g stroke="#cbd5e1" stroke-width="1.2">
+        <line x1="50" y1="40" x2="50" y2="190"/><line x1="140" y1="40" x2="140" y2="190"/><line x1="230" y1="40" x2="230" y2="190"/>
+        <line x1="50" y1="40" x2="230" y2="40"/><line x1="50" y1="115" x2="230" y2="115"/><line x1="50" y1="190" x2="230" y2="190"/>
+      </g>
+      <!-- p at cell centers -->
+      <g fill="#0e8b87"><circle cx="95" cy="77" r="3.4"/><circle cx="185" cy="77" r="3.4"/><circle cx="95" cy="152" r="3.4"/><circle cx="185" cy="152" r="3.4"/></g>
+      <!-- u (→) on vertical faces -->
+      <g stroke="#0078d7" stroke-width="2" fill="#0078d7">
+        <line x1="44" y1="77" x2="56" y2="77"/><polygon points="56,77 49,74 49,80"/>
+        <line x1="134" y1="77" x2="146" y2="77"/><polygon points="146,77 139,74 139,80"/>
+        <line x1="224" y1="77" x2="236" y2="77"/><polygon points="236,77 229,74 229,80"/>
+      </g>
+      <!-- v (↑) on horizontal faces -->
+      <g stroke="#0078d7" stroke-width="2" fill="#0078d7">
+        <line x1="95" y1="46" x2="95" y2="34"/><polygon points="95,34 92,41 98,41"/>
+        <line x1="185" y1="46" x2="185" y2="34"/><polygon points="185,34 182,41 188,41"/>
+        <line x1="95" y1="121" x2="95" y2="109"/><polygon points="95,109 92,116 98,116"/>
+      </g>
+      <text x="60" y="73" fill="#0078d7">u</text><text x="99" y="40" fill="#0078d7">v</text><text x="80" y="170" fill="#0e8b87">p</text>
+      <text x="140" y="208" text-anchor="middle" fill="#64748b">Staggered (면·중심에 분산)</text>
+    </svg>
+    <figcaption>u 는 세로 면(→), v 는 가로 면(↑), p 는 셀 중심 → 디커플링 회피</figcaption>
+  </figure>
+</div>
+
+<p class="docs-p">3D 로 보면, 한 점에 세 속도 성분이 모이면 <strong>Coupling</strong>, 면마다 흩어지면 <strong>Decoupling</strong> 이다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 520 200" width="520" height="200" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <!-- Coupling cube -->
+  <g stroke="#94a3b8" stroke-width="1.4" fill="none">
+    <rect x="50" y="60" width="80" height="80" fill="#f8fafc"/>
+    <polygon points="50,60 80,40 160,40 130,60" fill="#eef2f7"/>
+    <polygon points="130,60 160,40 160,120 130,140" fill="#f1f5f9"/>
+  </g>
+  <circle cx="98" cy="92" r="3" fill="#0f172a"/>
+  <g stroke="#0078d7" stroke-width="2" fill="#0078d7">
+    <line x1="98" y1="92" x2="132" y2="92"/><polygon points="132,92 124,88 124,96"/>
+    <line x1="98" y1="92" x2="98" y2="58"/><polygon points="98,58 94,66 102,66"/>
+    <line x1="98" y1="92" x2="122" y2="76"/><polygon points="122,76 112,76 116,84"/>
+  </g>
+  <text x="135" y="95" fill="#0078d7">u₁</text><text x="86" y="56" fill="#0078d7">u₂</text><text x="124" y="74" fill="#0078d7">u₃</text>
+  <text x="98" y="178" text-anchor="middle" fill="#0f172a" font-weight="700">Coupling (3-velocity)</text>
+
+  <!-- Decoupling cube -->
+  <g stroke="#94a3b8" stroke-width="1.4" fill="none">
+    <rect x="330" y="60" width="80" height="80" fill="#f8fafc"/>
+    <polygon points="330,60 360,40 440,40 410,60" fill="#eef2f7"/>
+    <polygon points="410,60 440,40 440,120 410,140" fill="#f1f5f9"/>
+  </g>
+  <g stroke="#0078d7" stroke-width="2" fill="#0078d7">
+    <line x1="324" y1="100" x2="342" y2="100"/><polygon points="342,100 334,96 334,104"/>
+    <line x1="370" y1="146" x2="370" y2="128"/><polygon points="370,128 366,136 374,136"/>
+    <line x1="408" y1="92" x2="430" y2="78"/><polygon points="430,78 420,78 424,86"/>
+  </g>
+  <text x="306" y="104" fill="#0078d7">u₁</text><text x="360" y="160" fill="#0078d7">u₂</text><text x="432" y="78" fill="#0078d7">u₃</text>
+  <text x="378" y="178" text-anchor="middle" fill="#0f172a" font-weight="700">Decoupling (3-velocity)</text>
+</svg>
+<figcaption>한 점에 세 속도가 모이면 Coupling, 면마다 흩어지면 Decoupling</figcaption>
+</div>
+
+<p class="docs-p">이 솔버는 두 방식을 섞는다. 앞서 staggered grid 는 FDM 을 쓰기 때문에 \(u_1,u_3\) 가 decoupling 되어 있었는데, \(x,z\) 방향은 스펙트럴이라 <strong>exact 한 미분이 가능</strong> 하므로 \(u_1,u_3\) 를 압력 위치(cell center)에 직접 coupling 시킨다. 결과적으로 \(u_1,u_3\) 는 cell center 에 coupling 되고, FDM 으로 풀어야 하는 \(u_2(=v)\) 방향만 <strong>엇갈림(staggered)</strong> 으로 둔다 — 즉 <em>“staggered grid with spectral”</em> 구성이다. 벽에서는 no-slip 을 위해 <strong>ghost cell</strong> 을 두고(\(u_1=-u_0\) 등), 액추에이터(blower/suction)가 있을 때는 벽면 \(v\) 에 그 값을 준다.</p>
+
+<h2 class="docs-h2">7. 선형 시스템 — TDMA</h2>
+
+<p class="docs-p">스펙트럴 방향은 미분이 대수적으로 떨어지므로, 실제로 풀어야 하는 것은 <strong>\(y\) 방향 한 줄</strong> 뿐이다. 앞서 구한 중앙차분(3개의 점이 필요)을 grid 에 적용하면, FDM 의 인접 3점이 만드는 <strong>삼중대각(tridiagonal)</strong> 계를 <strong>TDMA(Thomas algorithm)</strong> 로 한 번에 푼다.</p>
+
+<div class="docs-equation">\[ a\,\delta\hat u_{j-1} + b\,\delta\hat u_{j} + c\,\delta\hat u_{j+1} = f_{(x,y,z)} \]</div>
+<div class="docs-equation">\[ a = -\frac{\Delta t}{2Re}\frac{2}{dy_j(dy_j+dy_{j-1})}, \quad b = 1 + \frac{\Delta t}{2Re}\alpha^2 + \frac{\Delta t}{2Re}\gamma^2 - \frac{\Delta t}{2Re}\Big(\frac{1}{dy_j}+\frac{1}{dy_{j-1}}\Big)\frac{2}{dy_j+dy_{j-1}}, \quad c = -\frac{\Delta t}{2Re}\frac{2}{dy_j(dy_j+dy_{j-1})} \]</div>
+
+<p class="docs-p"><strong>[Figure 01 — staggered &amp; collocated grid]</strong> \(y\) 축은 총 129 개 점(128 구간)으로 둔다. 변수 개수는 \(u,w\): 130 개, \(v\): 129 개다. collocated grid 기준 위·아래 2칸의 ghost cell 을 위해 다음 ghost cell interval 조건과 no-slip 경계조건, 그리고 staggered–collocated 위치 관계식을 둔다.</p>
+
+<div class="docs-equation">\[ dy_0 = dy_1,\quad dy_{129} = dy_{128} \qquad(\text{ghost interval}) \]</div>
+<div class="docs-equation">\[ u_0 = -u_1,\quad u_{128} = -u_{129} \qquad(\text{no-slip}) ,\qquad dy_k^{*} = \frac{dy_k + dy_{k+1}}{2} \]</div>
+
+<p class="docs-p"><strong>TDMA solver — Matrix form (Thomas algorithm).</strong> \(u,w\)(staggered grid 기준)와 \(v\)(collocated grid 기준)에 대해 각각 삼중대각 행렬을 만들어 푼다. 경계 행에는 경계조건이 반영된다.</p>
+
+<div class="docs-equation">\[ \begin{pmatrix} b_1 & c_1 & & \\ a_2 & b_2 & c_2 & \\ & \ddots & \ddots & \ddots \\ & & a_{n} & b_{n} \end{pmatrix} \begin{pmatrix} \delta\hat u_1 \\ \delta\hat u_2 \\ \vdots \\ \delta\hat u_{n} \end{pmatrix} = \begin{pmatrix} f_1 \\ f_2 \\ \vdots \\ f_{n} \end{pmatrix} \]</div>
+
+<p class="docs-p">\(u,w\) 는 ghost cell 을 고려한 no-slip(\(u_{y'=0}=-u_{y'=-0}\) 등)을, \(v\) 는 액추에이터 유무(No actuator: 양 벽 \(v=0\) / With actuator: \(v_0=\) bottom act, \(v_{128}=\) top act)를 첫·마지막 행에 반영한다. \(u,w\) point 는 staggered grid 위에, \(v\) point 는 collocated grid 위에 있으므로 위치에 맞게 보간(interpolation)하여 적용한다.</p>
+
+<h3 class="docs-h3">이산 RHS \(f_{(x,y,z)}\) — Fourier · 차분 명시형</h3>
+
+<p class="docs-p">⑥·⑦에서 기호로만 두었던 우변 \(\text{RHS}=f_{(x,y,z)}\) 를 실제로 푸는 형태로 펼치면 다음과 같다. \(x,z\) 는 스펙트럴이라 \(\partial_{x_1}\!\to i\alpha\), \(\partial_{x_3}\!\to i\gamma\) 로 떨어지고, \(y\)(=\(x_2\)) 방향만 차분으로 남는다. 대류항은 AB(3·\(t\) − \(t{-}1\)), 점성항은 CN 으로 계산한다.</p>
+
+<div class="docs-equation">\[ \begin{aligned}
+f_{(x,y,z)} = &-\frac{\Delta t}{2}\Bigg[\,3\Big( i\alpha\,\widehat{(u_1u_j)}^{\,t} + \tfrac{\partial}{\partial x_2}\widehat{(u_2u_j)}^{\,t} + i\gamma\,\widehat{(u_3u_j)}^{\,t}\Big) - \Big( i\alpha\,\widehat{(u_1u_j)}^{\,t-1} + \tfrac{\partial}{\partial x_2}\widehat{(u_2u_j)}^{\,t-1} + i\gamma\,\widehat{(u_3u_j)}^{\,t-1}\Big)\Bigg] \\[4pt]
+&+\frac{\Delta t}{Re}\Big(\,-\alpha^2\,\hat u_i^{\,t} + \big(A\,\hat u_{(y'-dy_k)} + B\,\hat u_{(y')} + C\,\hat u_{(y'+dy_{k+1})}\big)^{t} - \gamma^2\,\hat u_i^{\,t}\Big)
+\end{aligned} \]</div>
+
+<p class="docs-p">여기서 \(y\) 방향 2계 미분 계수 \(A,B,C\) 는 비균일 격자의 중심차분 계수(앞 5절 ⑪)와 같다.</p>
+
+<div class="docs-equation">\[ A = \frac{2}{dy_k(dy_{k+1}+dy_k)}, \qquad B = -\Big(\frac{1}{dy_{k+1}}+\frac{1}{dy_k}\Big)\frac{2}{dy_{k+1}+dy_k}, \qquad C = \frac{2}{dy_{k+1}(dy_{k+1}+dy_k)} \]</div>
+
+<p class="docs-p">비선형 항을 스펙트럴 공간에서 곱하면 <strong>aliasing</strong> 이 생기므로, 곱(convolution) \( \widehat{(u_iu_j)} \) 를 구할 때 <strong>zero-padding(2/3 law)</strong> — 고파수 1/3 을 0 으로 채워 — aliasing 을 제거한다.</p>
+
+<h3 class="docs-h3">Staggered ↔ Collocated 보간 (2차 정확도 유지)</h3>
+
+<p class="docs-p">\(u,w\)(staggered)와 \(v\)(collocated)는 격자 위치가 어긋나 있으므로, 대류항의 \(y\)-미분 \(\partial_{x_2}\widehat{(u_2u_j)}\) 를 “우리가 원하는 point”에서 평가하려면 보간이 필요하다. 한 칸 앞·뒤 차분을 각각 구하면 둘 다 1차이지만,</p>
+
+<div class="docs-equation">\[ \frac{\partial}{\partial x_2}\widehat{(u_2u_j)}\Big|_{y'} = \frac{1}{dy_{k+1}}\Big(\widehat{(u_2u_j)}_{(y'+dy_{k+1})} - \widehat{(u_2u_j)}_{(y')}\Big) + O(dy^2) \]</div>
+
+<div class="docs-equation">\[ \frac{\partial}{\partial x_2}\widehat{(u_2u_j)}\Big|_{y'} = \frac{1}{dy_{k}}\Big(\widehat{(u_2u_j)}_{(y')} - \widehat{(u_2u_j)}_{(y'-dy_{k})}\Big) + O(dy^2) \]</div>
+
+<p class="docs-p">두 식을 각 \(0.5\) 씩 더해(평균) 합치면, 1차 오차가 상쇄되어 <strong>2차 정확도(Second order error)</strong> 가 유지된다.</p>
+
+<div class="docs-equation">\[ \frac{\partial}{\partial x_2}\widehat{(u_2u_j)}\Big|_{y'} = \frac{0.5}{dy_{k+1}}\Big(\widehat{(u_2u_j)}_{(y'+dy_{k+1})} - \widehat{(u_2u_j)}_{(y')}\Big) + \frac{0.5}{dy_{k}}\Big(\widehat{(u_2u_j)}_{(y')} - \widehat{(u_2u_j)}_{(y'-dy_{k})}\Big) + O(dy^2) \]</div>
+
+<p class="docs-p">참고로 위 Interpolation form 대신 Taylor expansion 으로 직접 구한 form 을 쓰면, 비균일 격자에서 난류가 잘 안 잡히는 경우가 있어 보간형을 쓴다.</p>
+
+<h2 class="docs-h2">8. 압력 — Poisson equation</h2>
+
+<p class="docs-p">Intermediate velocity 를 구했으니, 다음 step 의 속도로 update 하도록 의사압력 \(\phi\) 를 푼다. 발산(Divergence)을 취한 ⑤식에서 Poisson equation 이 나온다.</p>
+
+<div class="docs-equation">\[ \frac{\partial}{\partial t}\frac{\partial u_j^{\,t+1}}{\partial x_j} = \nabla^2\phi_{(x,y,z)} \;\Longrightarrow\; \nabla^2\phi = \frac{1}{\Delta t}\left(\frac{\partial \hat u_1}{\partial x_1}+\frac{\partial \hat u_2}{\partial x_2}+\frac{\partial \hat u_3}{\partial x_3}\right) \]</div>
+
+<p class="docs-p">여기서도 \(x,z\) 는 스펙트럴, \(y\) 는 FDM 이다. Fourier mode 로 바꾸면 \(x,z\) 의 라플라시안이 \(-\alpha^2,-\gamma^2\) 로 떨어진다. <strong>압력은 셀 중심(cell center)</strong> 에 위치한다(staggered 기준).</p>
+
+<div class="docs-equation">\[ -\alpha^2\tilde\phi - \gamma^2\tilde\phi + \frac{\partial^2 \tilde\phi}{\partial y^2} = \frac{1}{\Delta t}\left(i\alpha\,\tilde{\hat u}_1 + \frac{\partial \tilde{\hat u}_2}{\partial y} + i\gamma\,\tilde{\hat u}_3\right) \]</div>
+
+<p class="docs-p">\(y\) 방향 2계 미분을 앞의 비균일 중심차분으로 차분하면 다시 \(y\) 방향 삼중대각 계가 되고, TDMA 로 푼다.</p>
+
+<div class="docs-equation">\[ A\,\tilde\phi_{j-1} + B\,\tilde\phi_{j} + C\,\tilde\phi_{j+1} = D \]</div>
+
+<p class="docs-p">마지막으로 \(\mathbf u^{\,n+1} = \hat{\mathbf u} - \Delta t\,\nabla\phi\) 로 보정하면 발산이 0 인 속도장을 얻는다 — 이렇게 한 time step 이 끝난다.</p>
+
+<div class="docs-equation">\[ \frac{\partial^2 \tilde\phi}{\partial y^2} - (a^2+\gamma^2)\,\tilde\phi = \frac{1}{\Delta t}\,\widetilde{(\nabla\cdot\hat{\mathbf u})} \]</div>
+
+<h2 class="docs-h2">9. 정리 — 한 스텝의 흐름</h2>
+
+<div class="docs-fig">
+<svg viewBox="0 0 580 96" width="580" height="96" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <g fill="#0f172a">
+    <rect x="8" y="34" width="120" height="40" rx="8" fill="#eef2f7" stroke="#94a3b8"/><text x="68" y="52" text-anchor="middle" font-weight="700">RHS 계산</text><text x="68" y="67" text-anchor="middle" fill="#64748b" font-size="10">AB(대류)+CN(점성)</text>
+    <rect x="150" y="34" width="120" height="40" rx="8" fill="#e8f3fc" stroke="#0078d7"/><text x="210" y="52" text-anchor="middle" font-weight="700">TDMA</text><text x="210" y="67" text-anchor="middle" fill="#64748b" font-size="10">중간속도 û</text>
+    <rect x="292" y="34" width="120" height="40" rx="8" fill="#e9f7f3" stroke="#0e8b87"/><text x="352" y="52" text-anchor="middle" font-weight="700">Poisson</text><text x="352" y="67" text-anchor="middle" fill="#64748b" font-size="10">의사압력 φ</text>
+    <rect x="434" y="34" width="138" height="40" rx="8" fill="#eef2f7" stroke="#94a3b8"/><text x="503" y="52" text-anchor="middle" font-weight="700">투영 → uⁿ⁺¹</text><text x="503" y="67" text-anchor="middle" fill="#64748b" font-size="10">∇·u = 0</text>
+  </g>
+  <g stroke="#475569" stroke-width="2"><line x1="128" y1="54" x2="146" y2="54"/><line x1="270" y1="54" x2="288" y2="54"/><line x1="412" y1="54" x2="430" y2="54"/></g>
+  <g fill="#475569"><polygon points="150,54 140,49 140,59"/><polygon points="292,54 282,49 282,59"/><polygon points="434,54 424,49 424,59"/></g>
+</svg>
+<figcaption>매 시간 스텝: RHS → TDMA(중간속도) → Poisson(압력) → 투영(발산 0)</figcaption>
+</div>
+
+<p class="docs-p">정리하면, 이 솔버는 <strong>스펙트럴(x, z) + 비균일 엇갈림 FDM(y)</strong> 공간 이산화에, <strong>Projection method</strong> 와 <strong>AB/CN</strong> 시간적분, 그리고 방향마다 한 번의 <strong>TDMA</strong> 풀이로 채널 유동을 직접 수치해석한다.</p>
+
+<!-- ============ 원본 PPT 슬라이드 (접이식) ============ -->
+<details class="docs-slides">
+  <summary>원본 PPT 슬라이드 보기 <span class="docs-slides__hint">(전체 유도 과정 40장 — Taylor 전개, factorization, 행렬형 등 상세)</span></summary>
+  <div class="docs-slides__grid">
+    <img src="assets/numerical-flow/062cb22221fd.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/a6f30fc11d71.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/c6941fcae31f.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/38eb88ddc21a.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/878cf5fdcfb7.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/6f4f5afd2faa.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/f054fd15a569.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/6d77d7f5f763.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/9bbd6d4be66d.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/d5c623c18a0b.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/0a0ed1de30e6.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/41ae6a265109.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/434273cc35a2.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/969a88c8dd0a.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/bf25932f9650.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/b9d691e6f6ed.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/0f243f44b9bf.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/e259e7bbbfa9.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/52ad0baaaa0b.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/5d4f651fe50f.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/7cd52cf2c21b.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/63d5a488839c.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/6d9d66f4cc22.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/35ea26539c07.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/3191e429bcea.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/6b34f47c543a.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/47666bb8626f.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/dfd7165959d1.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/19f15de4c100.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/5faa3b9c8397.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/800ee62fa8ec.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/408d139f8829.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/df03a9da7577.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/e36b520089a0.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/7623c85893d2.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/175d427969f2.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/08cb12bf6703.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/46385bc4ff19.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/407c1b15c2e7.png" alt="slide" loading="lazy">
+    <img src="assets/numerical-flow/819be93cb7cf.png" alt="slide" loading="lazy">
+  </div>
+</details>
+
+    </div>
+  </article>
+</main>
+
+<footer-component></footer-component>
+
+<script>
+(function(){
+  function run(){
+    var c=document.getElementById('cvGrid'); if(!c) return;
+    var ctx=c.getContext('2d'), W=c.width, H=c.height;
+    ctx.clearRect(0,0,W,H);
+    var top=24, bot=H-24, L=70, R=W-30;
+    ctx.fillStyle="#0f172a"; ctx.fillRect(L,top-4,R-L,4); ctx.fillRect(L,bot,R-L,4);
+    ctx.fillStyle="#475569"; ctx.font="12px Montserrat, sans-serif";
+    ctx.fillText("top wall", L, top-9); ctx.fillText("bottom wall", L, bot+18);
+    var N=24;
+    ctx.strokeStyle="#0078d7"; ctx.lineWidth=1;
+    for(var j=0;j<=N;j++){
+      var eta=0.5*(1-Math.cos(Math.PI*j/N));
+      var y=top+eta*(bot-top);
+      ctx.globalAlpha=0.7;
+      ctx.beginPath(); ctx.moveTo(L,y); ctx.lineTo(R,y); ctx.stroke();
+      ctx.globalAlpha=1; ctx.fillStyle="#0078d7";
+      ctx.beginPath(); ctx.arc(L,y,2.2,0,6.2832); ctx.fill();
+    }
+  }
+  if(document.readyState!=="loading") run(); else document.addEventListener("DOMContentLoaded",run);
+})();
+</script>
+
+<script>
+/* 긴 본문을 H2 섹션 단위 페이지로 나누고 prev/next 네비게이션 추가.
+   원본 PPT 슬라이드(.docs-slides)는 페이지에서 제외되어 항상 맨 아래에 남는다. */
+(function(){
+  var body=document.querySelector('.docs-post__body'); if(!body) return;
+  var slides=body.querySelector('.docs-slides');
+  var kids=[].slice.call(body.children);
+  var perPage=3, inPage=0;
+  var pages=[], cur=document.createElement('div'); cur.className='docs-page';
+  kids.forEach(function(n){
+    if(n===slides) return;
+    if(n.tagName==='H2'){ if(inPage>=perPage && cur.childNodes.length){ pages.push(cur); cur=document.createElement('div'); cur.className='docs-page'; inPage=0; } inPage++; }
+    cur.appendChild(n);
+  });
+  if(cur.childNodes.length) pages.push(cur);
+  if(pages.length<2) return;
+  pages.forEach(function(p){ body.insertBefore(p, slides||null); });
+  var nav=document.createElement('div'); nav.className='docs-pagenav';
+  var prev=document.createElement('button'); prev.className='docs-pagebtn'; prev.type='button'; prev.textContent='← 이전';
+  var ctr=document.createElement('span'); ctr.className='docs-pagecounter';
+  var next=document.createElement('button'); next.className='docs-pagebtn'; next.type='button'; next.textContent='다음 →';
+  nav.appendChild(prev); nav.appendChild(ctr); nav.appendChild(next);
+  body.insertBefore(nav, slides||null);
+  var idx=0;
+  function show(i){ idx=Math.max(0,Math.min(pages.length-1,i)); pages.forEach(function(p,k){p.hidden=(k!==idx);}); ctr.textContent=(idx+1)+' / '+pages.length; prev.disabled=idx===0; next.disabled=idx===pages.length-1; }
+  function go(i){ show(i); var h=document.querySelector('.docs-post__header'); if(h) h.scrollIntoView({behavior:'smooth',block:'start'}); }
+  prev.addEventListener('click',function(){go(idx-1);});
+  next.addEventListener('click',function(){go(idx+1);});
+  show(0);
+})();
+</script>
+
+</body>
+</html>

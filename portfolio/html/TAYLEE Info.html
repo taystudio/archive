@@ -2,20 +2,35 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Info</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Info">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/TAYLEE%20Info.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Info">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/style Info.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css?v=20260605-18">
 
     <!--Java script event-->
-    <script src="../js/main.js" defer></script>  
-    <script src="../js/components/nav.js" sync></script>
-    <script src="../js/components/footer.js" sync></script>
-    <script src="../js/components/header.js" sync></script>
+    <script src="../js/main.js?v=20260605-18" defer></script>
+    <script src="../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../js/components/header.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
+
 </head>
 
 
@@ -23,183 +38,267 @@
 
     <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
+    <!-- ===================== PROFILE HEADER (light) ===================== -->
+    <header class="pf-pagehead pf-pagehead--profile">
+      <div class="pf-pagehead__photo">
+        <img src="../resources/infoImg/Lee's pics.jpg" alt="Taehyuk Lee">
+      </div>
+      <div class="pf-pagehead__main">
+        <p class="pf-pagehead__eyebrow">ABOUT &amp; CV</p>
+        <h1 class="pf-pagehead__title">Lee, <em>Taehyuk</em></h1>
+        <p class="pf-pagehead__role">Backend Engineer · Data &amp; AI Researcher</p>
+        <p class="pf-pagehead__lead">
+          Backend engineer with 4 years building platform backends &amp; infrastructure, plus a
+          2-year M.S. researching flow control with deep reinforcement learning. I read technology
+          from system fundamentals — network, OS and application layers — and apply it to stable,
+          well-structured backend platforms.
+        </p>
 
-
-        <!--profile section-->
-        <div class ="profile-section">
-            <img id="profile-picture", alt="myPics", src="../resources/infoImg/Lee's pics.jpg" width=400 height=530>
-            
-            <div class ="Introduction">
-                <p class ="About_me">ABOUT ME</p>
-
-                <p class="Personal-info">
-                    Name: Lee, Tae Hyuk<br>
-                    Nationality: Republic of Korea<br>
-                    E-mail: thlee991@gmail.com<br><br>
-                </p>
-
-                <p class="Interests">
-                    -Interests- <br>
-                    &nbsp 1. Fluid mechanics<br>
-                    &nbsp 2. Machine learning & Mathematics<br>
-                    &nbsp 3. Data Analysis based on statistics<br>
-                    &nbsp 4. Environmental issue<br>
-                    &nbsp 5. Information technologies<br>
-                    &nbsp 6. Algorithm<br>
-                </p>
-
-
-                <p class="About_me">Major</p>
-
-                <p class="major">
-                    Environment engineering<br> 
-                    Mechanical engineering<br> 
-                </p>
-                <a class = "gpa" href="TAYLEE Info course list.html">-Course List (Click)-</a>
-            </div>
-
-        </div>
-        
-        <div class = "For_center_CV">
-            <div class = "CV">
-                <!--Education-->
-                <h5 class = "Resmue-title">Education</h5>
-
-                <!--Education section-->
-                <div class="Education-section">
-
-                    <p class="school">Yonsei univ Mechanical engineering (Master's course)</p> 
-                    - Entered the Department of mechanical engineering (2020)<br>
-                    - Graduation with a master's in mechanical engineering (2022)<br>
-                    (thesis title - Turbulence control through deep reinforcement learning)<br><br>
-                    
-                    <p class="school">Yonsei univ Mechanical engineering (Bachelor's course)</p> 
-                    - Entered the Department of mechanical engineering (2018)<br>
-                    - Graduated from Department of mechanical engineering (2020)<br>
-                    - Bachelor in environmental engineering (Transition from Completion to Graduation) (2020)<br><br>
-
-                    <p class="school">Yonsei univ Environmental engineering (Bachelor's course)</p>
-                    - Entered the Department of Environmental engineering (2012)<br>
-                    - Completion of Bachelor in environmental engineering (2018)<br><br>
-
-                    <p id="army">Military service as KATUSA(Korean Augmentation To the USA) (2014-2016)</p>
-
-                    
-                </div><br>
-
-                <h5 class = "Resmue-title">Activities</h5>
-                <div class="activities">
-                    <a class = "Resume-activity" href="TAYLEE Activity.html">1. School Activities (Click for details)</a>
-                </div><br>
-
-
-                <h5 class = "Resmue-title">Capability</h5>
-                <div class="Capability">
-                    <p class = "Cap-sub">1. Programming language & Framework</p> 
-                    &nbsp<p class = "LanguageTypes">Programming language</p>
-                    &nbsp&nbsp - Java, &nbsp Python, &nbsp C, &nbsp R script <br>
-                    &nbsp<img class="logo", alt="JavaLogo", src="../resources/infoImg/Logo/Java-logo.png">
-                    &nbsp<img class="logo", alt="PythonLog", src="../resources/infoImg/Logo/python-logo.png">
-                    &nbsp<img class="logo", alt="RLogo", src="../resources/infoImg/Logo/R-logo.png">
-                    &nbsp<img class="logo", alt="CLogo", src="../resources/infoImg/Logo/C-logo.png"> <br>
-
-
-                    &nbsp<p class = "LanguageTypes">Framework</p>
-                    &nbsp&nbsp - Tensorflow, &nbsp LangGraph, &nbsp Spring Boot, &nbsp FastAPI <br>
-                    &nbsp<img class="logo", alt="TensorflowLogo", src="../resources/infoImg/Logo/TF logo.png">         
-                    &nbsp<img class="logo", alt="SpringBootLogo" src="../resources/infoImg/Logo/langgraph-logo.png"> 
-                    &nbsp<img class="logo", alt="SpringBootLogo" src="../resources/infoImg/Logo/SpringBoot-logo.png">
-                    &nbsp<img class="logo", alt="SpringBootLogo" src="../resources/infoImg/Logo/fastapi-logo.png">
-                    <br>
-                    
-                    <li class= "git-logo-list"><a class = "git_menu", rel="noopener", href="https://github.com/TAEHYUKLEE" target='_blank'>
-                        <img src="../resources/infoImg/Logo/Github-logo.png", alt="GitLogo", height="20" width="20"/>&nbsp Github (Link)</a></li>
-                    <br><br>
-                    <p class = "Cap-sub">2. Data anylsis<br> </p>
-                    &nbsp - Basic statistics (Correlation coefficient, R-squared, Skewness)<br>
-                    &nbsp - Model selection based on linear regression (Variable selection)<br>
-                    &nbsp - Imputation for NA (Not Available) <br><br>
-
-                    <p class = "Cap-sub">3. Machine learning<br></p>
-                    &nbsp - Reinforcement learning (Control, Time forecasting)<br>
-                    &nbsp - Supervised learning (Time forecasting)<br><br>
-
-                    <p class = "Cap-sub">4. Numerical simulation(CFD)<br></p>
-                    &nbsp - Finite Difference method (Cavity Lid driven)<br>
-                    &nbsp - Spectral method (Burgers equation, Channel flow)<br><br>
-
-                    <p class = "Cap-sub">5. Server Engineering & Development of Back-end system <br></p>
-                    &nbsp - Development  of monitoring system (API gateway system etc.)<br>
-                    &nbsp - Data collection & totalization system<br>
-                    &nbsp - Server Configuration (Web Server, WAS, Middle-ware etc.)
-                </div>
-
-                <h5 class = "Resmue-title">Awards</h5>
-                <div class="Awards">
-                    Engineering Contest - 2nd prize<br>
-                    <a class = "Orga_menu" href="http://eng.ksme.or.kr/"> -Issuing organization: The Korean Society of Mechanical Engineers- 
-                        &nbsp <a class = "refer_paper", href="https://www.dbpia.co.kr/author/authorDetail?ancId=4023861">Conference paper</a></a>
-                    <br><br>
-                    Conference Poster presentation - Awards<br>
-                    <a class = "Orga_menu" href = "http://www.cse.or.kr/">-Issuing organization: Korean Society for Computational Science and Engeering-</a>
-                </div>
-
-                <h5 class = "Resmue-title">Certificate</h5>
-
-                <div class="certificate"> 
-                    <div class="Certificate_img">
-                        <img id="kdataLogo", alt="kdata" , src="../resources/infoImg/Logo/Kdata-Logo.png" width=150 height=70>
-                        <a class = "Orga_menu", id="kdataImg", href="https://www.dataq.or.kr/www/main.do"> -Issuing organization-</a>
-                    </div>
-
-                    <div class="certificate_cluster">
-                        <span class="certificate_element">1. Advanced Data Analytics semi-Professional (ADsP)</span><br>
-                        <span class="certificate_element">2. Data Architecture semi-Professional (DAsP)</span>
-                    </div>
-                </div>
-
-                <h5 class = "Resmue-title">Careers</h5>
-
-                <div class="careers">
-                    <div class="Company_img">
-                        <img id="sk-img", alt="sk" , src="../resources/infoImg/Logo/SK-logo.png" width=150 height=100>
-                    </div>
-
-                    <div class = "Career_element">
-                        <a class = "Company_title", href="https://www.skcc.co.kr/"> SK Inc. AX(C&C) <a class="fromdate">(from 2024-01-01)</a> </a>
-                        <p class = "Company_role"> &nbsp Software Engineer & Manager</p>
-                        <p class = "Company_project", id="apiGwPj"> &nbsp &nbsp 1. Development of I-FACTs Data Analysis Systems</p>
-                        <p class = "Company_project", id="apiGwPj"> &nbsp &nbsp 2. Development of AI Service (Reinforced Security Agent)</p>
-                        <p class = "Company_project", id="apiGwPj"> &nbsp &nbsp 3. Public Cloud Infrastructure</p>
-                        <!-- <p class = "Company_project", id="apiGwPj"> &nbsp &nbsp 1. in training <a class="project_sttus"> </a></p> -->
-                    </div>
-
-                </div><br>
-
-                <hr width = "90%" color = "#E6E6E6">
-
-                <div class="careers">
-                    <div class="Company_img">
-                        <img id="ktds-image", alt="ktds" , src="../resources/infoImg/Logo/ktds-logo.png" width=150 height=100>
-                    </div>
-
-                    <div class = "Career_element">
-                        <a class = "Company_title", href="https://www.ktds.com/index.jsp"> KT DataSystems <a class="fromdate">(from 2022-01-10 to 2023-12-29)</a> </a>
-                        <p class = "Company_role"> &nbsp Back-end Server Engineer</p>
-                        <p class = "Company_project", id="apiGwPj"> &nbsp &nbsp 1. Development of API Gateway solution <a class="project_sttus"> - completed</a></p>
-                        <p class = "Company_project", id="apiGwPj"> &nbsp &nbsp 2. Management of Open Source  <a class="project_sttus"></a></p>
-                    </div>
-                </div><br><br>
-
-            </div>
+        <div class="info-chips">
+          <span class="info-chip">🇰🇷 Republic of Korea</span>
+          <a class="info-chip" href="mailto:thlee991@gmail.com">✉ thlee991@gmail.com</a>
+          <span class="info-chip">Mechanical Eng.</span>
+          <span class="info-chip">Environmental Eng.</span>
         </div>
 
+        <div class="pf-pagehead__cta">
+          <a class="pf-btn pf-btn--primary" href="https://github.com/TAEHYUKLEE" target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="pf-btn pf-btn--outline" href="TAYLEE Info course list.html">Course list</a>
+        </div>
+      </div>
+    </header>
 
-    </div>
+
+    <!-- ===================== INTERESTS ===================== -->
+    <section class="pf-section">
+      <p class="pf-keyline">INTERESTS</p>
+      <div class="info-tags">
+        <span class="info-tag">Fluid mechanics</span>
+        <span class="info-tag">Machine learning &amp; Mathematics</span>
+        <span class="info-tag">Data analysis (statistics)</span>
+        <span class="info-tag">Environmental issues</span>
+        <span class="info-tag">Information technologies</span>
+        <span class="info-tag">Algorithm</span>
+      </div>
+    </section>
+
+
+    <!-- ===================== EDUCATION ===================== -->
+    <section class="pf-section">
+      <h2 class="pf-h2">Education</h2>
+      <p class="pf-sub">Yonsei University · Environmental &amp; Mechanical engineering</p>
+
+      <div class="info-timeline">
+        <div class="info-edu">
+          <span class="info-edu__year">2020 – 2022</span>
+          <div class="info-edu__body">
+            <h3 class="info-edu__title">Yonsei Univ. — Mechanical Engineering <span>(Master's)</span></h3>
+            <p class="info-edu__desc">M.S. in Mechanical Engineering.<br>Thesis — <em>Turbulence control through deep reinforcement learning</em>.</p>
+          </div>
+        </div>
+        <div class="info-edu">
+          <span class="info-edu__year">2018 – 2020</span>
+          <div class="info-edu__body">
+            <h3 class="info-edu__title">Yonsei Univ. — Mechanical Engineering <span>(Bachelor's)</span></h3>
+            <p class="info-edu__desc">B.S. in Mechanical Engineering. Bachelor in Environmental Engineering (transition from completion to graduation).</p>
+          </div>
+        </div>
+        <div class="info-edu">
+          <span class="info-edu__year">2012 – 2018</span>
+          <div class="info-edu__body">
+            <h3 class="info-edu__title">Yonsei Univ. — Environmental Engineering <span>(Bachelor's)</span></h3>
+            <p class="info-edu__desc">Completion of Bachelor in Environmental Engineering.</p>
+          </div>
+        </div>
+        <div class="info-edu">
+          <span class="info-edu__year">2014 – 2016</span>
+          <div class="info-edu__body">
+            <h3 class="info-edu__title">Military service — KATUSA</h3>
+            <p class="info-edu__desc">Korean Augmentation To the United States Army.</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="info-inline-link"><a href="TAYLEE Activity.html">School activities — see details →</a></p>
+    </section>
+
+
+    <!-- ===================== TECH STACK ===================== -->
+    <section class="pf-section">
+      <h2 class="pf-h2">Tech stack</h2>
+      <p class="pf-sub">Programming languages, frameworks &amp; tools I work with.</p>
+
+      <div class="info-stack">
+        <div class="info-stack__group">
+          <h4 class="info-stack__label">Languages</h4>
+          <div class="info-logos">
+            <span class="info-logo"><img src="../resources/infoImg/Logo/Java-logo.png" alt="Java"><span>Java</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/python-logo.png" alt="Python"><span>Python</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/js-logo.png" alt="JavaScript"><span>JavaScript</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/C-logo.png" alt="C"><span>C</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/R-logo.png" alt="R"><span>R</span></span>
+          </div>
+        </div>
+        <div class="info-stack__group">
+          <h4 class="info-stack__label">Frameworks</h4>
+          <div class="info-logos">
+            <span class="info-logo"><img src="../resources/infoImg/Logo/SpringBoot-logo.png" alt="Spring Boot"><span>Spring Boot</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/spring-logo.png" alt="Spring WebFlux"><span>Spring WebFlux</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/fastapi-logo.png" alt="FastAPI"><span>FastAPI</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/TF logo.png" alt="TensorFlow"><span>TensorFlow</span></span>
+            <span class="info-logo"><img src="../resources/infoImg/Logo/langgraph-logo.png" alt="LangGraph"><span>LangGraph</span></span>
+          </div>
+        </div>
+        <div class="info-stack__group">
+          <h4 class="info-stack__label">Databases &amp; ORM</h4>
+          <div class="info-logos">
+            <span class="info-logo info-logo--text"><span>PostgreSQL</span></span>
+            <span class="info-logo info-logo--text"><span>MariaDB</span></span>
+            <span class="info-logo info-logo--text"><span>Oracle</span></span>
+            <span class="info-logo info-logo--text"><span>MongoDB</span></span>
+            <span class="info-logo info-logo--text"><span>JPA</span></span>
+            <span class="info-logo info-logo--text"><span>R2DBC</span></span>
+            <span class="info-logo info-logo--text"><span>Reactive MongoDB</span></span>
+          </div>
+        </div>
+        <div class="info-stack__group">
+          <h4 class="info-stack__label">Infra &amp; Cloud</h4>
+          <div class="info-logos">
+            <span class="info-logo info-logo--text"><span>AWS</span></span>
+            <span class="info-logo info-logo--text"><span>Linux</span></span>
+            <span class="info-logo info-logo--text"><span>Nginx</span></span>
+            <span class="info-logo info-logo--text"><span>On-premise</span></span>
+          </div>
+        </div>
+        <a class="info-stack__git" href="https://github.com/TAEHYUKLEE" target="_blank" rel="noopener">
+          <img src="../resources/infoImg/Logo/Github-logo.png" alt="GitHub"> github.com/TAEHYUKLEE ↗
+        </a>
+      </div>
+    </section>
+
+
+    <!-- ===================== SKILLS ===================== -->
+    <section class="pf-section">
+      <h2 class="pf-h2">Skills</h2>
+      <p class="pf-sub">Domains I've worked in, from research to production.</p>
+
+      <div class="pf-grid">
+        <div class="pf-card pf-card--static">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40V22"/><path d="M20 40V10"/><path d="M32 40V28"/><path d="M44 40V16"/><path d="M6 40h38"/></svg>
+          </span>
+          <h3 class="pf-card__title">Data analysis</h3>
+          <p class="pf-card__desc">Basic statistics (correlation, R², skewness), model selection via linear regression (variable selection), imputation for missing values.</p>
+        </div>
+
+        <div class="pf-card pf-card--static">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="5"/><circle cx="10" cy="14" r="3.5"/><circle cx="10" cy="34" r="3.5"/><circle cx="38" cy="14" r="3.5"/><circle cx="38" cy="34" r="3.5"/><path d="M13 15.5l7 6M13 32.5l7-6M35 15.5l-7 6M35 32.5l-7-6"/></svg>
+          </span>
+          <h3 class="pf-card__title">Machine learning</h3>
+          <p class="pf-card__desc">Reinforcement learning (control, time forecasting) and supervised learning (time forecasting).</p>
+        </div>
+
+        <div class="pf-card pf-card--static">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 30c6 0 6-8 12-8s6 8 12 8 6-8 12-8"/><path d="M6 18c6 0 6-8 12-8s6 8 12 8 6-8 12-8"/></svg>
+          </span>
+          <h3 class="pf-card__title">Numerical simulation (CFD)</h3>
+          <p class="pf-card__desc">Finite Difference method (cavity lid-driven), spectral method (Burgers equation, channel flow).</p>
+        </div>
+
+        <div class="pf-card pf-card--static">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="9" width="32" height="9" rx="2"/><rect x="8" y="20" width="32" height="9" rx="2"/><rect x="8" y="31" width="32" height="9" rx="2"/><path d="M13 13.5h.02M13 24.5h.02M13 35.5h.02"/></svg>
+          </span>
+          <h3 class="pf-card__title">Server engineering &amp; Back-end</h3>
+          <p class="pf-card__desc">Monitoring systems (API gateway, etc.), data collection &amp; aggregation systems, server configuration (Web server, WAS, middleware).</p>
+        </div>
+
+        <div class="pf-card pf-card--static">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 36h18a8 8 0 0 0 1.2-15.9 11 11 0 0 0-21.2.4A7 7 0 0 0 16 36z"/><path d="M24 31v-9M24 22l-4 4M24 22l4 4"/></svg>
+          </span>
+          <h3 class="pf-card__title">Cloud &amp; Infrastructure</h3>
+          <p class="pf-card__desc">AWS public-cloud architecture (VPC, public / private subnets, IGW, NAT Gateway · Instance) and self-hosted Linux servers — Nginx, NAT gateway, auto-renewing HTTPS (Let's Encrypt).</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================== CAREERS ===================== -->
+    <section class="pf-section">
+      <h2 class="pf-h2">Careers</h2>
+
+      <div class="info-careers">
+        <div class="info-career">
+          <div class="info-career__logo"><img src="../resources/infoImg/Logo/SK-logo.png" alt="SK Inc. AX"></div>
+          <div class="info-career__body">
+            <a class="info-career__title" href="https://www.skcc.co.kr/" target="_blank" rel="noopener">SK Inc. AX (C&amp;C)</a>
+            <span class="info-career__period">from 2024-01-01 · present</span>
+            <p class="info-career__role">Software Engineer &amp; Manager</p>
+            <ul class="info-career__list">
+              <li>SKO IT-VoC Deployment Platform — unified VoC &amp; deployment governance across overseas subsidiaries</li>
+              <li>Data Analysis Engine for manufacturing quality — abstracts multiple formats (CSV / JSON / DB) into one statistics pipeline</li>
+              <li>Reinforced Security Agent (AI) — PoC</li>
+              <li>Public Cloud (AWS) infrastructure &amp; common authentication module</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="info-career">
+          <div class="info-career__logo"><img src="../resources/infoImg/Logo/ktds-logo.png" alt="KT DataSystems"></div>
+          <div class="info-career__body">
+            <a class="info-career__title" href="https://www.ktds.com/index.jsp" target="_blank" rel="noopener">KT DataSystems</a>
+            <span class="info-career__period">2022-01-10 – 2023-12-29</span>
+            <p class="info-career__role">Back-end Server Engineer</p>
+            <ul class="info-career__list">
+              <li>Development of API Gateway solution <span class="info-done">completed</span></li>
+              <li>Management of Open Source</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================== AWARDS & CERTIFICATE ===================== -->
+    <section class="pf-section">
+      <div class="info-two">
+
+        <div class="info-panel">
+          <h2 class="pf-h2 pf-h2--sm">Awards</h2>
+          <div class="info-award">
+            <p class="info-award__title">Engineering Contest — 2nd prize</p>
+            <p class="info-award__org">
+              <a href="http://eng.ksme.or.kr/" target="_blank" rel="noopener">The Korean Society of Mechanical Engineers</a>
+              · <a href="https://www.dbpia.co.kr/author/authorDetail?ancId=4023861" target="_blank" rel="noopener">Conference paper</a>
+            </p>
+          </div>
+          <div class="info-award">
+            <p class="info-award__title">Conference Poster presentation — Award</p>
+            <p class="info-award__org"><a href="http://www.cse.or.kr/" target="_blank" rel="noopener">Korean Society for Computational Science and Engineering</a></p>
+          </div>
+        </div>
+
+        <div class="info-panel">
+          <h2 class="pf-h2 pf-h2--sm">Certificate</h2>
+          <div class="info-cert">
+            <img class="info-cert__logo" src="../resources/infoImg/Logo/Kdata-Logo.png" alt="K-data">
+            <ul class="info-cert__list">
+              <li>Advanced Data Analytics semi-Professional (ADsP)</li>
+              <li>Data Architecture semi-Professional (DAsP)</li>
+            </ul>
+            <a class="info-inline-link" href="https://www.dataq.or.kr/www/main.do" target="_blank" rel="noopener">Issuing organization ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
 
     <footer-component></footer-component>
-    
+
 </body>
 
 

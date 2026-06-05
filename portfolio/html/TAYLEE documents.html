@@ -2,20 +2,36 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Documents</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Documents">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/TAYLEE%20documents.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Documents">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/style document.css">
-    
+    <link rel="stylesheet" type="text/css" href="../css/style.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../css/style document.css?v=20260605-18">
+
     <!--Java script event-->
-    <script src="../js/main.js" defer></script>  
-    <script src="../js/components/nav.js" sync></script>
-    <script src="../js/components/footer.js" sync></script>
-    <script src="../js/components/header.js" sync></script>
+    <script src="../js/main.js?v=20260605-18" defer></script>
+    <script src="../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../js/components/header.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
+
 </head>
 
 
@@ -24,65 +40,68 @@
 
     <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
+    <!-- ===================== PAGE HEADER (light) ===================== -->
+    <header class="pf-pagehead">
+        <p class="pf-pagehead__eyebrow">DOCUMENTS · ARCHIVE</p>
+        <h1 class="pf-pagehead__title">Knowledge <em>archive</em></h1>
+        <p class="pf-pagehead__lead">Study notes &amp; hands-on records across Project (IT), Mechanical engineering and Computer Science.</p>
+    </header>
 
-        <div class="Archive_box">
-            <h4 class="Archive_title"> Archive with notion </h4> 
-            <h2 class="For_details"> Archive for my knowledge</h2> 
+    <section class="pf-section">
 
-            <div class="Archive_list">
+            <div class="docs-grid">
 
-                <!--Corp Project-->
-                <div class = "topic-box" OnClick="location.href ='document/Document Archive Project.html'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "topic-box-image">
-                        <img id="PrjImg", alt="box_img", src="../resources/documentLogo/PrjImg.png" width=300 height=150>
+                <a class="docs-card" href="document/Document Archive Project.html">
+                    <div class="docs-card__media">
+                        <img src="../resources/documentLogo/PrjImg.jpg" alt="IT Project Works">
+                        <span class="docs-card__badge">Project</span>
                     </div>
-    
-                    <div class="topic-box-script"> 
-                        <p class="topic-Ob-title">IT Project Works</p>
-                        <p class="topic-Ob-descript"> Start recording from 2022 </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">IT Project Works</h2>
+                        <p class="docs-card__meta">Since 2022</p>
+                        <span class="docs-card__cta">
+                            View archive
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-                <!--Spring notion-->
-                <div class = "topic-box" OnClick="location.href ='document/Document Archive ME.html'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "topic-box-image">
-                        <img id="MEImg", alt="MEImg", src="../resources/documentLogo/MEImg.jpg" width=300 height=150>
+                <a class="docs-card" href="document/Document Archive ME.html">
+                    <div class="docs-card__media">
+                        <img src="../resources/documentLogo/MEImg.jpg" alt="Mechanical Engineering Repository">
+                        <span class="docs-card__badge">Engineering</span>
                     </div>
-    
-                    <div class="topic-box-script"> 
-                        <p class="topic-Ob-title">Mechanical Eng. Repo</p>
-                        <p class="topic-Ob-descript"> Recorded from 2018 - 2021 </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Mechanical Eng. Repo</h2>
+                        <p class="docs-card__meta">2018 — 2021</p>
+                        <span class="docs-card__cta">
+                            View archive
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-                
-                <!--Spring Cloud-->
-                <div class = "topic-box" OnClick="location.href ='document/Document Archive CS.html'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "topic-box-image">
-                        <img id="CSImg", alt="box_img", src="../resources/documentLogo/CSImg.jpg" width=300 height=150>
+                <a class="docs-card" href="document/Document Archive CS.html">
+                    <div class="docs-card__media">
+                        <img src="../resources/documentLogo/CSImg.jpg" alt="Computer Science Repository">
+                        <span class="docs-card__badge">Computer Science</span>
                     </div>
-    
-                    <div class="topic-box-script"> 
-                        <p class="topic-Ob-title">Computer Science Repo</p>
-                        <p class="topic-Ob-descript"> Start recording from 2022 </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Computer Science Repo</h2>
+                        <p class="docs-card__meta">Since 2022</p>
+                        <span class="docs-card__cta">
+                            View archive
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
-
+                </a>
 
             </div>
 
-        </div>
-    </div>
+    </section>
 
     <footer-component></footer-component>
 
-    
+
 </body>
 </html>

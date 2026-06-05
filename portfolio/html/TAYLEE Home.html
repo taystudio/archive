@@ -3,17 +3,33 @@
 
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Home</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Home">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/TAYLEE%20Home.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Home">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/style main.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../css/style main.css?v=20260605-18">
 
     <!-- js -->
-    <script src="../js/main.js" defer></script>
-    <script src="../js/components/nav.js" sync></script>
-    <script src="../js/components/footer.js" sync></script>
-    <script src="../js/components/header.js" sync></script>
+    <script src="../js/main.js?v=20260605-18" defer></script>
+    <script src="../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../js/components/header.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
 </head>
@@ -23,129 +39,120 @@
 
     <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
-        
-        <div class = "dashboards">
-            <!--본인의 소개 Line-->
-            <div class = "banner">
-                <h1 class ="Korean-comment">
-                    Welcome.<br>
-                    I'm <a class="my-name">Taehyuk Lee</a>, who dreams of becoming a <a class="field-highlight">CTO</a> <br>
-                    standing at the top of the engineering field.<br>
-    
-                </h1>
-
-                <p class = "English-comment">
-                    1. Becoming a bridge between the physical and digital worlds<br>
-                    2. Developing sustainable technologies
-                </p>
-            </div>
-
+    <!-- ===================== HERO ===================== -->
+    <section class="pf-hero">
+      <div class="pf-hero__inner">
+        <p class="pf-eyebrow">PORTFOLIO · ARCHIVE</p>
+        <h1 class="pf-hero__title">
+          I'm <em>Taehyuk&nbsp;Lee</em> — engineering my way<br>
+          to the top of the field as a <em>CTO</em>.
+        </h1>
+        <p class="pf-hero__lead">
+          A bridge between the physical and digital worlds, developing sustainable
+          technologies across Mechanical &amp; Environmental engineering and IT.
+        </p>
+        <div class="pf-hero__cta">
+          <a class="pf-btn pf-btn--primary" href="TAYLEE project.html">View Projects</a>
+          <a class="pf-btn pf-btn--ghost" href="TAYLEE Info.html">About &amp; CV</a>
         </div>
 
-
-        <h5 class="recent-menu"> MAIN RESEARCH TOPICS</h5>
-
-        <div class = "recent-works">
-            
-            <div class="Back_ground_c">
-                <img class="Back_ground", alt="back_image", src="../resources/background/Fluid-image.jpg" width=450 height=300>
-                <p class="back-s">Fluid mechanics</p>
-            </div>
-            
-            <div class="Back_ground_c">
-                <img class="Back_ground", alt="back_image", src="../resources/background/Comp-image.jpg" width=450 height=300>
-                <p class="back-s">Information technologies</p>
-            </div>
+        <div class="pf-hero__links">
+          <a href="TAYLEE documents.html">Documents</a>
+          <span></span>
+          <a href="TAYLEE research.html">Research</a>
+          <span></span>
+          <a href="TAYLEE Activity.html">Activity</a>
         </div>
+      </div>
+    </section>
 
 
-        <div class = "Objective">
-            <h1 class = "mid-Ob">About me</h1>
-
-            <!--CV-->
-            <div class = "box">
-                <div class = "box-image">
-                    <img id="box-img", alt="box_img", src="../resources/main/cv.png" width=100 height=100>
-                </div>
-
-                <div class="box-script"> 
-                    <p class="Ob-title">What do I want to do?</p>
-                    <p class="Ob-descript">
-                        &nbsp Analyzing and processing engineering data and presenting a predictive model or 
-                        optimal selection model based on knowledge of physical and chemical engineering. 
-                        The ultimate goal is to get the entire model (software) installed on the target device. 
-                        &nbsp&nbsp <a class="more-bottom" href="TAYLEE Info.html"> More > </a></p><br>
-                </div>
-            </div>
-
-            <!--Dream-->
-            <div class = "box">
-
-                <div class = "box-image">
-                    <img class="box-img", alt="box_img", src="../resources/main/Job-dream.png" width=100 height=100>
-                </div>
-
-                <div class="box-script"> 
-                    <p class="Ob-title">What do I want to be?</p>
-                    <p class="Ob-descript">&nbsp I aspire to be a mechanical and chemical engineer, 
-                        as well as an embedded software developer,
-                        who uses sustainable technologies to balance the world.
-                        &nbsp&nbsp <a class="more-bottom" href="TAYLEE Info.html"> More > </a>
-                    </p>
-                </div>
-            </div>
-
-            <!--Research-->
-            <div class = "box">
-
-                <div class = "box-image">
-                    <img class="box-img", alt="box_img", src="../resources/main/research.png" width=100 height=100>
-                </div>
-
-                <div class="box-script"> 
-                    <p class="Ob-title">What Research have I done?<br></p>
-                    <p class="Ob-descript">&nbsp Computational fluid dynamics (Numerical method-FDM, Spectral method), Fluid control through Deep Reinforcement Learning, 
-                        and Time series forecasting of fine dust concentration through Deep Learning. (Including data analysis work)
-                        &nbsp&nbsp <a class="more-bottom" href="TAYLEE research.html"> More > </a> </p>
-                </div>
-            
-            </div>
-
-            <!--Project-->
-            <div class = "box">
-
-                <div class = "box-image">
-                    <img class="box-img", alt="box_img", src="../resources/main/Project.png" width=100 height=100>
-                </div>
-
-                <div class="box-script"> 
-                    <p class="Ob-title">What competencies have I developed?<br></p>
-                    <p class="Ob-descript">&nbsp Data analysis (correlation analysis, regression analysis, variable selection, linear model selection, data visualization), 
-                        predictive model and optimal selection model through DNN, DRL respectively, etc.
-                        &nbsp&nbsp <a class="more-bottom" href="TAYLEE project.html"> More > </a></p>
-                </div>
-            </div>
-
-            <!--Activity-->
-            <div class = "box">
-
-                <div class = "box-image">
-                    <img class="box-img", alt="box_img", src="../resources/main/Social club.png" width=100 height=100>
-                </div>
-
-                <div class="box-script"> 
-                    <p class="Ob-title">What extracurricular activities have I been doing?<br></p>
-                    <p class="Ob-descript">&nbsp I was able to widen my personal relationships while pursuing hobbies by participating 
-                        in tennis club, squash club, advertising and marketing club, 
-                        robot and control engineering club, and computer club, among others.
-                        &nbsp&nbsp <a class="more-bottom" href="TAYLEE Activity.html"> More > </a></p>
-                </div>
-            </div>
-
+    <!-- ===================== RESEARCH TOPICS ===================== -->
+    <section class="pf-section">
+      <p class="pf-keyline">MAIN RESEARCH TOPICS</p>
+      <div class="pf-topics">
+        <div class="pf-topic">
+          <img src="../resources/background/Fluid-image.jpg" alt="Fluid mechanics" loading="lazy">
+          <div class="pf-topic__cap">
+            <span class="pf-topic__title">Fluid mechanics</span>
+            <span class="pf-topic__sub">CFD · turbulence control · numerical methods</span>
+          </div>
         </div>
+        <div class="pf-topic">
+          <img src="../resources/background/Comp-image.jpg" alt="Information technologies" loading="lazy">
+          <div class="pf-topic__cap">
+            <span class="pf-topic__title">Information technologies</span>
+            <span class="pf-topic__sub">cloud · AI agents · data analysis</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    </div>
+
+    <!-- ===================== ABOUT ME ===================== -->
+    <section class="pf-section">
+      <h2 class="pf-h2">About me</h2>
+      <p class="pf-sub">Five quick answers about what I do, where I'm headed, and what I've built.</p>
+
+      <div class="pf-grid">
+
+        <a class="pf-card" href="TAYLEE Info.html">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="9"/><circle cx="24" cy="24" r="2.4" fill="currentColor"/>
+            </svg>
+          </span>
+          <h3 class="pf-card__title">What do I want to do?</h3>
+          <p class="pf-card__desc">Analyze engineering data and build predictive / optimal-selection models grounded in physical &amp; chemical engineering — then deploy the whole model onto the target device.</p>
+          <span class="pf-card__more">More <span class="pf-card__arrow">→</span></span>
+        </a>
+
+        <a class="pf-card" href="TAYLEE Info.html">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 42V8"/><path d="M12 9h22l-4 7 4 7H12"/>
+            </svg>
+          </span>
+          <h3 class="pf-card__title">What do I want to be?</h3>
+          <p class="pf-card__desc">A mechanical &amp; chemical engineer and embedded-software developer who uses sustainable technologies to keep the world in balance.</p>
+          <span class="pf-card__more">More <span class="pf-card__arrow">→</span></span>
+        </a>
+
+        <a class="pf-card" href="TAYLEE research.html">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6v13L9 38a4 4 0 0 0 3.5 6h23A4 4 0 0 0 39 38L28 19V6"/><path d="M17 6h14"/><path d="M16 30h16"/>
+            </svg>
+          </span>
+          <h3 class="pf-card__title">What research have I done?</h3>
+          <p class="pf-card__desc">CFD (FDM, spectral method), fluid control via deep reinforcement learning, and time-series forecasting of fine-dust concentration with deep learning — including the data analysis.</p>
+          <span class="pf-card__more">More <span class="pf-card__arrow">→</span></span>
+        </a>
+
+        <a class="pf-card" href="TAYLEE project.html">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 40V22"/><path d="M20 40V10"/><path d="M32 40V28"/><path d="M44 40V16"/><path d="M6 40h38"/>
+            </svg>
+          </span>
+          <h3 class="pf-card__title">What competencies have I developed?</h3>
+          <p class="pf-card__desc">Data analysis (correlation, regression, variable / linear-model selection, visualization) and predictive &amp; optimal-selection models via DNN and DRL.</p>
+          <span class="pf-card__more">More <span class="pf-card__arrow">→</span></span>
+        </a>
+
+        <a class="pf-card" href="TAYLEE Activity.html">
+          <span class="pf-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="17" cy="18" r="6"/><circle cx="33" cy="20" r="5"/><path d="M7 40c0-6 4.5-10 10-10s10 4 10 10"/><path d="M29 31c5 .4 9 4.2 9 9"/>
+            </svg>
+          </span>
+          <h3 class="pf-card__title">What activities have I done?</h3>
+          <p class="pf-card__desc">Widened relationships and pursued hobbies through tennis, squash, advertising &amp; marketing, robotics / control engineering, and computer clubs.</p>
+          <span class="pf-card__more">More <span class="pf-card__arrow">→</span></span>
+        </a>
+
+      </div>
+    </section>
 
 
     <footer-component></footer-component>

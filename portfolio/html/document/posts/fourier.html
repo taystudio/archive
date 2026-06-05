@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Understanding of Fourier Transform — TAYLEE Archive</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="Understanding of Fourier Transform — TAYLEE Archive">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/posts/fourier.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Understanding of Fourier Transform — TAYLEE Archive">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="../../../css/style.css?v=20260605-18">
+<link rel="stylesheet" type="text/css" href="../posts.css?v=20260605-18">
+
+<script src="../../../js/main.js?v=20260605-18" defer></script>
+<script src="../../../js/components/nav.js?v=20260605-18" sync></script>
+<script src="../../../js/components/footer.js?v=20260605-18" sync></script>
+<script src="../../../js/components/header.js?v=20260605-18" sync></script>
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+<common-header-component></common-header-component>
+</head>
+<body>
+<nav-component></nav-component>
+
+<main class="docs-post">
+  <article class="docs-post__article">
+    <header class="docs-post__header">
+      <p class="docs-post__eyebrow"><a href="../../TAYLEE documents.html">← Documents</a></p>
+      <h1 class="docs-post__title">Understanding of Fourier Transform</h1>
+    </header>
+    <div class="docs-post__body">
+
+<p class="docs-p">This article distills the <strong>intuition</strong> I built while studying the Fourier series and the Fourier transform. Starting from the familiar idea of an inner product on vectors, we trace a single thread: <em>inner product of functions → trigonometric series → complex exponential form → Fourier integral → Fourier transform → Discrete Fourier Transform (DFT)</em>.</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">📌</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>In one line</strong> — the Fourier series / transform decomposes a function into a <em>linear combination of mutually orthogonal (independent) sinusoidal basis functions</em>. It is exactly the same logic as expressing a vector in an orthogonal basis. The only difference is that the basis is now an <em>infinite-dimensional</em> set of sinusoids.</p>
+  </div>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">1. Orthogonal Functions</h2>
+
+<p class="docs-p">The inner product originates with vectors, but we want to <strong>extend the same idea to functions</strong>.</p>
+
+<h3 class="docs-h3">1) Inner product of vectors</h3>
+
+<p class="docs-p">For two vectors \(\vec{u} = u_1 i + u_2 j + u_3 k\) and \(\vec{v} = v_1 i + v_2 j + v_3 k\):</p>
+
+<div class="docs-equation">
+\[ \vec{u}\cdot\vec{v} = |\vec{u}||\vec{v}|\cos\theta = u_1 v_1 + u_2 v_2 + u_3 v_3 = \sum_{i=1}^{3} u_i v_i \]
+</div>
+
+<p class="docs-p">The case \(\theta = 90^\circ\) (inner product = 0) is called <strong>orthogonality (independence)</strong>.</p>
+
+<h3 class="docs-h3">2) Inner product of functions</h3>
+
+<p class="docs-p">For two functions \(f_1, f_2\) on an interval \([a, b]\), the inner product is defined as:</p>
+
+<div class="docs-equation">
+\[ (f_1, f_2) = \int_{a}^{b} f_1(x) f_2(x) \, dx \]
+</div>
+
+<p class="docs-p">It is harder to picture geometrically, but if the two functions are independent then</p>
+
+<div class="docs-equation">
+\[ (f_1, f_2) = \int_{a}^{b} f_1(x) f_2(x) \, dx = 0 \quad \Rightarrow \quad f_1, f_2 \text{ are } \mathbf{orthogonal} \text{ on } [a,b] \]
+</div>
+
+<p class="docs-p"><strong>Example.</strong> Take \(f_1(x) = x^2,\; f_2(x) = x^3\) on \([-1, 1]\): the integral vanishes, so they are <em>orthogonal</em>.</p>
+
+<h3 class="docs-h3">3) Orthogonal sets</h3>
+
+<p class="docs-p">A set of orthogonal functions (an infinite set) is defined as follows.</p>
+
+<div class="docs-quote">
+A set of real-valued functions \(\{\phi_0(x), \phi_1(x), \phi_2(x), \dots\}\) is said to be <strong>orthogonal</strong> on an interval \([a, b]\) if
+\((\phi_m, \phi_n) = \int_a^b \phi_m(x)\phi_n(x)\,dx = 0\) for \(m \ne n\).
+</div>
+
+<p class="docs-p">In other words, every pair of distinct functions in an orthogonal set is mutually orthogonal.</p>
+
+<h3 class="docs-h3">4) Norm</h3>
+
+<p class="docs-p">One more term we'll lean on is the <strong>norm</strong>.</p>
+
+<div class="docs-equation">
+\[ \|\vec{u}\| = \sqrt{\vec{u}\cdot\vec{u}} \quad (\text{norm}), \qquad \vec{u}\cdot\vec{u} = \|\vec{u}\|^2 \quad (\text{square norm}) \]
+</div>
+
+<p class="docs-p">For vectors, the inner product of a vector with itself gives its square norm. The same idea defines the norm of a function:</p>
+
+<div class="docs-equation">
+\[ \|\phi_n(x)\| = \sqrt{\int_a^b \phi_n \cdot \phi_n} \quad (\text{norm}), \qquad \|\phi_n(x)\|^2 = \int_a^b \phi_n \cdot \phi_n \quad (\text{square norm}) \]
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">2. Vector Analogy — linear combination of functions</h2>
+
+<p class="docs-p">If the orthogonal functions are independent, their key feature is <strong>linearity</strong>. With an orthogonal (infinite) set as the basis, we should be able to <em>superpose</em> them to represent any function.</p>
+
+<div class="docs-equation">
+\[ f(x) = c_0\phi_0(x) + c_1\phi_1(x) + c_2\phi_2(x) + \dots + c_n\phi_n(x) + \dots, \quad n = 0, 1, 2, \dots \quad \cdots (1) \]
+</div>
+
+<p class="docs-p">But how do we find the coefficients \(c_n\)? Borrow the trick from vectors.</p>
+
+<p class="docs-p">In a 3-D Cartesian system:</p>
+
+<div class="docs-equation">
+\[ \vec{u} = c_1 \vec{u_x} + c_2 \vec{u_y} + c_3 \vec{u_z} \quad [c_i: \text{scalar component of the vector}] \]
+</div>
+
+<p class="docs-p">If the basis vectors are mutually orthogonal, any vector is a linear combination of them. To find the coefficients \(c_1, c_2, c_3\), take <strong>inner products</strong>:</p>
+
+<div class="docs-equation">
+\[
+\begin{aligned}
+(\vec{u}, \vec{u}_x) &= c_1\|\vec{u}_x\|^2 + 0 + 0 \quad &\Rightarrow& \quad c_1 = \frac{\vec{u}\cdot\vec{u}_x}{\|\vec{u}_x\|^2}\\
+(\vec{u}, \vec{u}_y) &= 0 + c_2\|\vec{u}_y\|^2 + 0 \quad &\Rightarrow& \quad c_2 = \frac{\vec{u}\cdot\vec{u}_y}{\|\vec{u}_y\|^2}\\
+(\vec{u}, \vec{u}_z) &= 0 + 0 + c_3\|\vec{u}_z\|^2 \quad &\Rightarrow& \quad c_3 = \frac{\vec{u}\cdot\vec{u}_z}{\|\vec{u}_z\|^2}
+\end{aligned}
+\]
+</div>
+
+<p class="docs-p">Now apply the same logic to (1). For functions, the inner product is continuous, so it becomes an integral (vectors are discrete):</p>
+
+<div class="docs-equation">
+\[ \int_a^b f(x)\phi_m(x)\,dx = c_0 \int_a^b \phi_0(x)\phi_m(x)\,dx + c_1 \int_a^b \phi_1(x)\phi_m(x)\,dx + \dots + c_n \int_a^b \phi_n(x)\phi_m(x)\,dx + \dots \]
+</div>
+
+<p class="docs-p">By orthogonality every \(m \ne n\) term vanishes, and only the parallel term \(m = n\) survives:</p>
+
+<div class="docs-equation">
+\[ c_n = \frac{\int_a^b f(x)\phi_n(x)\,dx}{\int_a^b \phi_n(x)^2\,dx} \]
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">3. Trigonometric Series — Fourier Series</h2>
+
+<p class="docs-p">According to Zill &amp; Wright, 5th edition, Exercises 12.1 – 12, the following set is mutually orthogonal for every \(x\):</p>
+
+<div class="docs-equation">
+\[ \left\{ 1, \cos\frac{n\pi}{p}x, \sin\frac{n\pi}{p}x \right\}, \quad n = 1, 2, 3 \quad \text{on}\;[-p, p] \]
+</div>
+
+<p class="docs-p">So we can expand an arbitrary function \(f(x)\) as a linear combination of these basis functions:</p>
+
+<div class="docs-equation">
+\[ f(x) = c_0 + c_1\cos\frac{\pi}{p}x + c_2\sin\frac{\pi}{p}x + c_3\cos\frac{2\pi}{p}x + c_4\sin\frac{2\pi}{p}x + \dots \]
+</div>
+
+<p class="docs-p">By convention, setting \(c_0 = a_0/2\), \(c_{2n-1} = a_n\), \(c_{2n} = b_n\) gives the cleaner form:</p>
+
+<div class="docs-equation">
+\[ \boxed{\; f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty}\left( a_n \cos\frac{n\pi}{p}x + b_n \sin\frac{n\pi}{p}x \right) \;} \quad \cdots (2) \]
+</div>
+
+<h3 class="docs-h3">Finding \(a_0, a_n, b_n\)</h3>
+
+<p class="docs-p">Apply the vector analogy: take the inner product of both sides with each basis function.</p>
+
+<p class="docs-p"><strong>A) \(a_0\)</strong> — inner product of \(f(x)\) with 1 over \([-p, p]\):</p>
+<div class="docs-equation">
+\[ \int_{-p}^{p} f(x)\cdot 1\,dx = \frac{a_0}{2}\int_{-p}^{p} 1\,dx + 0 = p\,a_0 \quad \Rightarrow \quad a_0 = \frac{1}{p}\int_{-p}^{p} f(x)\,dx \]
+</div>
+
+<p class="docs-p"><strong>B) \(a_n\)</strong> — inner product of \(f(x)\) with \(\cos(m\pi x/p)\):</p>
+<div class="docs-equation">
+\[ \int_{-p}^{p} f(x)\cos\frac{m\pi}{p}x\,dx = a_n \int_{-p}^{p} \cos\frac{n\pi}{p}x \cdot \cos\frac{m\pi}{p}x\,dx = p\;\;(m=n) \quad \Rightarrow \quad a_n = \frac{1}{p}\int_{-p}^{p} f(x)\cos\frac{n\pi}{p}x\,dx \]
+</div>
+
+<p class="docs-p"><strong>C) \(b_n\)</strong> — inner product of \(f(x)\) with \(\sin(m\pi x/p)\):</p>
+<div class="docs-equation">
+\[ b_n = \frac{1}{p}\int_{-p}^{p} f(x)\sin\frac{n\pi}{p}x\,dx \]
+</div>
+
+<p class="docs-p">Equation (2) is the <strong>Fourier series</strong> of \(f(x)\); the coefficients from A), B), C) are the <strong>Fourier coefficients</strong>.</p>
+
+<h3 class="docs-h3">What does the Fourier series actually mean?</h3>
+
+<p class="docs-p">Back to the vector analogy — a 3-D vector is a linear combination of basis vectors and can represent any vector in 3-D space:</p>
+
+<div class="docs-equation">
+\[ \vec{u} = c_1 \vec{u}_x + c_2 \vec{u}_y + c_3 \vec{u}_z \quad \longrightarrow \quad \vec{u}\;(\text{every vector in 3-D space}) \]
+</div>
+
+<p class="docs-p">A function is the same — the point is that the linear combination can represent <em>every</em> \(f(x)\):</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty}\left( a_n\cos\frac{n\pi}{p}x + b_n\sin\frac{n\pi}{p}x \right) \;\longrightarrow\; f(x)\;(\text{any function defined on } [-p, p]) \]
+</div>
+
+<p class="docs-p">Two caveats follow.</p>
+<ol class="docs-list">
+  <li>Like a Taylor series, a Fourier series is an infinite series, so <strong>convergence</strong> becomes an issue.</li>
+  <li>Truncation introduces error, so the <strong>accuracy</strong> depends on where we stop.</li>
+</ol>
+
+<h3 class="docs-h3">Conditions for convergence</h3>
+
+<p class="docs-p">Even if \(f(x)\) is discontinuous, that's fine as long as the discontinuities are finite in number. Outside the discontinuities (piecewise continuous), if \(f\) and \(f'\) exist on \([-p, p]\), convergence is guaranteed even at the discontinuities themselves.</p>
+
+<div class="docs-equation">
+\[ \text{At a point of discontinuity, the Fourier series converges to } \frac{f(x_+) + f(x_-)}{2} \]
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">4. Expansion in a Fourier Series — a worked example</h2>
+
+<p class="docs-p">Expand the following function as a Fourier series.</p>
+
+<div class="docs-equation">
+\[ f(x) = \begin{cases} 0, & -\pi < x < 0 \\ \pi - x, & 0 \le x \le \pi \end{cases} \]
+</div>
+
+<p class="docs-p">Plug all coefficients into the Fourier series. The result is:</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{\pi}{4} + \sum_{n=1}^{\infty} \left\{ \frac{1 - (-1)^n}{n^2 \pi}\cos nx + \frac{1}{n}\sin nx \right\} \]
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">💡</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>Interpretation.</strong> The index \(n\) plays the role that \(i, j, k\) play for vectors — it enumerates basis components. Here \(n\) runs over countably infinitely many basis functions. (In theory, \(f(x)\) is a linear combination of infinitely many sinusoidal basis functions on \([-\pi, \pi]\).)</p>
+    <p class="docs-p">At the discontinuity \(x = 0\), the convergence condition gives \(\dfrac{f(0+) + f(0-)}{2} = \dfrac{\pi + 0}{2} = \dfrac{\pi}{2}\).</p>
+    <p class="docs-p">Orthogonality holds only on \([-\pi, \pi]\), so the Fourier expansion is valid only inside that interval.</p>
+  </div>
+</div>
+
+<h3 class="docs-h3">What happens outside \([-p, p]\)?</h3>
+
+<p class="docs-p">The shape on the orthogonal interval simply <strong>repeats periodically</strong>.</p>
+
+<p class="docs-p">Equation (2) writes an arbitrary \(f(x)\) as a linear combination of orthogonal sinusoids with different fundamental periods. By analogy: a vector in 2-D \((i, j)\) is less expressive than one in 3-D \((i, j, k)\), which is less expressive than one in 4-D \((i, j, k, t)\). Higher dimension means we can represent more.</p>
+
+<p class="docs-p">Among the sinusoids in the linear combination, the one with the longest period sets the overall period of \(f(x)\). For the form in (2), the orthogonality interval \([-p, p]\) of length \(2p\) becomes the period.</p>
+
+<div class="docs-equation">
+\[ \boxed{\; 2p \text{ is the fundamental period of the sum} \;} \]
+</div>
+
+<h3 class="docs-h3">Sum of an orthogonal set of trigonometric functions</h3>
+
+<p class="docs-p">A linear combination of the basis functions above — orthogonal on \((-p, p)\) — converges to an arbitrary function as \(n \to \infty\).</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">📐</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>Summary</strong> — the Fourier expansion of \(f(x)\) is a \(2p\)-periodic function on \((-p, p)\). \(2p\) is the fundamental period of the (linear-combination) sum.</p>
+  </div>
+</div>
+
+<p class="docs-p">Reference: in Zill &amp; Wright (5th ed.), page 663, example graphs show that partial sums get closer to \(f(x)\) as \(n\) grows — moving \((a) \to (b) \to (c) \to (d)\) toward the target on \((-\pi, \pi)\). The Fourier series is itself periodic.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">5. Complex (exponential) form of the Fourier series</h2>
+
+<p class="docs-p">For analyzing periodic signals, the <strong>complex form</strong> is more convenient. By Euler's formula:</p>
+
+<div class="docs-equation">
+\[ e^{i\varphi} = \cos\varphi + i\sin\varphi, \quad \cos x = \frac{e^{ix} + e^{-ix}}{2}, \quad \sin x = \frac{e^{ix} - e^{-ix}}{2i} \]
+</div>
+
+<p class="docs-p">Substituting into (2):</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty}\left( \tfrac{1}{2}(a_n - i b_n)e^{\,i n\pi x/p} + \tfrac{1}{2}(a_n + i b_n)e^{-i n\pi x/p} \right) = c_0 + \sum_{n=1}^{\infty}\left( c_n e^{\,i n\pi x/p} + c_{-n} e^{-i n\pi x/p} \right) \cdots (3) \]
+</div>
+
+<p class="docs-p">Each \(c\)-coefficient is computed the same way as before:</p>
+
+<div class="docs-equation">
+\[ c_0 = \frac{1}{2p}\int_{-p}^{p} f(x)\,dx, \quad c_n = \frac{1}{2p}\int_{-p}^{p} f(x)\,e^{-i n\pi x/p}\,dx, \quad c_{-n} = \frac{1}{2p}\int_{-p}^{p} f(x)\,e^{\,i n\pi x/p}\,dx \]
+</div>
+
+<p class="docs-p">Tidying (3) gives the compact form:</p>
+
+<div class="docs-equation">
+\[ \boxed{\; f(x) = \sum_{n=-\infty}^{\infty} c_n\, e^{\,i n\pi x/p} \;} \quad \cdots (4) \qquad c_n = \frac{1}{2p}\int_{-p}^{p} f(x)\, e^{-i n\pi x/p}\,dx \]
+</div>
+
+<p class="docs-p">\(n = 0, \pm 1, \pm 2, \pm 3, \dots\). At a discontinuity: \(\dfrac{f(x_+) + f(x_-)}{2}\). \(c_n\) is the per-basis weight; \(e^{\,i n\pi x/p}\) is the basis itself. This is essentially the same linear combination of sinusoids as (2), just compactly written.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">6. Wave basics — period, frequency, wavelength</h2>
+
+<p class="docs-p">A quick refresher on wave terminology.</p>
+
+<ul class="docs-list">
+  <li>Time for one cycle — <strong>period</strong> \(T = \text{time}/\text{cycle}\)</li>
+  <li>Cycles per second — <strong>frequency</strong> \(f = \text{cycle}/\text{time}\)</li>
+  <li>Distance per cycle — <strong>wavelength</strong> \(\lambda = \text{distance}/\text{cycle}\)</li>
+</ul>
+
+<p class="docs-p">Wave speed is therefore:</p>
+
+<div class="docs-equation">
+\[ v = \frac{\lambda}{T} = \lambda f \]
+</div>
+
+<p class="docs-p">Two ways to read it. ① Distance per time — one cycle covers \(\lambda\) in \(T\) seconds. ② Per cycle the distance is \(\lambda\), and there are \(f\) cycles per second.</p>
+
+<h3 class="docs-h3">Fundamental frequency</h3>
+
+<p class="docs-p">Back to the Fourier expansion:</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty}\left( a_n\cos\frac{n\pi}{p}x + b_n\sin\frac{n\pi}{p}x \right) \qquad f(x) = \sum_{n=-\infty}^{\infty} c_n\, e^{\,i n\pi x/p} \quad \cdots (5) \]
+</div>
+
+<p class="docs-p">The overall period of \(f(x)\) is set by the longest-period basis sinusoid in the expansion — that is, the one at \(n = 1\).</p>
+
+<div class="docs-equation">
+\[ T(\text{period}) = 2p, \quad p = T/2, \quad \omega = \frac{2\pi(1\;\text{cycle})}{T} \]
+</div>
+
+<p class="docs-p">This is the fundamental period of the Fourier expansion. Hence:</p>
+
+<div class="docs-equation">
+\[ \cos\frac{n\pi}{p}x \;\Longleftrightarrow\; \cos\frac{n\,2\pi}{T}x = \cos n\omega x \]
+</div>
+
+<div class="docs-equation">
+\[ \boxed{\; f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty}(a_n\cos n\omega x + b_n\sin n\omega x), \qquad f(x) = \sum_{n=-\infty}^{\infty} c_n\, e^{\,i n\omega x} \;} \]
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">⚠️</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>Common confusion.</strong> Isn't the period \(T = 2p/n\)? — If it were written that way, that would describe the period of <em>each individual basis function</em>. The \(T\) and frequency above refer instead to the period and frequency of \(f(x)\) <em>as a whole</em> (the \(n = 1\) case).</p>
+    <p class="docs-p">The point is to identify \(f(x)\)'s own fundamental frequency and period, then re-express the Fourier expansion using those quantities so they're easy to read off.</p>
+  </div>
+</div>
+
+<p class="docs-p">If we use the circular convention, one cycle equals \(2\pi\,[\mathrm{rad}]\). The fundamental frequency in that convention is then called the <strong>fundamental angular frequency \(\omega\)</strong>:</p>
+
+<div class="docs-equation">
+\[ \omega = \frac{2\pi(1\;\text{cycle})}{T} \]
+</div>
+
+<p class="docs-p">* Note: \(2\pi\,[\mathrm{rad}]\) is a dimensionless angle, not a distance. The distance per cycle (wavelength) is a separate concept — don't confuse "cycle" with "distance." Cycle is expressed in terms of distance or period, not equated with them.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">7. Frequency spectrum</h2>
+
+<p class="docs-p">\(f(x)\) is a sum of many sinusoids (think of them in blue). Plotting the fundamental angular frequency on the \(x\)-axis and the amplitude (coefficient) on the \(y\)-axis gives the <strong>frequency spectrum</strong>.</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🎯</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>What the frequency spectrum tells us</strong> — which sinusoids make up the time-domain function \(f(x)\), and with what amplitudes. The waveform is sinusoidal anyway, so frequency + amplitude is enough to characterize each component.</p>
+    <p class="docs-p"><strong>Aside</strong>: roughly, do high-frequency components tend to have small amplitudes?</p>
+  </div>
+</div>
+
+<p class="docs-p">These ideas are the core meaning of the Fourier series.</p>
+
+<h3 class="docs-h3">Amplitude and phase of \(c_n\)</h3>
+
+<p class="docs-p">Strictly, the amplitude is \(|c_n|\). Since \(c_n\) itself is complex (a vector in the complex plane), it can also shift phase:</p>
+
+<div class="docs-equation">
+\[ c_n = a + bi, \quad |c_n| = \sqrt{a^2 + b^2}, \quad \varphi = \tan^{-1}\!\left(\frac{b}{a}\right) \]
+</div>
+
+<p class="docs-p">\(\varphi\) is the phase shift.</p>
+
+<h3 class="docs-h3">Spectrum examples</h3>
+
+<p class="docs-p">Two simple examples.</p>
+<ol class="docs-list">
+  <li>\(f(x) = e^{-x},\;(-\pi < x < \pi)\)</li>
+  <li>\(f(x) = \begin{cases} 0, & -1 < x < 0 \\ 1, & 0 \le x < 1 \\ 0, & 1 \le x < 3 \end{cases}\)</li>
+</ol>
+
+<p class="docs-p"><strong>Q.</strong> Express each function as a complex Fourier series and plot its frequency spectrum across \(n\).</p>
+
+<h4 class="docs-h4">Example 1) \(f(x) = e^{-x},\;(-\pi < x < \pi)\)</h4>
+
+<div class="docs-equation">
+\[ c_n = \frac{1}{2\pi}\int_{-\pi}^{\pi} e^{-x}\cdot e^{-i n x}\,dx = \frac{1}{2\pi}\int_{-\pi}^{\pi} e^{-(in+1)x}\,dx = \frac{-1}{2\pi(in+1)}\!\left[ e^{-(in+1)x}\right]_{-\pi}^{\pi} \]
+</div>
+
+<div class="docs-equation">
+\[ = \frac{-1}{2\pi(in+1)}\!\left[ e^{-i n\pi}\,e^{-\pi} - e^{i n\pi}\,e^{\pi} \right] = \frac{-1}{2\pi(in+1)}(-1)^n[e^{-\pi} - e^{\pi}] = (-1)^n \frac{\sinh\pi}{\pi(in+1)} \]
+</div>
+
+<p class="docs-p">(using \(e^{\pm i n\pi} = \cos n\pi \pm i\sin n\pi = (-1)^n\))</p>
+
+<div class="docs-equation">
+\[ f(x) = \sum_{n=-\infty}^{\infty} (-1)^n \frac{\sinh\pi}{\pi(in+1)}\, e^{i n\omega x} = \frac{\sinh\pi}{\pi}\sum_{n=-\infty}^{\infty}(-1)^n\frac{1 - in}{n^2+1}\,e^{i n\omega x} \]
+</div>
+
+<div class="docs-equation">
+\[ c_n = \frac{\sinh\pi}{\pi(n^2+1)}(1-in), \quad |c_n| = \frac{\sinh\pi}{\pi(n^2+1)}\sqrt{n^2+1} = \frac{\sinh\pi}{\pi\sqrt{n^2+1}} \]
+</div>
+
+<p class="docs-p">Here \(n\omega\) is the fundamental frequency of each component sinusoid, and \(\omega\) is the fundamental frequency of the whole Fourier series. With \(\omega = 2\pi/T = 2\pi/2\pi = 1\), we get \(n\omega = n\).</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">8. Integral transform method — Fourier integral</h2>
+
+<p class="docs-p">Error function, Laplace transform, <strong>Fourier transform</strong> — all are integral transforms.</p>
+
+<p class="docs-p">So far \(f(x)\) has been a sum of <strong>discrete</strong> sinusoidal components:</p>
+
+<div class="docs-equation">
+\[ f(x) = \sum_{n=1}^{\infty}: \quad n=1, n=2, n=3, \dots, n\to\infty \]
+</div>
+
+<p class="docs-p">But the "missing" frequencies between, say, \(n = 1\) and \(n = 2\) can also be components. To account for them we need the <strong>continuous</strong> idea of integration:</p>
+
+<div class="docs-equation">
+\[ \int_1^{\infty}: \quad n=1 \to \text{continuously varying sinusoids all become components} \to n\to\infty \]
+</div>
+
+<h3 class="docs-h3">From discrete to continuous</h3>
+
+<div class="docs-equation">
+\[ f(x) = \frac{a_0}{2} + \sum_{n=1}^{\infty}\left(a_n\cos\frac{n\pi}{p}x + b_n\sin\frac{n\pi}{p}x\right) \]
+</div>
+
+<div class="docs-equation">
+\[ a_0 = \frac{1}{p}\int_{-p}^{p} f(x)\,dx, \quad a_n = \frac{1}{p}\int_{-p}^{p} f(x)\cos\frac{n\pi}{p}x\,dx, \quad b_n = \frac{1}{p}\int_{-p}^{p} f(x)\sin\frac{n\pi}{p}x\,dx \]
+</div>
+
+<p class="docs-p">Plug the coefficients back in:</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{1}{2p}\int_{-p}^{p} f(t)\,dt + \frac{1}{p}\sum_{n=1}^{\infty}\left( \left(\int_{-p}^{p} f(t)\cos\frac{n\pi}{p}t\,dt\right)\cos\frac{n\pi}{p}x + \left(\int_{-p}^{p} f(t)\sin\frac{n\pi}{p}t\,dt\right)\sin\frac{n\pi}{p}x \right) \]
+</div>
+
+<p class="docs-p">Why is \(p\) in the denominator? Because the Fourier expansion's period is \(2p\) (its longest fundamental period). To convert the sum into an integral, we need a differential \(d\alpha\) to fall out of \(\pi/p\).</p>
+
+<p class="docs-p">What should that differential be? Since \(n\) controls the frequency of \(\cos, \sin\), mimicking a continuous change of frequency means using:</p>
+
+<div class="docs-equation">
+\[ \frac{(n+1)\pi}{p} = \alpha_{n+1}, \quad \frac{n\pi}{p} = \alpha_n, \quad \frac{\pi}{p} = \Delta\alpha = \alpha_{n+1} - \alpha_n \]
+</div>
+
+<div class="docs-equation">
+\[ f(x) = \frac{1}{2\pi}\!\left(\int_{-p}^{p} f(t)\,dt\right)\!\Delta\alpha + \frac{1}{\pi}\sum_{n=1}^{\infty}\!\left( \left(\int_{-p}^{p} f(t)\cos\alpha_n t\,dt\right)\cos\alpha_n x + \left(\int_{-p}^{p} f(t)\sin\alpha_n t\,dt\right)\sin\alpha_n x \right)\!\Delta\alpha \]
+</div>
+
+<p class="docs-p">Stretch the domain to infinity (\(p \to \infty\)) and let the basis become continuous (\(\cos\alpha\,d\alpha\)):</p>
+
+<div class="docs-equation">
+\[ p \to \infty: \quad \Delta\alpha \to 0, \quad \alpha_n = \Delta\alpha\cdot n \quad \Rightarrow \quad \lim_{\Delta\alpha\to 0} \sum_{n=1}^{\infty} F(\alpha_n)\Delta\alpha = \int_0^{\infty} F(\alpha)\,d\alpha \]
+</div>
+
+<div class="docs-equation">
+\[ \boxed{\; f(x) = \frac{1}{\pi}\int_0^{\infty}\!\!\left( \!\!\left(\int_{-\infty}^{\infty} f(t)\cos(\alpha t)\,dt\right)\cos\alpha x + \left(\int_{-\infty}^{\infty} f(t)\sin(\alpha t)\,dt\right)\sin\alpha x \right) d\alpha \;} \]
+</div>
+
+<p class="docs-p">This is the <strong>Fourier integral</strong> of \(f\) on \((-\infty, \infty)\). If \(f\) is even or odd, the form simplifies further.</p>
+
+<h3 class="docs-h3">Even / odd Fourier integral</h3>
+
+<p class="docs-p">For an even function:</p>
+<div class="docs-equation">
+\[ f(x) = \frac{2}{\pi}\int_0^{\infty} A(\alpha)\cos(\alpha x)\,d\alpha, \quad A(\alpha) = \int_0^{\infty} f(x)\cos(\alpha x)\,dx \quad \cdots (6) \]
+</div>
+
+<p class="docs-p">For an odd function:</p>
+<div class="docs-equation">
+\[ f(x) = \frac{2}{\pi}\int_0^{\infty} B(\alpha)\sin(\alpha x)\,d\alpha, \quad B(\alpha) = \int_0^{\infty} f(x)\sin(\alpha x)\,dx \quad \cdots (7) \]
+</div>
+
+<h3 class="docs-h3">Complex form of the Fourier integral</h3>
+
+<p class="docs-p">The Fourier integral also has a complex form.</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{1}{\pi}\int_0^{\infty}\!\!\left( \int_{-\infty}^{\infty} f(t)[\cos\alpha t \cos\alpha x + \sin\alpha t \sin\alpha x]\,dt \right) d\alpha = \frac{1}{\pi}\int_0^{\infty}\!\!\left( \int_{-\infty}^{\infty} f(t)\cos[\alpha(t-x)]\,dt \right)\!d\alpha \]
+</div>
+
+<p class="docs-p">In \(\alpha\), \(\cos\) is even, so we can rewrite:</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty}\!\!\left( \int_{-\infty}^{\infty} f(t)[\cos\alpha(t-x) + i\sin\alpha(t-x)]\,dt \right)\!d\alpha = \frac{1}{2\pi}\int_{-\infty}^{\infty}\!\!\left(\int_{-\infty}^{\infty} f(t)\,e^{i\alpha(t-x)}\,dt\right) d\alpha \]
+</div>
+
+<p class="docs-p">(The \(i\sin\alpha(t-x)\) term integrates to zero, since \(f(t)\) doesn't depend on \(\alpha\).)</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🤔</div>
+  <div class="docs-callout__body">
+    <p class="docs-p">Why does \(\sin, \cos\) integrate over \((0, \infty)\), while the complex form integrates over \((-\infty, \infty)\)? — In (6), (7) the \(\alpha\) inside \(A(\alpha), B(\alpha)\) ends up absorbed into the exponential, leaving \(f(t)\) alone. The resulting expression in \(\alpha\) is even, so extending the range to \((-\infty, \infty)\) is valid.</p>
+  </div>
+</div>
+
+<div class="docs-equation">
+\[ \boxed{\; f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} F(\alpha)\,e^{-i\alpha x}\,d\alpha, \qquad F(\alpha) = \int_{-\infty}^{\infty} f(t)\,e^{i\alpha t}\,dt \;} \]
+</div>
+
+<p class="docs-p">Complex form. \(e^{-i\alpha x}\) is the sinusoidal basis; \(C(\alpha)\) is the per-basis coefficient (like a vector weight). The integral form invites a more general framing — the integral-transform framework below.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">9. Integral transforms &amp; Fourier transform pairs</h2>
+
+<p class="docs-p">A transform pair is:</p>
+
+<div class="docs-equation">
+\[ f(x)\;\xrightarrow{\;\text{integral}\;}\;F(\alpha), \qquad F(\alpha)\;\longrightarrow\;f(x) \]
+</div>
+
+<div class="docs-equation">
+\[
+\begin{cases}
+F(\alpha) = \int_a^b f(x) K(\alpha, x)\,dx & \quad\text{(real domain → } \alpha \text{ domain)}\\
+f(x) = \int_a^b F(\alpha) H(\alpha, x)\,d\alpha & \quad (\alpha \text{ domain → real domain)}
+\end{cases}
+\]
+</div>
+
+<p class="docs-p">The pair always works together. The functions \(K(\alpha, x), H(\alpha, x)\) used to switch domains are called <strong>kernels</strong>. For the Laplace transform, for instance, \(K(s, x) = e^{-sx}\) and \(H(s, x) = e^{sx}/(2\pi i)\).</p>
+
+<h3 class="docs-h3">Fourier transform pair</h3>
+
+<div class="docs-equation">
+\[ \boxed{\; \mathcal{F}\{f(x)\} = \int_{-\infty}^{\infty} f(x) K(\alpha, x)\,dx = F(\alpha), \quad K(\alpha, x) = e^{i\alpha x} \;} \]
+</div>
+
+<div class="docs-equation">
+\[ \boxed{\; \mathcal{F}^{-1}\{F(\alpha)\} = \int_{-\infty}^{\infty} F(\alpha) H(\alpha, x)\,d\alpha = f(x), \quad H(\alpha, x) = \frac{e^{-i\alpha x}}{2\pi} \;} \]
+</div>
+
+<h3 class="docs-h3">Transforms for even / odd functions</h3>
+
+<p class="docs-p"><strong>Even function — Fourier cosine transform</strong></p>
+<div class="docs-equation">
+\[ \mathcal{F}_c\{f(x)\} = \int_0^{\infty} f(x)\cos\alpha x\,dx = F(\alpha), \qquad \mathcal{F}_c^{-1}\{F(\alpha)\} = \frac{2}{\pi}\int_0^{\infty} F(\alpha)\cos\alpha x\,d\alpha = f(x) \]
+</div>
+
+<p class="docs-p"><strong>Odd function — Fourier sine transform</strong></p>
+<div class="docs-equation">
+\[ \mathcal{F}_s\{f(x)\} = \int_0^{\infty} f(x)\sin\alpha x\,dx = F(\alpha), \qquad \mathcal{F}_s^{-1}\{F(\alpha)\} = \frac{2}{\pi}\int_0^{\infty} F(\alpha)\sin\alpha x\,d\alpha = f(x) \]
+</div>
+
+<p class="docs-p">Like the Laplace transform, the Fourier transform can solve differential equations: differentiation in the real domain pulls a factor onto the transformed function.</p>
+
+<div class="docs-equation">
+\[
+\begin{aligned}
+\mathcal{F}\{f'(x)\} &= -i\alpha F(\alpha)\\
+\mathcal{F}\{f''(x)\} &= -\alpha^2 F(\alpha)\\
+\mathcal{F}\{f^{(n)}(x)\} &= (-i\alpha)^n F(\alpha)\\
+\mathcal{F}_s\{f''(x)\} &= -\alpha^2 F(\alpha) + \alpha f(0)\\
+\mathcal{F}_c\{f''(x)\} &= -\alpha^2 F(\alpha) - f'(0)
+\end{aligned}
+\]
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">10. Example — solving the heat equation</h2>
+
+<p class="docs-p"><strong>Example 1.</strong> Solve the heat equation</p>
+
+<div class="docs-equation">
+\[ k\frac{\partial^2 u}{\partial x^2} = \frac{\partial u}{\partial t}, \quad -\infty < x < \infty,\; t > 0 \]
+</div>
+
+<div class="docs-equation">
+\[ u(x, 0) = f(x), \qquad f(x) = \begin{cases} u_0, & |x| < 1\\ 0, & |x| > 1 \end{cases} \]
+</div>
+
+<p class="docs-p">Take the Fourier transform of both sides:</p>
+
+<div class="docs-equation">
+\[ \mathcal{F}\!\left\{ k\frac{\partial^2 u(x, t)}{\partial x^2} \right\} = \mathcal{F}\!\left\{\frac{\partial u}{\partial t}\right\} \quad \Longrightarrow \quad -k\alpha^2 U(\alpha, t) = \frac{dU(\alpha, t)}{dt} \]
+</div>
+
+<div class="docs-equation">
+\[ U(\alpha, t) = c\, e^{-k\alpha^2 t} \]
+</div>
+
+<p class="docs-p">From the initial condition:</p>
+
+<div class="docs-equation">
+\[ \mathcal{F}\{u(x, 0)\} = \mathcal{F}\{f(x)\} = \int_{-\infty}^{\infty} f(x)\,e^{i\alpha x}\,dx = 0 + \int_{-1}^{1} u_0\,e^{i\alpha x}\,dx + 0 = u_0\frac{e^{i\alpha} - e^{-i\alpha}}{i\alpha} \]
+</div>
+
+<div class="docs-equation">
+\[ U(\alpha, 0) = u_0\frac{e^{i\alpha} - e^{-i\alpha}}{i\alpha} = c \]
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🤔</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>Question 1</strong> — \(u(x, t)\) depends on both space and time, so why Fourier-transform only in space and leave \(t\) alone? Couldn't we do a 2-D Fourier transform?</p>
+    <p class="docs-p">A 2-D transform like \(F(\alpha, \beta) = \int\!\int f(x,y)\,e^{-i(\alpha x + \beta y)}\,du\,dv\) is in principle possible, and including \(t\) should still yield a result. But we usually peel \(t\) off separately, for two reasons:</p>
+    <ol class="docs-list">
+      <li>An \(n\)-dimensional Fourier transform that includes \(x, y, z, \dots\) all together (a first-order setup) is not always guaranteed to exist or be useful — \(x, y, z\) appear implicitly in each other, and orthogonality can break (a stability issue: in PDEs, elliptic problems are typically stable, while hyperbolic and parabolic ones can be unstable, depending on the regime).</li>
+      <li>The PDE is first-order in \(t\), so as in Example 1 it makes physical and mathematical sense to separate \(t\) and solve sequentially.</li>
+    </ol>
+  </div>
+</div>
+
+<p class="docs-p">Reading \(dU(\alpha, t)/dt\) intuitively (in a 2-D setting): the snapshots \(t_1, t_2, t_3\) are continuous moments in time. At each moment, \(k(\partial^2 u/\partial x^2 + \partial^2 u/\partial y^2)\) updates the Fourier-domain representation, and we step forward. In code, you can either store time inside an array or sweep it in an outer loop — either way, the time evolution lives on the \(t \times \alpha\) axis alongside the spatial transform.</p>
+
+<p class="docs-p">Solving a PDE with Fourier means: move to the Fourier domain \((\alpha, \beta)\), solve there for a weak solution, then transform back to the real domain. Next we wrap up with the Discrete Fourier Transform (DFT) — a stepping stone toward spectral methods.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">11. Discrete Fourier Transform (DFT)</h2>
+
+<p class="docs-p">The continuous form is:</p>
+
+<div class="docs-equation">
+\[ f(x) = \frac{1}{2\pi}\int_{-\infty}^{\infty} F(\alpha)\,e^{-i\alpha x}\,d\alpha, \qquad F(\alpha) = \int_{-\infty}^{\infty} f(t)\,e^{i\alpha t}\,dt \]
+</div>
+
+<p class="docs-p">To actually solve numerically, this continuous picture must be turned <strong>discrete</strong>.</p>
+
+<h3 class="docs-h3">Step 1 — bound the domain</h3>
+
+<p class="docs-p">Replace the infinite real line with the bounded interval \([0, 2p]\):</p>
+
+<div class="docs-equation">
+\[ f(x) = \sum_{n=-\infty}^{\infty} c_n\, e^{i n\omega x}, \qquad c_n = \frac{1}{2p}\int_0^{2p} f(x)\,e^{-i n\omega x}\,dx \quad \cdots (4) \]
+</div>
+
+<h3 class="docs-h3">Step 2 — make the basis count countably infinite</h3>
+
+<p class="docs-p">Move from an uncountably infinite basis to a countably infinite (integer) one:</p>
+
+<div class="docs-equation">
+\[ f(x) = \int_{-\infty}^{\infty} F(\alpha) H(\alpha, x)\,d\alpha \quad\Longrightarrow\quad f(x) = \sum_{n=-\infty}^{\infty} c_n\,e^{i n\omega x} \quad\Longrightarrow\quad f(x) = \sum_{n=0}^{N-1} c_n\,e^{i n\omega x} \]
+</div>
+
+<p class="docs-p">In theory the basis is countably infinite; in practice we truncate to \(N\) terms.</p>
+
+<h3 class="docs-h3">Step 3 — discretize \(x\) (sampling rate)</h3>
+
+<p class="docs-p">\(x\) is also uncountably infinite over \((0, 2p)\), so it too must be made finite — this is the heart of <strong>discretization</strong>: cover \(x\) with finitely many sample points.</p>
+
+<p class="docs-p">We can't carry uncountably many points, so we sample. The spacing \(\Delta x = T\) between samples is the <strong>sampling rate</strong>.</p>
+
+<p class="docs-p">Taking one cycle as \(2\pi\) (angular) and \(N\) samples per cycle:</p>
+
+<div class="docs-equation">
+\[ N\,(\#\text{of samples}) = \frac{2\pi}{T} = \omega, \qquad p = \pi \]
+</div>
+
+<div class="docs-equation">
+\[ \alpha = \frac{n\pi}{p}, \quad \omega = \frac{2\pi}{2p}, \quad T = \frac{2\pi}{N} \]
+</div>
+
+<p class="docs-p">The number of basis functions and the number of sample points are independent in principle, but we usually take them equal (it makes the matrix square, which is easier to solve). \(k\) and \(n\) don't strictly have to match.</p>
+
+<div class="docs-equation">
+\[ f^0 = \sum_{k=0}^{N-1} c_k\,e^{i(k)\omega(kT)}, \quad f^1 = \sum_{k=0}^{N-1} c_k\,e^{i(2)\omega(kT)}, \quad \dots \quad f^{N-1} = \sum_{k=0}^{N-1} c_k\,e^{i(n)\omega(kT)} \]
+</div>
+
+<div class="docs-equation">
+\[ \alpha = \frac{n\pi}{p}, \quad \omega = \frac{2\pi}{2p} \quad \begin{aligned}\alpha&: \text{basis sinusoidal frequency}\\ \omega&: \text{Fourier-expansion frequency}\end{aligned}, \qquad n\alpha = \omega \;(n=1 \text{ gives the longest period}) \]
+</div>
+
+<h3 class="docs-h3">Matrix form</h3>
+
+<div class="docs-equation">
+\[
+\begin{pmatrix} f_0 \\ f_1 \\ f_2 \\ \vdots \\ f_{N-1} \end{pmatrix}
+=
+\begin{pmatrix}
+1 & 1 & 1 & \cdots & 1 \\
+1 & \omega_N & \omega_N^2 & \cdots & \omega_N^{N-1} \\
+1 & \omega_N^2 & \omega_N^4 & \cdots & \omega_N^{2(N-1)} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & \omega_N^{N-1} & \omega_N^{2(N-1)} & \cdots & \omega_N^{(N-1)^2}
+\end{pmatrix}
+\begin{pmatrix} c_0 \\ c_1 \\ c_2 \\ \vdots \\ c_{N-1} \end{pmatrix}
+\]
+</div>
+
+<div class="docs-equation">
+\[ \omega_N = e^{\,i\,2\pi/N} = \cos\frac{2\pi}{N} + i\sin\frac{2\pi}{N} \]
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🧭</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>Picturing what "solving with Fourier" means</strong> — start from a PDE in \(f(x)\), decompose into basis components, <em>find</em> the coefficients \(c_0, c_1, c_2, \dots, c_{N-1}\), and recombine to recover \(f(x)\). In matrix form, equation (4) becomes the linear system shown above.</p>
+  </div>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">Summary</h2>
+
+<ol class="docs-list">
+  <li><strong>Vectors → functions</strong>: extending the inner product to an integral carries orthogonality, normalization, and linear combinations straight over to functions.</li>
+  <li><strong>Fourier series</strong>: decompose a \(2p\)-periodic function in the orthogonal basis \(\{1, \cos(n\pi x/p), \sin(n\pi x/p)\}\). Coefficients come from the vector-analogy inner product.</li>
+  <li><strong>Complex form</strong>: Euler's formula collapses the series to a single line \(\sum c_n e^{in\pi x/p}\); \(|c_n|\) is the amplitude and \(\arg c_n\) is the phase.</li>
+  <li><strong>Frequency spectrum</strong>: plot \(n\omega\) on the \(x\)-axis and \(|c_n|\) on the \(y\)-axis to read off, at a glance, which sinusoids make up the function.</li>
+  <li><strong>Fourier integral / transform</strong>: send \(p \to \infty\) so that the sum becomes an integral. With kernel \(K(\alpha, x) = e^{i\alpha x}\) we get the transform pair \(f(x) \leftrightarrow F(\alpha)\).</li>
+  <li><strong>Solving PDEs</strong>: differentiation maps to \((-i\alpha)^n F(\alpha)\), so a PDE becomes an ODE in \(\alpha\)-space — illustrated on the heat equation.</li>
+  <li><strong>DFT</strong>: replace the infinite integral with a finite sum, the uncountable basis with \(N\) discrete bases, and continuous \(x\) with samples at spacing \(T\). The result is an \(N \times N\) Vandermonde system in \(\omega_N = e^{i2\pi/N}\).</li>
+</ol>
+
+<div class="docs-spacer"></div>
+    </div>
+  </article>
+</main>
+
+<footer-component></footer-component>
+</body>
+</html>

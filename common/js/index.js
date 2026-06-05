@@ -1,57 +1,31 @@
-//index 페이지 event 등록
-function mouseenterHandler() {
-    document.getElementById("api_text").textContent = "Under Construction";
-}
-function mouseleaveHandler() {
-    document.getElementById("api_text").textContent = "My Open-APIs page";
-}
-
-function goPage(){
-    document.querySelector('#imgHoverEvent').scrollIntoView({behavior:'smooth'});
-    
-}
-
-var arrow_page = document.querySelector('.arrow-down');
-var event_box = document.querySelector('.event1');
-
-arrow_page.addEventListener('click', function() {
-    if(event_box.classList.contains('active')) {
-        event_box.classList.remove('active');
+// Cover page (index.html) — minimal behaviour
+// Mark JS active so reveal-on-scroll hidden states apply (no-JS shows everything).
+document.documentElement.classList.add('cv-js');
+document.addEventListener('DOMContentLoaded', function () {
+    document.body.classList.add('cv-js');
+    // Smooth-scroll for the "Explore" cue
+    var cue = document.querySelector('.cv-scroll');
+    var target = document.getElementById('cv-explore');
+    if (cue && target) {
+        cue.addEventListener('click', function (e) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+        });
     }
-    else{
-        event_box.classList.toggle('active');
+
+    // Reveal cards on scroll
+    var reveal = document.querySelectorAll('.cv-card, .cv-explore__title, .cv-explore__eyebrow');
+    if ('IntersectionObserver' in window && reveal.length) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (en.isIntersecting) {
+                    en.target.classList.add('is-in');
+                    io.unobserve(en.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        reveal.forEach(function (c) { io.observe(c); });
+    } else {
+        reveal.forEach(function (c) { c.classList.add('is-in'); });
     }
 });
-
-//index portfolio 등록
-document.addEventListener('DOMContentLoaded', function() {
-    var arrow_page = document.getElementById('arrow-page');
-    var hoverBox = document.getElementById('imgHoverEvent');
-
-    arrow_page.addEventListener('click', function() {
-        hoverBox.classList.toggle('show');
-    });
-
-    // 클릭 이외의 영역을 클릭하면 드롭다운이 닫히도록 설정
-    window.addEventListener('click', function(event) {
-    if (!event.target.matches('#arrow-page')) {
-            if (hoverBox.classList.contains('show')) {
-                hoverBox.classList.remove('show');
-            }
-        }
-    });
-}); 
-
-
-const text = "Profile summary is here, click or hover";
-const container = document.querySelector('.typing-demo');
-
-let i = 0;
-function type() {
-    if (i < text.length) {
-        container.textContent += text[i];
-        i++;
-        setTimeout(type, 55); // 글자 속도 조절
-    }
-}
-type();

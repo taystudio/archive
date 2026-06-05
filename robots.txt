@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://taehyuklee.github.io/Archive/sitemap.xml
+
+# Keep heavy build / app folders out of search
+Disallow: /blog/
+Disallow: /my-service/
+Disallow: /service/

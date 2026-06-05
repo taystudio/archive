@@ -2,20 +2,36 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Project</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Project">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/TAYLEE%20project.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Project">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/style project main.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../css/style project main.css?v=20260605-18">
 
     <!--Java script event-->
-    <script src="../js/main.js" defer></script>  
-    <script src="../js/components/nav.js" sync></script>
-    <script src="../js/components/footer.js" sync></script>
-    <script src="../js/components/header.js" sync></script>
+    <script src="../js/main.js?v=20260605-18" defer></script>
+    <script src="../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../js/components/header.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
+
 </head>
 
 
@@ -43,247 +59,207 @@
   <img, src="../resources/project/Graduation project/Sound check.jpg" width=1 hegiht=1>
 
 
-  <div class = "frame"> <!--div for grouping-->
-    <!--School project-->
-    <h2 class="Project-title"> Undergraduated school project</h2>
-    <h4 class="Project-small-title"> Click on the project title for details below time line</h4>
-    <a class="sample_menu"> Sample project title</a> 
-    
+  <div class="frame"> <!--div for grouping-->
 
-    <!-- Vertical Timeline -->
-    <section class="conference-timeline">
-      <div class="timeline-start">Start</div>
-      <div class="conference-center-line"></div> <!--center line stem-->
+    <header class="proj-head">
+      <p class="pf-pagehead__eyebrow">PROJECTS</p>
+      <h1 class="pf-pagehead__title">Selected <em>projects</em></h1>
+      <p class="pf-pagehead__lead">From environmental &amp; mechanical engineering research to cloud / AI engineering in industry. Filter by phase, click a card for details.</p>
+    </header>
 
-      <!-- contents for each time line-->
-      <div class="conference-timeline-content">
-
-          <!-- 2016 time line- Article -->
-          <div class="timeline-article">
-              <div class="content-right-container">
-                <div class="content-right">
-                  <p><a class="project_menu" href="./project/Project Environmental monitoring.html">Environmental monitoring</a> </p>
-                  <p><a class="project_menu" href="./project/Project Environmental experiment.html">Environmental experiment</a> </p>
-                </div>
-                <span class="timeline-author">Environmental engineering</span>
-              </div>
-              <div class="meta-date">
-                <span class="date">2016</span>
-              </div>
-          </div>
-          <!-- // Article -->
-
-          <!-- 2017 time line- Article -->
-          <div class="timeline-article">
-
-          <!-- left side -->
-          <div class="content-left-container">
-              <div class="content-left">
-                  <p><a class="project_menu" href="./project/Project Data analysis.html">Data anylsis project</a> </p>
-
-              </div>
-              <span class="timeline-author">Environmental engineering</span>
-          </div>
+    <!-- Filter pills -->
+    <div class="proj-filters" role="tablist" aria-label="Project filter">
+      <button class="proj-pill is-active" data-filter="all">All <span class="proj-pill__n">19</span></button>
+      <button class="proj-pill" data-filter="sk"><span class="proj-dot proj-dot--sk"></span>SK Inc. AX <span class="proj-pill__n">3</span></button>
+      <button class="proj-pill" data-filter="ktds"><span class="proj-dot proj-dot--ktds"></span>KT DS <span class="proj-pill__n">4</span></button>
+      <button class="proj-pill" data-filter="grad"><span class="proj-dot proj-dot--grad"></span>Graduate <span class="proj-pill__n">2</span></button>
+      <button class="proj-pill" data-filter="undergrad"><span class="proj-dot proj-dot--undergrad"></span>Undergraduate <span class="proj-pill__n">10</span></button>
+    </div>
 
 
-          <div class="meta-date">
-              <span class="date">2017</span>
-          </div>
-
-          </div>
-          <!-- // Article -->
-        
-          <!-- 2018 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-right-container">
-              <div class="content-right">
-                <p><a class="project_menu" href="./project/Project Machine design(1).html">Machine design(1)</a> </p>
-                <p><a class="project_menu" href="./project/Project Self-driving.html">Autonomous driving (DRL)</a> </p>
-              </div>
-              <span class="timeline-author">Mechanical engineering</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2018</span>
-            </div>
-          </div>
-          <!-- // Article -->
-        
-          <!-- 2019 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-left-container">
-              <div class="content-left">
-                <p><a class="project_menu" href="./project/Project Robust design.html">Robust design</a> </p>
-                <p><a class="project_menu" href="./project/Project Computer aided design.html">Computer aided design</a> </p>
-                <p><a class="project_menu" href="./project/Project thesis.html">Time forecasting via NN</a> </p>
-                <p><a class="project_menu" href="./project/Project Mechanical system control.html">Mechanical system control</a> </p>
-                <p><a class="project_menu" href="./project/Project Graduation project.html">Graduation project</a> </p>
-              </div>
-              <span class="timeline-author">Mechanical engineering</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2019</span>
-            </div>
-          </div>
-          <!-- // Article -->
-
+    <!-- ===== SK Inc. AX ===== -->
+    <section class="proj-section" data-group="sk">
+      <header class="proj-secthead">
+        <span class="proj-dot proj-dot--sk"></span>
+        <h2 class="proj-secthead__title">SK Inc. AX</h2>
+        <span class="proj-secthead__meta">Cloud / AI engineering · 2024–2025 · 3</span>
+      </header>
+      <div class="proj-grid">
+        <a class="proj-card" data-year="2025" href="document/posts/itvoc-cicd.html">
+          <span class="proj-card__year">2025</span>
+          <h3 class="proj-card__title">IT-VoC Deployment Platform</h3>
+          <span class="proj-card__field">Development Project</span>
+        </a>
+        <a class="proj-card" data-year="2025" href="document/posts/security-agent.html">
+          <span class="proj-card__year">2025</span>
+          <h3 class="proj-card__title">Reinforced Security Agent</h3>
+          <span class="proj-card__field">AI · Development Project</span>
+        </a>
+        <a class="proj-card" data-year="2024" href="document/posts/data-analysis-solution.html">
+          <span class="proj-card__year">2024</span>
+          <h3 class="proj-card__title">Data-Analysis Solution</h3>
+          <span class="proj-card__field">Solution enhancement</span>
+        </a>
       </div>
-
-      <div class="timeline-end">End</div>
-
     </section>
 
 
-
-
-
-    <!--School project-->
-    <h2 class="Project-title"> Graduated school project</h2>
-    
-    <!-- Vertical Timeline -->
-    <section class="conference-timeline">
-      <div class="timeline-start">Start</div>
-      <div class="conference-center-line"></div> <!--center line stem-->
-
-      <!-- contents for each time line-->
-      <div class="conference-timeline-content">
-        
-          <!-- 2020 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-right-container">
-              <div class="content-right">
-                <p style="font-family:'sans-serif'; width:200px;">
-                  <a class="project_menu" href="./project/Project Lid Driven.html">Basic of CFD <br> (numerical method)</a> </p>
-              </div>
-              <span class="timeline-author">Mechanical engineering</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2020</span>
-            </div>
-          </div>
-          <!-- // Article -->
-        
-          <!-- 2021 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-left-container">
-              <div class="content-left">
-                <p><a class="project_menu" href="./project/Project Dynamic time warping.html">Dynamic Time Warping</a> </p>
-              </div>
-              <span class="timeline-author">Mechanical engineering</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2021</span>
-            </div>
-          </div>
-          <!-- // Article -->
-
+    <!-- ===== KT DS ===== -->
+    <section class="proj-section" data-group="ktds">
+      <header class="proj-secthead">
+        <span class="proj-dot proj-dot--ktds"></span>
+        <h2 class="proj-secthead__title">KT DS</h2>
+        <span class="proj-secthead__meta">Development of Cloud service · 2022–2023 · 4</span>
+      </header>
+      <div class="proj-grid">
+        <a class="proj-card" data-year="2022" href="document/posts/api-gateway.html">
+          <span class="proj-card__year">2022</span>
+          <h3 class="proj-card__title">API Gateway Solution</h3>
+          <span class="proj-card__field">Cloud service</span>
+        </a>
+        <a class="proj-card" data-year="2023" href="./project/Project API Optimization.html">
+          <span class="proj-card__year">2023</span>
+          <h3 class="proj-card__title">Performance Optimization</h3>
+          <span class="proj-card__field">Cloud service</span>
+        </a>
+        <a class="proj-card" data-year="2023" href="./project/Project Test Code.html">
+          <span class="proj-card__year">2023</span>
+          <h3 class="proj-card__title">Test code for D-Pla</h3>
+          <span class="proj-card__field">Cloud service</span>
+        </a>
+        <a class="proj-card" data-year="2023" href="./project/Project Management of Redis.html">
+          <span class="proj-card__year">2023</span>
+          <h3 class="proj-card__title">Management of Redis</h3>
+          <span class="proj-card__field">Cloud service</span>
+        </a>
       </div>
-
-      <div class="timeline-end">End</div>
-
-    </section>
-
-    
-    <!--School project-->
-    <h2 class="Project-title"> KT DS project</h2>
-    
-    <!-- Vertical Timeline -->
-    <section class="conference-timeline">
-      <div class="timeline-start">Start</div>
-      <div class="conference-center-line"></div> <!--center line stem-->
-
-      <!-- contents for each time line-->
-      <div class="conference-timeline-content">
-        
-          <!-- 2022 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-right-container">
-              <div class="content-right">
-                <p style="font-family:'sans-serif'; width:200px;">
-                  <a class="project_menu" href="https://www.notion.so/API-Gateway-Solution-BEAST-26e71ceb5558818d9b35fbc87e39de0d?source=copy_link"> API Gateway Solution</a> </p>
-              </div>
-              <span class="timeline-author">Development of Cloud service</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2022</span>
-            </div>
-          </div>
-          <!-- // Article -->
-        
-          <!-- 2023 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-left-container">
-              <div class="content-left">
-                <p><a class="project_menu" href="./project/Project API Optimization.html"> Performance Optimization</a> </p>
-                <p><a class="project_menu" href="./project/Project Test Code.html"> Test code for D-Pla code</a> </p>
-                <p><a class="project_menu" href="./project/Project Management of Redis.html"> Management of Redis</a> </p>
-              </div>
-
-              <span class="timeline-author">Development of Cloud service</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2023</span>
-            </div>
-          </div>
-          <!-- // Article -->
-
-      </div>
-
-      <div class="timeline-end">End</div>
-
     </section>
 
 
-    <!--SK C&C project-->
-    <h2 class="Project-title"> SK Inc. AX project</h2>
-    
-    <!-- Vertical Timeline -->
-    <section class="conference-timeline">
-      <div class="timeline-start">Start</div>
-      <div class="conference-center-line"></div> <!--center line stem-->
-
-      <!-- contents for each time line-->
-      <div class="conference-timeline-content">
-        
-          <!-- 2024 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-right-container">
-              <div class="content-right">
-                <p style="font-family:'sans-serif'; width:200px;">
-                  <a class="project_menu" href="https://www.notion.so/Data-Analysis-Solution-26e71ceb555881e2a0eedd9bad3dbe4b?source=copy_link"> Data-Analysis Solution</a> </p>
-              </div>
-              <span class="timeline-author">Solution enhancement</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2024</span>
-            </div>
-          </div>
-          <!-- // Article -->
-        
-          <!-- 2025 time line- Article -->
-          <div class="timeline-article">
-            <div class="content-left-container">
-              <div class="content-left">
-                <p><a class="project_menu" href="https://www.notion.so/Reinforced-Security-Agent-AI-Agent-26e71ceb5558811e9b65dc9086f2a38d"> Reinforced Security Agent</a> </p>
-                <p><a class="project_menu" href="https://www.notion.so/IT-VoC-CI-CD-Platform-SK-ON-Project-In-Progress-26e71ceb555881ca8a3acfa2dc2e90a2?source=copy_link"> IT-VoC Deployment Platform</a> </p>
-              </div>
-
-              <span class="timeline-author">Development Project</span>
-            </div>
-            <div class="meta-date">
-              <span class="date">2025</span>
-            </div>
-          </div>
-          <!-- // Article -->
-     
-
+    <!-- ===== Graduate ===== -->
+    <section class="proj-section" data-group="grad">
+      <header class="proj-secthead">
+        <span class="proj-dot proj-dot--grad"></span>
+        <h2 class="proj-secthead__title">Graduate school</h2>
+        <span class="proj-secthead__meta">Mechanical engineering · 2020–2021 · 2</span>
+      </header>
+      <div class="proj-grid">
+        <a class="proj-card" data-year="2020" href="./project/Project Lid Driven.html">
+          <span class="proj-card__year">2020</span>
+          <h3 class="proj-card__title">Basic of CFD <span class="proj-card__sub2">(numerical method)</span></h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2021" href="./project/Project Dynamic time warping.html">
+          <span class="proj-card__year">2021</span>
+          <h3 class="proj-card__title">Dynamic Time Warping</h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
       </div>
-
-      <div class="timeline-end">End</div>
-
     </section>
 
+
+    <!-- ===== Undergraduate (collapsed by default) ===== -->
+    <section class="proj-section proj-section--collapsible" data-group="undergrad">
+      <header class="proj-secthead">
+        <span class="proj-dot proj-dot--undergrad"></span>
+        <h2 class="proj-secthead__title">Undergraduate</h2>
+        <span class="proj-secthead__meta">Mechanical &amp; Environmental engineering · 2016–2019 · 10</span>
+        <button class="proj-toggle" type="button" aria-expanded="false">Show all 10 ▾</button>
+      </header>
+      <div class="proj-grid proj-grid--collapsed">
+        <a class="proj-card" data-year="2019" href="./project/Project Graduation project.html">
+          <span class="proj-card__year">2019</span>
+          <h3 class="proj-card__title">Graduation project</h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2019" href="./project/Project Mechanical system control.html">
+          <span class="proj-card__year">2019</span>
+          <h3 class="proj-card__title">Mechanical system control</h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2019" href="./project/Project thesis.html">
+          <span class="proj-card__year">2019</span>
+          <h3 class="proj-card__title">Time forecasting via NN</h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2019" href="./project/Project Computer aided design.html">
+          <span class="proj-card__year">2019</span>
+          <h3 class="proj-card__title">Computer aided design</h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2019" href="./project/Project Robust design.html">
+          <span class="proj-card__year">2019</span>
+          <h3 class="proj-card__title">Robust design</h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2018" href="./project/Project Self-driving.html">
+          <span class="proj-card__year">2018</span>
+          <h3 class="proj-card__title">Autonomous driving <span class="proj-card__sub2">(DRL)</span></h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2018" href="./project/Project Machine design(1).html">
+          <span class="proj-card__year">2018</span>
+          <h3 class="proj-card__title">Machine design (1)</h3>
+          <span class="proj-card__field">Mechanical engineering</span>
+        </a>
+        <a class="proj-card" data-year="2017" href="./project/Project Data analysis.html">
+          <span class="proj-card__year">2017</span>
+          <h3 class="proj-card__title">Data analysis project</h3>
+          <span class="proj-card__field">Environmental engineering</span>
+        </a>
+        <a class="proj-card" data-year="2016" href="./project/Project Environmental experiment.html">
+          <span class="proj-card__year">2016</span>
+          <h3 class="proj-card__title">Environmental experiment</h3>
+          <span class="proj-card__field">Environmental engineering</span>
+        </a>
+        <a class="proj-card" data-year="2016" href="./project/Project Environmental monitoring.html">
+          <span class="proj-card__year">2016</span>
+          <h3 class="proj-card__title">Environmental monitoring</h3>
+          <span class="proj-card__field">Environmental engineering</span>
+        </a>
+      </div>
+    </section>
+
+    <p class="proj-empty" hidden>No projects in this phase.</p>
 
   </div>
+
+  <script>
+    (function(){
+      var pills=document.querySelectorAll('.proj-pill');
+      var sections=document.querySelectorAll('.proj-section');
+      var empty=document.querySelector('.proj-empty');
+
+      // Collapsible undergraduate section
+      var toggle=document.querySelector('.proj-toggle');
+      var coll=document.querySelector('.proj-grid--collapsed');
+      function setExpanded(open){
+        if(!toggle||!coll) return;
+        coll.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open?'true':'false');
+        toggle.textContent = open ? 'Show less ▴' : 'Show all 10 ▾';
+      }
+      if(toggle){ toggle.addEventListener('click', function(e){ e.preventDefault();
+        setExpanded(toggle.getAttribute('aria-expanded')!=='true'); }); }
+
+      // Filter pills -> show/hide sections
+      pills.forEach(function(p){
+        p.addEventListener('click', function(){
+          pills.forEach(function(x){x.classList.remove('is-active');});
+          p.classList.add('is-active');
+          var f=p.getAttribute('data-filter');
+          var shown=0;
+          sections.forEach(function(s){
+            var on=(f==='all'||s.getAttribute('data-group')===f);
+            s.hidden=!on; if(on) shown++;
+          });
+          // auto-expand undergrad when it is the focused filter; collapse again on "all"
+          setExpanded(f==='undergrad');
+          if(empty) empty.hidden=shown>0;
+        });
+      });
+    })();
+  </script>
 
   <footer-component></footer-component>
 

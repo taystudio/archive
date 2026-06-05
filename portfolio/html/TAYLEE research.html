@@ -2,20 +2,37 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Research</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Research">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/TAYLEE%20research.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Research">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/style research main.css">
+    <link rel="stylesheet" type="text/css" href="../css/style.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../css/style document.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../css/style research main.css?v=20260605-18">
 
     <!--Java script event-->
-    <script src="../js/main.js" defer></script>  
-    <script src="../js/components/nav.js" sync></script>
-    <script src="../js/components/footer.js" sync></script>
-    <script src="../js/components/header.js" sync></script>
+    <script src="../js/main.js?v=20260605-18" defer></script>
+    <script src="../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../js/components/header.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
+
 </head>
 
 
@@ -23,46 +40,75 @@
 
     <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
+    <!-- ===================== PAGE HEADER (light) ===================== -->
+    <header class="pf-pagehead">
+        <p class="pf-pagehead__eyebrow">RESEARCH · TECHNIQUE</p>
+        <h1 class="pf-pagehead__title">Research &amp; <em>technique</em></h1>
+        <p class="pf-pagehead__lead">CFD · Deep Reinforcement Learning · Time-series Forecasting — from numerical methods to AI-driven flow control.</p>
+    </header>
 
-        <div class="Resarch-list">
-            <h4 class="Research-title"> Research & Technique</h4> 
-            <h2 class="For_details"> Click on the images for details</h2> 
+    <section class="pf-section">
 
-            <div class="Research-img">
+            <div class="docs-grid">
 
-                <div class="Research-class">
-                    <a class="R_img_click" href="./research/Research Cavity.html"><img id="Research_id", alt="CFD",  src="../resources/background/Research-fluid img.jpg" width=300 height=280></a>
-                    <p class="Research_sub"> Computational Fluid Dynamics</p>
-                </div>
+                <a class="docs-card" href="./research/Research Cavity.html">
+                    <div class="docs-card__media">
+                        <img src="../resources/background/Research-fluid img.jpg" alt="Computational Fluid Dynamics">
+                        <span class="docs-card__badge">CFD</span>
+                    </div>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Computational Fluid Dynamics</h2>
+                        <p class="docs-card__meta">Lid-driven cavity · channel flow</p>
+                        <span class="docs-card__cta">Explore
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
+                    </div>
+                </a>
 
-                <div class="Research-class">
-                    <a class="R_img_click" href="./research/Research DRL.html"><img id="Research_id", alt="DRL", src="../resources/background/Machine learning.png" width=300 height=280></a>
-                    <p class="Research_sub"> Deep Reinforcement learning</p>
-                </div>
+                <a class="docs-card" href="./research/Research DRL.html">
+                    <div class="docs-card__media">
+                        <img src="../resources/background/Machine learning.png" alt="Deep Reinforcement Learning">
+                        <span class="docs-card__badge">DRL</span>
+                    </div>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Deep Reinforcement Learning</h2>
+                        <p class="docs-card__meta">Flow control · Burgers equation</p>
+                        <span class="docs-card__cta">Explore
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
+                    </div>
+                </a>
 
-                <div class="Research-class">
-                    <a class="R_img_click" href="./research/Research Prediction.html"><img id="Research_id", alt="Forecasting", src="../resources/background/Time forecasting image.png" width=300 height=280></a>
-                    <p class="Research_sub"> Time Forecasting</p>
-                </div>            
+                <a class="docs-card" href="./research/Research Prediction.html">
+                    <div class="docs-card__media">
+                        <img src="../resources/background/Time forecasting image.png" alt="Time Forecasting">
+                        <span class="docs-card__badge">Forecasting</span>
+                    </div>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Time Forecasting</h2>
+                        <p class="docs-card__meta">Time-series prediction</p>
+                        <span class="docs-card__cta">Explore
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
+                    </div>
+                </a>
+
             </div>
-        </div>
 
+    </section>
 
-    </div>
     <!--Cache에 미리 담아두기 -->
-    <img, src="../resources/cavity/3d video u velocity.gif" width=1 hegiht=1>
-    <img, src="../resources/cavity/3d video v velocity.gif" width=1 hegiht=1>
-    <img, src="../resources/cavity/3d video w velocity.gif" width=1 hegiht=1>
-    <img, src="../resources/cavity/Re50000 20sec.gif" width=1 hegiht=1>
-    <img, src="../resources/cavity/Re100000 200x200 video.gif" width=1 hegiht=1>
-    <img, src="../resources/cavity/Re 100000 256x256.gif" width=1 hegiht=1>
-
-    <img, src="../resources/reinforcement/Burgers equation nu=0.1.gif" width=1 hegiht=1>
-    <img, src="../resources/reinforcement/TD3 burgers.gif" width=1 hegiht=1>
-    <img, src="../resources/reinforcement/ppo burgers.gif" width=1 hegiht=1>
+    <img src="../resources/cavity/3d video u velocity.gif" width=1 height=1 alt="">
+    <img src="../resources/cavity/3d video v velocity.gif" width=1 height=1 alt="">
+    <img src="../resources/cavity/3d video w velocity.gif" width=1 height=1 alt="">
+    <img src="../resources/cavity/Re50000 20sec.gif" width=1 height=1 alt="">
+    <img src="../resources/cavity/Re100000 200x200 video.gif" width=1 height=1 alt="">
+    <img src="../resources/cavity/Re 100000 256x256.gif" width=1 height=1 alt="">
+    <img src="../resources/reinforcement/Burgers equation nu=0.1.gif" width=1 height=1 alt="">
+    <img src="../resources/reinforcement/TD3 burgers.gif" width=1 height=1 alt="">
+    <img src="../resources/reinforcement/ppo burgers.gif" width=1 height=1 alt="">
 
     <footer-component></footer-component>
-    
+
 </body>
 </html>

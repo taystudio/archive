@@ -2,138 +2,134 @@
 <html lang="en">
 
 <head>
-    <title>TAYLEE Activity</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TAYLEE — Activities</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE — Activities">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/TAYLEE%20Activity.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE — Activities">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../css/style activity.css">
-    
+    <link rel="stylesheet" type="text/css" href="../css/style.css?v=20260605-18">
+
     <!--Java script event-->
-    <script src="../js/main.js" defer></script>  
-    <script src="../js/components/nav.js" sync></script>
-    <script src="../js/components/footer.js" sync></script>
-    <script src="../js/components/header.js" sync></script>
+    <script src="../js/main.js?v=20260605-18" defer></script>
+    <script src="../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../js/components/header.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
+
 </head>
 
 
 
 <body bgproperties="fixed" oncontextmenu='return false'>
-    
+
     <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
-
-        <div class= "Activity_frame">
-            
-            <h2 class="Extra-activity">Extracurricular activities</h2> <br>
-
-            <h3 class="Clubs">School Clubs activity</h3>  
-
-            <div class="Club-frame">
-
-                <div class="Match-logo">
-                    <img id="Match-image", alt="MatchLogo", src="../resources/activity/Matchpoint.JPG" width=100 height=100>
-                </div>
-                
-                <div class="Match-description">
-                    <h3>Match point Tennis club (2012/03 ~ 2013/08)</h3>
-                    <p class="match-point-script"> &nbsp Tennis workshop is the main activity, and tennis competitions (Match competition, bat competition, etc) are held every semester.</p>
-                    <p class="match-point-script">2012: General membership<br> 2013 Spring Semester: Vice President</p>
-                </div>        
-            </div>
+    <!-- ===================== PAGE HEADER (light) ===================== -->
+    <header class="pf-pagehead">
+      <a class="pf-pagehead__back" href="TAYLEE Info.html">← About &amp; CV</a>
+      <h1 class="pf-pagehead__title">Extracurricular <em>activities</em></h1>
+      <p class="pf-pagehead__lead">
+        School clubs I took part in during university — sports, language, design and engineering.
+      </p>
+    </header>
 
 
-            <div class="Club-frame">
+    <!-- ===================== CLUBS ===================== -->
+    <section class="pf-section">
+      <h2 class="pf-h2">School clubs</h2>
+      <p class="pf-sub">2012 – 2019 · 7 clubs</p>
 
-                <div class="Tea-logo">
-                    <img id="Tea-image", alt="teaLogo", src="../resources/activity/Yonsei-tea-logo.jpg" width=100 height=100>
-                </div>
-                
-                <div class="Tea-description">
-                    <h3>Yonsei Tea Club (2014/03 ~ 2014/11)</h3>
-                    <p class="Tea-script"> &nbsp Yonsei Tea Club holds regular tea meetings once a week and promotes friendship.</p>
-                    <p class="Tea-script"> 2013: General membership</p>
-                </div>        
-            </div>
+      <div class="act-grid">
 
-
-            <div class="Club-frame">
-
-                <div class="YK-logo">
-                    <img id="YK-image", alt="YKLogo" src="../resources/activity/YK-logo.jpg" width=100 height=100>
-                </div>
-                
-                <div class="YK-description">
-                    <h3>YK Club - Advertising and Marketing Club (2016/09 ~ 2017/12)</h3>
-                    <p class="YK-script"> &nbsp Seminars for advertising copy, video, planning, Desgin, Participation in advertising contests as a team.</p>
-                    <p class='YK-script'> Participated in contests:<a class = "Orga_menu" href="https://www.youtube.com/watch?v=Oq_hU4m7nho&t=10s"> UCC - video URL (LINK)</a></p>
-                    <p class="YK-script"> 2016~2017: General membership</p>
-                </div>        
-            </div>       
-
-            <div class="Club-frame">
-
-                <div class="TZ-logo">
-                    <img id="TZ-image", alt="TZoneLogo" src="../resources/activity/T-zone.JPG" width=100 height=130>
-                </div>
-                
-                <div class="TZ-description">
-                    <h3>T-Zone - Squash Club (2017/09 ~ 2017/12)</h3>
-                    <p class="TZ-script"> &nbsp Activities: Squash Workshop, Squash Competition (Winner in 2017 Beginner Competition)</p>
-                    <p class="TZ-script"> 2017: General membership</p>
-                </div>        
-            </div>
-
-            <div class="Club-frame">
-
-                <div class="ALC-logo">
-                    <img id="ALC-image", alt="ALCLogo" src="../resources/activity/ALC.jpg" width=100 height=100>
-                </div>
-                
-                <div class="ALC-description">
-                    <h3> ALC - English conversation club (2018/03 ~ 2018/8)</h3>
-                    <p class="ALC-script"> &nbsp A club for exchanging activities with foreign exchange students </p>
-                    <p class="ALC-script"> 2018: General membership</p>
-                </div>        
-            </div>
-
-
-            <div class="Club-frame">
-
-                <div class="YCC-logo">
-                    <img id="YCC-image", alt="YCCLogo" src="../resources/activity/YCC.jpg" width=100 height=100>
-                </div>
-                
-                <div class="YCC-description">
-                    <h3> YCC - Yonsei Computer club (2018/09 ~ 2019/12)</h3>
-                    <p class="YCC-script"> &nbsp Image classification through CNN model (AI model study), Seminar for programming language, etc. </p>
-                    <p class="YCC-script"> 2018~2019: General membership</p>
-                </div>        
-            </div>
-
-
-            <div class="Club-frame">
-
-                <div class="Robo-logo">
-                    <img id="Robo-image", alt="RoboinLogo" src="../resources/activity/Roboin.png" width=100 height=100>
-                </div>
-                
-                <div class="Robo-description">
-                    <h3> Roboin - Robot, Control engineering club (2019/03 ~ 2019/12)</h3>
-                    <p class="Robo-script"> &nbsp Motor control through Arduino, circuit fabrication (solder work on PCB board, etc.) </p>
-                    <p class="Robo-script"> 2019: General membership</p>
-                </div>        
-            </div>
-
-            <div class="space-null"></div>
-
+        <div class="act-card">
+          <div class="act-card__logo"><img src="../resources/activity/Matchpoint.JPG" alt="Match point" loading="lazy"></div>
+          <div class="act-card__body">
+            <h3 class="act-card__title">Match point — Tennis club</h3>
+            <span class="act-card__period">2012.03 – 2013.08 · Tennis</span>
+            <p class="act-card__desc">Tennis workshops as the main activity, with match &amp; bat competitions held every semester.</p>
+            <span class="act-card__role act-card__role--lead">2013 Spring · Vice President</span>
+          </div>
         </div>
-    </div>
+
+        <div class="act-card">
+          <div class="act-card__logo"><img src="../resources/activity/Yonsei-tea-logo.jpg" alt="Yonsei Tea" loading="lazy"></div>
+          <div class="act-card__body">
+            <h3 class="act-card__title">Yonsei Tea Club</h3>
+            <span class="act-card__period">2014.03 – 2014.11 · Tea</span>
+            <p class="act-card__desc">Weekly tea meetings to promote friendship across members.</p>
+            <span class="act-card__role">General membership</span>
+          </div>
+        </div>
+
+        <div class="act-card">
+          <div class="act-card__logo"><img src="../resources/activity/YK-logo.jpg" alt="YK Club" loading="lazy"></div>
+          <div class="act-card__body">
+            <h3 class="act-card__title">YK Club — Advertising &amp; Marketing</h3>
+            <span class="act-card__period">2016.09 – 2017.12 · Advertising</span>
+            <p class="act-card__desc">Seminars on ad copy, video, planning and design; entered advertising contests as a team. <a href="https://www.youtube.com/watch?v=Oq_hU4m7nho&t=10s" target="_blank" rel="noopener">UCC video ↗</a></p>
+            <span class="act-card__role">General membership</span>
+          </div>
+        </div>
+
+        <div class="act-card">
+          <div class="act-card__logo"><img src="../resources/activity/T-zone.JPG" alt="T-Zone" loading="lazy"></div>
+          <div class="act-card__body">
+            <h3 class="act-card__title">T-Zone — Squash club</h3>
+            <span class="act-card__period">2017.09 – 2017.12 · Squash</span>
+            <p class="act-card__desc">Squash workshops and competition — winner of the 2017 Beginner Competition.</p>
+            <span class="act-card__role">General membership</span>
+          </div>
+        </div>
+
+        <div class="act-card">
+          <div class="act-card__logo"><img src="../resources/activity/ALC.jpg" alt="ALC" loading="lazy"></div>
+          <div class="act-card__body">
+            <h3 class="act-card__title">ALC — English conversation club</h3>
+            <span class="act-card__period">2018.03 – 2018.08 · Language</span>
+            <p class="act-card__desc">Exchange activities with international students.</p>
+            <span class="act-card__role">General membership</span>
+          </div>
+        </div>
+
+        <div class="act-card">
+          <div class="act-card__logo"><img src="../resources/activity/YCC.jpg" alt="YCC" loading="lazy"></div>
+          <div class="act-card__body">
+            <h3 class="act-card__title">YCC — Yonsei Computer club</h3>
+            <span class="act-card__period">2018.09 – 2019.12 · Computer · AI</span>
+            <p class="act-card__desc">Image classification with a CNN model (AI study) and programming-language seminars.</p>
+            <span class="act-card__role">General membership</span>
+          </div>
+        </div>
+
+        <div class="act-card">
+          <div class="act-card__logo"><img src="../resources/activity/Roboin.png" alt="Roboin" loading="lazy"></div>
+          <div class="act-card__body">
+            <h3 class="act-card__title">Roboin — Robot &amp; Control engineering</h3>
+            <span class="act-card__period">2019.03 – 2019.12 · Robotics</span>
+            <p class="act-card__desc">Motor control with Arduino and circuit fabrication (PCB soldering, etc.).</p>
+            <span class="act-card__role">General membership</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <footer-component></footer-component>
-    
+
 </body>
 </html>

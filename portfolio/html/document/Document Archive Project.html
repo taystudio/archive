@@ -2,122 +2,133 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Document</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Document">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/Document%20Archive%20Project.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Document">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../../css/style document.css">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../../css/style document.css?v=20260605-18">
 
     <!--Java script event-->
-    <script src="../pakcage/js/main.js" defer></script>
-    <script src="../../js/components/nav.js" sync></script>
-    <script src="../../js/components/footer.js" sync></script>
-    <script src="../../js/components/header.js" sync></script>
-    <script src="../../js/components/img_comp/imgComponent.js" sync></script>
+    <script src="../../js/main.js?v=20260605-18" defer></script>
+    <script src="../../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../../js/components/header.js?v=20260605-18" sync></script>
+    <script src="../../js/components/img_comp/imgComponent.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
-</head>
 
+</head>
 
 
 <body bgproperties="fixed" oncontextmenu='return false'>
 
-    <other-nav-component></other-nav-component>
+    <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
+    <div class="frame">
 
-        <div class="Archive_box">
-            <h4 class="Archive_title"><a href="../TAYLEE documents.html"> Archive with notion </a> </h4> 
-            <!-- <h2 class="For_details"> IT Project Works from 2022</h2>  -->
-            <div class="container">
-            <div class="For_details">IT Project Works from 2022</div>
-            </div>
-            <div class="Archive_list">
+        <section class="docs-page">
 
-                <!--Spring notion-->
-                <div class = "box" OnClick="location.href ='https://www.notion.so/API-Gateway-Solution-BEAST-26e71ceb5558818d9b35fbc87e39de0d?source=copy_link'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image">
-                        <!-- <img id="spring-img", alt="box_img", src="../../resources/documentLogo/API Gateway.png" width=280 height=80> -->
-                         <gateway-img></gateway-img>
+            <header class="docs-page__header">
+                <p class="docs-page__eyebrow"><a href="../TAYLEE documents.html">← Documents</a></p>
+                <h1 class="docs-page__title">IT Project Works</h1>
+                <p class="docs-page__subtitle">Cloud · Data · AI · DevOps — professional projects since 2022.</p>
+            </header>
+
+            <div class="docs-grid">
+
+                <a class="docs-card" href="posts/api-gateway.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <gateway-img></gateway-img>
+                        <span class="docs-card__badge">Cloud Service</span>
                     </div>
-    
-                    <div class="box-script"> 
-                        <p class="Ob-title">API Gateway Project</p>
-                        <p class="Ob-descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">API Gateway Solution</h2>
+                        <p class="docs-card__meta">KT DS · 2022</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-                
-                <!--Spring Cloud-->
-                <div class = "box" OnClick="location.href ='https://www.notion.so/Data-Analysis-Solution-26e71ceb555881e2a0eedd9bad3dbe4b?source=copy_link'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="cloud_box_image">
-                        <!-- <img id="springcloud-img", alt="box_img", src="../../resources/documentLogo/SpringCloud.png" width=300 height=100> -->
-                         <data-ans-img></data-ans-img>
+                <a class="docs-card" href="posts/data-analysis-solution.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <data-ans-img></data-ans-img>
+                        <span class="docs-card__badge">Data / AI</span>
                     </div>
-    
-                    <div class="box-script"> 
-                        <p class="Ob-title">Data Analysis Solution</p>
-                        <p class="Ob-descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Data Analysis Solution</h2>
+                        <p class="docs-card__meta">SK Inc. · 2024</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--Network Server-->
-                <div class = "box" OnClick="location.href ='https://www.notion.so/Reinforced-Security-Agent-AI-Agent-26e71ceb5558811e9b65dc9086f2a38d'" style="cursor:pointer;" target='_blank'>
-                
-                    <div class = "box-image" id ="net_box_image">
-                        <!-- <img id="network-img", alt="box_img", src="../../resources/documentLogo/sharedIT.jpg" width=270 height=120> -->
-                         <reinfore-security-img></reinfore-security-img>
+                <a class="docs-card" href="posts/security-agent.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <reinfore-security-img></reinfore-security-img>
+                        <span class="docs-card__badge">AI Agent</span>
                     </div>
-    
-                    <div class="box-script"> 
-                        <p class="Ob-title">Reinforce Security Agent</p>
-                        <p class="Ob-descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Reinforced Security Agent</h2>
+                        <p class="docs-card__meta">R&amp;D PoC · 2024</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--MongoDB Tips-->
-                <div class = "box" OnClick="location.href ='https://www.notion.so/IT-VoC-CI-CD-Platform-SK-ON-Project-In-Progress-26e71ceb555881ca8a3acfa2dc2e90a2'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/mongoDB.jpg" width=230 height=120>
+                <a class="docs-card" href="posts/itvoc-cicd.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <cicd-img></cicd-img>
+                        <span class="docs-card__badge">DevOps</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">IT-VoC CI/CD Platform</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">IT-VoC CI/CD Platform</h2>
+                        <p class="docs-card__meta">SK ON · 2025</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--Alogrithm-->
-                <div class = "box" OnClick="location.href ='https://www.notion.so/Technical-Skills-Infra-System-26e71ceb5558814e9d69efada4ac3488'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/Algorithm.jpg" width=230 height=120>
+                <a class="docs-card" href="posts/tech-skills.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <cloud-infra-img></cloud-infra-img>
+                        <span class="docs-card__badge">Infra</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Cloud Infra</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Technical Skills · Cloud Infra</h2>
+                        <p class="docs-card__meta">Infra &amp; System</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
             </div>
 
-        </div>
+        </section>
+
     </div>
 
-    <other-footer-component></other-footer-component>
-    
+    <footer-component></footer-component>
+
 </body>
 </html>

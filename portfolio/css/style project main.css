@@ -16,7 +16,7 @@ body {
     flex-direction: row;
     margin-left: 40px;
     font-size: 21px;
-    color:rgb(148, 22, 0);
+    color:var(--accent);
 
   }
 
@@ -201,14 +201,14 @@ body {
 
 .sample_menu:hover:before{
   transform: rotate(270deg);
-  color: rgb(100, 4, 4);
+  color: var(--accent-2);
   filter: drop-shadow(3px 3px 5px rgb(0, 59, 98));
   transition: 0.5s;
   transition-timing-function: ease-in-out;
 }
 
 .sample_menu:hover{
-  color: rgb(100, 4, 4);
+  color: var(--accent-2);
   filter: drop-shadow(3px 3px 5px rgb(0, 59, 98));
   transition: 0.3s;
 
@@ -237,14 +237,14 @@ body {
 
 .project_menu:hover:before{
     transform: rotate(270deg);
-    color: rgb(100, 4, 4);
+    color: var(--accent-2);
     filter: drop-shadow(3px 3px 5px rgb(0, 59, 98));
     transition: 0.5s;
     transition-timing-function: ease-in-out;
 }
 
 .project_menu:hover{
-    color: rgb(100, 4, 4);
+    color: var(--accent-2);
     filter: drop-shadow(3px 3px 5px rgb(0, 59, 98));
     transition: 0.3s;
     text-align: center;
@@ -324,3 +324,208 @@ body {
     
   }
   /*===== // Resonsive Vertical Timeline =====*/
+
+
+  /*===================================================================
+    Project — Filter pills + Card grid  (current layout)
+  ===================================================================*/
+  .frame {
+    max-width: var(--maxw, 1180px);
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+    box-sizing: border-box;
+  }
+
+  .proj-head { margin-bottom: 32px; }
+  .proj-h1 {
+    font-family: var(--font-sans);
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--ink);
+    margin: 0 0 10px;
+  }
+  .proj-sub {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0;
+  }
+
+  /* Filter pills */
+  .proj-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 30px 0 8px;
+  }
+  .proj-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--body);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 16px;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .proj-pill:hover { border-color: #c7d0e0; background: #fff; box-shadow: var(--shadow); }
+  .proj-pill.is-active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .proj-pill__n {
+    font-size: 11.5px;
+    font-weight: 700;
+    opacity: .65;
+  }
+  .proj-pill.is-active .proj-pill__n { opacity: .85; }
+
+  /* Phase dot */
+  .proj-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+  }
+  .proj-dot--sk        { background: #EA002C; }
+  .proj-dot--ktds      { background: #0048A7; }
+  .proj-dot--grad      { background: #0e8b87; }
+  .proj-dot--undergrad { background: #94a3b8; }
+  .proj-pill.is-active .proj-dot { box-shadow: 0 0 0 2px rgba(255,255,255,.5); }
+
+  /* Section grouping */
+  .proj-section { margin-top: 52px; }
+  .proj-section[hidden] { display: none; }
+  .proj-secthead {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 14px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .proj-secthead .proj-dot { width: 10px; height: 10px; }
+  .proj-secthead__title {
+    font-family: var(--font-sans);
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .proj-secthead__meta {
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .proj-toggle {
+    margin-left: auto;
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--accent-2);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background .16s ease, border-color .16s ease;
+  }
+  .proj-toggle:hover { background: var(--surface); border-color: #c7d0e0; }
+
+  /* Card grid */
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+    gap: 22px;
+  }
+  /* Collapsed undergraduate: show first row only until expanded */
+  .proj-grid--collapsed .proj-card:nth-child(n+5) { display: none; }
+  .proj-grid--collapsed.is-open .proj-card:nth-child(n+5) { display: flex; }
+  .proj-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius, 12px);
+    padding: 24px 22px 22px;
+    text-decoration: none;
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  /* left accent bar (phase color) */
+  .proj-card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--line);
+    transition: background .18s ease;
+  }
+  .proj-section[data-group="sk"]   .proj-card::before { background: #EA002C; }
+  .proj-section[data-group="ktds"] .proj-card::before { background: #0048A7; }
+  .proj-section[data-group="grad"] .proj-card::before { background: #0e8b87; }
+  .proj-section[data-group="undergrad"] .proj-card::before { background: #cbd5e1; }
+  .proj-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: #d6deec;
+  }
+  .proj-card__year {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--accent-2);
+  }
+  .proj-card__title {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--ink);
+    margin: 0;
+  }
+  .proj-card__sub2 { font-weight: 500; color: var(--muted); font-size: 14px; }
+  .proj-card__field {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .proj-card__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: auto;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--body);
+  }
+  .proj-card[hidden] { display: none; }
+
+  .proj-empty {
+    font-family: var(--font-sans);
+    color: var(--muted);
+    text-align: center;
+    padding: 40px 0;
+  }
+
+  @media (max-width: 520px) {
+    .frame { padding: 36px 16px 72px; }
+    .proj-h1 { font-size: 30px; }
+    .proj-grid { grid-template-columns: 1fr; }
+  }

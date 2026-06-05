@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic Time Warping — TAYLEE Archive</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="Dynamic Time Warping — TAYLEE Archive">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/posts/dtw.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dynamic Time Warping — TAYLEE Archive">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="../../../css/style.css?v=20260605-18">
+<link rel="stylesheet" type="text/css" href="../posts.css?v=20260605-18">
+
+<script src="../../../js/main.js?v=20260605-18" defer></script>
+<script src="../../../js/components/nav.js?v=20260605-18" sync></script>
+<script src="../../../js/components/footer.js?v=20260605-18" sync></script>
+<script src="../../../js/components/header.js?v=20260605-18" sync></script>
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+<common-header-component></common-header-component>
+</head>
+<body>
+<nav-component></nav-component>
+
+<main class="docs-post">
+  <article class="docs-post__article">
+    <header class="docs-post__header">
+      <p class="docs-post__eyebrow"><a href="../../TAYLEE documents.html">← Documents</a></p>
+      <h1 class="docs-post__title">Dynamic Time Warping</h1>
+    </header>
+    <div class="docs-post__body">
+
+<p class="docs-p">Rewritten and re-illustrated from my 2021 algorithm-class project. This article walks through <strong>Dynamic Time Warping (DTW)</strong> — a metric for measuring similarity between two numeric sequences. We start from <strong>Edit Distance</strong> over strings and trace how the same dynamic-programming skeleton extends to time series in a single thread.</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">📌</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>In one line</strong> — instead of comparing two time series <em>point-by-point at the same index</em>, DTW asks <em>how similar their shape is</em>. Just as Edit Distance aligns two strings via add / delete / substitute, DTW aligns two sequences by <strong>warping the time axis</strong>.</p>
+  </div>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">1. What is DTW?</h2>
+
+<p class="docs-p">DTW is a metric for measuring the <strong>similarity between two continuous numeric series (patterns)</strong>. The simplest comparison between two time series \(A, B\) is the <strong>Euclidean Distance (ED)</strong>, which sums the squared differences point by point:</p>
+
+<div class="docs-equation">
+\[ \mathrm{ED}(A, B) = \sqrt{\sum_{i=1}^{N}(a_i - b_i)^2} \]
+</div>
+
+<p class="docs-p">But ED is a strict <strong>1:1 matching</strong> — it only compares same-index points, so it fails to capture <em>overall shape similarity</em>. If two series share the same pattern but with a time shift or local stretching, ED reports a large distance even though their shapes are essentially identical.</p>
+
+<figure class="docs-canvas-figure">
+  <canvas id="dtw-ts-intro" width="720" height="320" aria-label="Two time series A and B with similar shape but mismatched timing; dashed gray lines show ED's strict 1:1 matching."></canvas>
+  <figcaption>Two time series \(A, B\) with similar shape but mismatched timing. The dashed gray lines show ED's strict 1:1 matching — comparing only same-index points clearly misses the shape similarity.</figcaption>
+</figure>
+
+<blockquote class="docs-quote">
+"DTW offers greater flexibility in measuring similarity (or distance) between a given pair of patterns S and T. This is similar in spirit to the edit distance and the Levenshtein distance." — <em>The Dynamic Time Warping Algorithm, Eiji Mizutani</em>
+</blockquote>
+
+<p class="docs-p">DTW therefore aligns the time axis <em>non-linearly</em> to ask whether the shapes themselves are similar. The same idea extends naturally to comparing probability distributions and other sequence-like objects.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">2. Edit Algorithm (Text) — the starting point</h2>
+
+<p class="docs-p">DTW extends <strong>Levenshtein distance</strong> (= Edit Distance) from strings to numeric sequences. It helps to anchor the intuition in the string version first.</p>
+
+<h3 class="docs-h3">1) Basic operations</h3>
+
+<p class="docs-p">How do we quantify the similarity between two strings? Count the <strong>minimum number of operations</strong> required to transform one into the other. Three basic operations are allowed:</p>
+
+<ul class="docs-list">
+  <li><strong>Add</strong> — insert a character</li>
+  <li><strong>Delete</strong> — remove a character</li>
+  <li><strong>Substitute</strong> — replace a character with another</li>
+</ul>
+
+<h3 class="docs-h3">2) Example</h3>
+
+<p class="docs-p">Compare two pairs of strings. Red dashed lines mark <em>substitutes</em>, green solid lines mark <em>characters kept in place</em>.</p>
+
+<figure class="docs-svg-figure">
+<svg viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Edit distance comparison: ABC to DEF needs three substitutions, ABC to ABD needs one.">
+  <defs>
+    <style>
+      .ed-title { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: #003B62; }
+      .ed-ch { font: 700 18px ui-monospace, monospace; }
+      .ed-from { fill: #003B62; }
+      .ed-to   { fill: #003B62; }
+      .ed-same { fill: #2f7d4f; }
+      .ed-box-from { fill: #eef2f7; stroke: #003B62; }
+      .ed-box-to   { fill: #fdecec; stroke: #003B62; }
+      .ed-box-same { fill: #eafaf0; stroke: #2f7d4f; }
+      .ed-sub  { stroke: #c4493e; stroke-width: 1.6; stroke-dasharray: 4 3; fill: none; }
+      .ed-keep { stroke: #2f7d4f; stroke-width: 1.8; fill: none; }
+      .ed-meta { font: 13px ui-sans-serif, system-ui, sans-serif; fill: #444; }
+      .ed-dist { font-weight: 700; fill: #003B62; }
+    </style>
+  </defs>
+
+  <!-- Pair 1 -->
+  <text x="20" y="28" class="ed-title">Pair 1 · ABC → DEF</text>
+  <g>
+    <rect x="20"  y="48" width="36" height="36" rx="5" class="ed-box-from"/>
+    <text x="38"  y="73" text-anchor="middle" class="ed-ch ed-from">A</text>
+    <rect x="64"  y="48" width="36" height="36" rx="5" class="ed-box-from"/>
+    <text x="82"  y="73" text-anchor="middle" class="ed-ch ed-from">B</text>
+    <rect x="108" y="48" width="36" height="36" rx="5" class="ed-box-from"/>
+    <text x="126" y="73" text-anchor="middle" class="ed-ch ed-from">C</text>
+  </g>
+  <line x1="38"  y1="86" x2="38"  y2="116" class="ed-sub"/>
+  <line x1="82"  y1="86" x2="82"  y2="116" class="ed-sub"/>
+  <line x1="126" y1="86" x2="126" y2="116" class="ed-sub"/>
+  <g>
+    <rect x="20"  y="118" width="36" height="36" rx="5" class="ed-box-to"/>
+    <text x="38"  y="143" text-anchor="middle" class="ed-ch ed-to">D</text>
+    <rect x="64"  y="118" width="36" height="36" rx="5" class="ed-box-to"/>
+    <text x="82"  y="143" text-anchor="middle" class="ed-ch ed-to">E</text>
+    <rect x="108" y="118" width="36" height="36" rx="5" class="ed-box-to"/>
+    <text x="126" y="143" text-anchor="middle" class="ed-ch ed-to">F</text>
+  </g>
+  <text x="160" y="178" class="ed-meta">3 substitutions → edit distance = <tspan class="ed-dist">3</tspan></text>
+
+  <!-- Divider -->
+  <line x1="320" y1="20" x2="320" y2="190" stroke="#e5e9ef" stroke-width="1"/>
+
+  <!-- Pair 2 -->
+  <text x="340" y="28" class="ed-title">Pair 2 · ABC → ABD</text>
+  <g>
+    <rect x="340" y="48" width="36" height="36" rx="5" class="ed-box-same"/>
+    <text x="358" y="73" text-anchor="middle" class="ed-ch ed-same">A</text>
+    <rect x="384" y="48" width="36" height="36" rx="5" class="ed-box-same"/>
+    <text x="402" y="73" text-anchor="middle" class="ed-ch ed-same">B</text>
+    <rect x="428" y="48" width="36" height="36" rx="5" class="ed-box-from"/>
+    <text x="446" y="73" text-anchor="middle" class="ed-ch ed-from">C</text>
+  </g>
+  <line x1="358" y1="86" x2="358" y2="116" class="ed-keep"/>
+  <line x1="402" y1="86" x2="402" y2="116" class="ed-keep"/>
+  <line x1="446" y1="86" x2="446" y2="116" class="ed-sub"/>
+  <g>
+    <rect x="340" y="118" width="36" height="36" rx="5" class="ed-box-same"/>
+    <text x="358" y="143" text-anchor="middle" class="ed-ch ed-same">A</text>
+    <rect x="384" y="118" width="36" height="36" rx="5" class="ed-box-same"/>
+    <text x="402" y="143" text-anchor="middle" class="ed-ch ed-same">B</text>
+    <rect x="428" y="118" width="36" height="36" rx="5" class="ed-box-to"/>
+    <text x="446" y="143" text-anchor="middle" class="ed-ch ed-to">D</text>
+  </g>
+  <text x="480" y="178" class="ed-meta">1 substitution → distance = <tspan class="ed-dist">1</tspan></text>
+</svg>
+<figcaption>Pair 2 keeps two characters intact, so its distance is much smaller — meaning it is the more similar pair.</figcaption>
+</figure>
+
+<p class="docs-p"><strong>Pair 1</strong> needs \(A\to D,\; B\to E,\; C\to F\) — three substitutes — so \(\text{edit distance} = 3\). <strong>Pair 2</strong> needs only \(C\to D\), so \(\text{edit distance} = 1\).</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">💡</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>Takeaway.</strong> The smaller the edit distance (= the fewer changes required), the more similar the two strings.</p>
+  </div>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">3. Edit Distance Matrix</h2>
+
+<p class="docs-p">To compute edit distance systematically — i.e. to turn it into an algorithm — we use a <strong>matrix</strong>. Let's work out the edit distance between \(abcdefg\) and \(ayced\).</p>
+
+<p class="docs-p">Given two strings, we look at every <strong>contiguous prefix</strong>. Character order matters (we are after sequence similarity, not bag-of-characters similarity), so prefixes are taken in order — never as arbitrary subsets.</p>
+
+<p class="docs-p">Including the empty prefix \(\{\}\), the prefixes of \(abcdefg\) are:</p>
+
+<div class="docs-equation">
+\[ \{\},\; \{a\},\; \{a,b\},\; \{a,b,c\},\; \{a,b,c,d\},\; \{a,b,c,d,e\},\; \{a,b,c,d,e,f\},\; \{a,b,c,d,e,f,g\} \]
+</div>
+
+<p class="docs-p">Similarly for \(ayced\):</p>
+
+<div class="docs-equation">
+\[ \{\},\; \{a\},\; \{a,y\},\; \{a,y,c\},\; \{a,y,c,e\},\; \{a,y,c,e,d\} \]
+</div>
+
+<p class="docs-p">Place these along the row and column axes; each cell stores the edit distance of the corresponding prefix pair.</p>
+
+<div class="docs-table-wrap">
+<table class="docs-table">
+  <thead>
+    <tr><th></th><th>{}</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>{}</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>a</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>y</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>c</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>e</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>d</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<p class="docs-caption">[Edit distance matrix] — stores the edit distance for every pair of contiguous prefixes of the two strings.</p>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">4. Step 1) Boundary condition</h2>
+
+<p class="docs-p">We start at the <strong>boundary</strong> — the row and column compared against the empty prefix \(\{\}\). The empty prefix transforms into any other prefix via "all adds" or "all deletes", so its edit distance equals the other prefix's length.</p>
+
+<ul class="docs-list">
+  <li>\(\{\} \to \{\}\): distance = 0 (already equal)</li>
+  <li>\(\{\} \to \{a\}\): distance = 1 (add \(a\))</li>
+  <li>\(\{\} \to \{a, b\}\): distance = 2 (add \(a, b\))</li>
+  <li>In general, \(\{\} \to \{x_1, \ldots, x_k\}\) has distance \(k\).</li>
+</ul>
+
+<p class="docs-p">So the first row and first column are filled as follows:</p>
+
+<div class="docs-table-wrap">
+<table class="docs-table">
+  <thead>
+    <tr><th></th><th>{}</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>{}</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+    <tr><th>a</th><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>y</th><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>c</th><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>e</th><td>4</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><th>d</th><td>5</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody>
+</table>
+<p class="docs-caption">After the boundary condition is set. The first row equals the prefix lengths of \(abcdefg\); the first column equals the prefix lengths of \(ayced\).</p>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">5. Step 2) Fill in rows — first row</h2>
+
+<p class="docs-p">Now we fill the interior. Start with Row 1 (\(\{a\}\)). Compare \(\{a\}\) against each prefix of \(abcdefg\):</p>
+
+<ul class="docs-list">
+  <li>\(\{a\} \leftrightarrow \{a\}\): identical → 0</li>
+  <li>\(\{a\} \leftrightarrow \{a,b\}\): delete \(b\) → 1</li>
+  <li>\(\{a\} \leftrightarrow \{a,b,c\}\): delete \(b, c\) → 2</li>
+  <li>\(\{a\} \leftrightarrow \{a,b,c,d\}\): delete \(b, c, d\) → 3</li>
+  <li>\(\{a\} \leftrightarrow \{a,b,c,d,e\}\): delete \(b, c, d, e\) → 4</li>
+  <li>… continuing in the same way to the end</li>
+</ul>
+
+<p class="docs-p">The first row ends up as:</p>
+
+<div class="docs-table-wrap">
+<table class="docs-table">
+  <thead>
+    <tr><th></th><th>{}</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>{}</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+    <tr><th>a</th><td>1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+  </tbody>
+</table>
+<p class="docs-caption">Row 1 (\(\{a\}\)) filled. Notice how the distance dips when matching characters meet — this becomes the heart of the recurrence.</p>
+</div>
+
+<p class="docs-p">Rows 2 through 5 follow the same rule. Each cell still means <em>the minimum number of operations to turn the row prefix into the column prefix</em>. For example, filling Row 2 (\(\{a, y\}\)):</p>
+
+<ul class="docs-list">
+  <li>\(\{a,y\} \leftrightarrow \{a\}\): add \(y\) → 1</li>
+  <li>\(\{a,y\} \leftrightarrow \{a,b\}\): substitute \(b \to y\) → 1</li>
+  <li>\(\{a,y\} \leftrightarrow \{a,b,c\}\): substitute \(b \to y\), delete \(c\) → 2</li>
+  <li>\(\{a,y\} \leftrightarrow \{a,b,c,d\}\): substitute \(b \to y\), delete \(c, d\) → 3</li>
+  <li>… resulting in \(2,\, 1,\, 1,\, 2,\, 3,\, 4,\, 5,\, 6\)</li>
+</ul>
+
+<p class="docs-p">Rows 3, 4, 5 are filled identically. Once every row is in, the matrix is complete.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">6. Step 3) Complete the matrix</h2>
+
+<div class="docs-table-wrap">
+<table class="docs-table">
+  <thead>
+    <tr><th></th><th>{}</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>{}</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+    <tr><th>a</th><td>1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+    <tr><th>y</th><td>2</td><td>1</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+    <tr><th>c</th><td>3</td><td>2</td><td>2</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+    <tr><th>e</th><td>4</td><td>3</td><td>3</td><td>2</td><td>2</td><td>2</td><td>3</td><td>4</td></tr>
+    <tr><th>d</th><td>5</td><td>4</td><td>4</td><td>3</td><td>2</td><td>3</td><td>3</td><td><strong style="color:var(--accent)">4</strong></td></tr>
+  </tbody>
+</table>
+<p class="docs-caption">The completed edit distance matrix. The bottom-right cell holds the final answer.</p>
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">✅</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>Final answer — \(D(7, 5) = 4\).</strong> The edit distance between \(abcdefg\) and \(ayced\) is <strong>4</strong>: at minimum, four add / delete / substitute operations are needed to transform one into the other.</p>
+  </div>
+</div>
+
+<p class="docs-p">A natural question — <em>why fill every cell, when only the bottom-right one is the answer we want?</em></p>
+
+<p class="docs-p">A computer doesn't reason intuitively; it needs a structural rule it can apply mechanically. That rule is the <strong>recurrence relation</strong>, and to determine any single cell via the recurrence its neighbors must already be filled. Hence the full matrix.</p>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">7. Generalization — the meaning of \(D(i, j)\)</h2>
+
+<p class="docs-p">Denote an arbitrary cell as \(D(i, j)\). Its meaning is:</p>
+
+<blockquote class="docs-quote">
+\(D(i, j)\) = the minimum edit distance between the first \(i\) characters of TextA and the first \(j\) characters of TextB.
+</blockquote>
+
+<p class="docs-p">Filling the matrix top-to-bottom, left-to-right: by the time we reach cell \(D(i, j)\), the three neighbors \(D(i-1, j-1),\; D(i-1, j),\; D(i, j-1)\) are already known. From those three together with the new characters \(A[i],\, B[j]\), we can determine \(D(i, j)\).</p>
+
+<figure class="docs-svg-figure">
+<svg viewBox="0 0 520 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mini matrix illustrating recurrence: D(i-1,j-1), D(i-1,j), D(i,j-1) are known, D(i,j) is the unknown target.">
+  <defs>
+    <style>
+      .axis { font: 600 13px ui-sans-serif, system-ui, sans-serif; fill: #5b6470; }
+      .cell-known  { fill: #f5f7fa; stroke: #c8d0db; stroke-width: 1; }
+      .cell-target { fill: #fff5e0; stroke: #b8860b; stroke-width: 1.6; }
+      .cell-tx   { font: 14px ui-monospace, monospace; fill: #003B62; }
+      .cell-tx-t { font: 700 15px ui-monospace, monospace; fill: #003B62; }
+      .arrow     { stroke: #c4493e; stroke-width: 1.6; fill: none; }
+      .arr-label { font: 11px ui-sans-serif, system-ui, sans-serif; fill: #003B62; }
+    </style>
+    <marker id="dtw-arr" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 z" fill="#c4493e"/>
+    </marker>
+  </defs>
+
+  <text x="270" y="22" text-anchor="middle" class="axis">TextA · column j →</text>
+  <text x="22" y="155" class="axis" transform="rotate(-90 22 155)">TextB · row i →</text>
+
+  <rect x="120" y="60"  width="170" height="70" rx="6" class="cell-known"/>
+  <text x="205" y="100" text-anchor="middle" class="cell-tx">D(i−1, j−1)</text>
+
+  <rect x="300" y="60"  width="170" height="70" rx="6" class="cell-known"/>
+  <text x="385" y="100" text-anchor="middle" class="cell-tx">D(i−1, j)</text>
+
+  <rect x="120" y="140" width="170" height="70" rx="6" class="cell-known"/>
+  <text x="205" y="180" text-anchor="middle" class="cell-tx">D(i, j−1)</text>
+
+  <rect x="300" y="140" width="170" height="70" rx="6" class="cell-target"/>
+  <text x="385" y="182" text-anchor="middle" class="cell-tx-t">D(i, j)  ← ?</text>
+
+  <line x1="280" y1="125" x2="318" y2="153" class="arrow" marker-end="url(#dtw-arr)"/>
+  <text x="248" y="140" class="arr-label">substitute</text>
+  <line x1="385" y1="132" x2="385" y2="152" class="arrow" marker-end="url(#dtw-arr)"/>
+  <text x="395" y="148" class="arr-label">delete</text>
+  <line x1="293" y1="175" x2="313" y2="175" class="arrow" marker-end="url(#dtw-arr)"/>
+  <text x="232" y="168" class="arr-label">add</text>
+
+  <text x="270" y="240" text-anchor="middle" class="axis">The three known neighbors plus the \(A[i]\) vs \(B[j]\) comparison determine \(D(i, j)\).</text>
+</svg>
+<figcaption>The recurrence's basic structure — each arrow corresponds to a substitute / delete / add operation.</figcaption>
+</figure>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">8. Deriving the recurrence</h2>
+
+<h3 class="docs-h3">Case 1) \(A[i] = B[j]\) — last characters match</h3>
+
+<p class="docs-p">Example: \(\,ayc\) ↔ \(abc\). The last character \(c\) matches. If we already know the cost \(D(i-1, j-1)\) of aligning \(\,ay\) ↔ \(ab\), the matching last character costs nothing extra.</p>
+
+<div class="docs-equation">
+\[ D(i, j) = D(i-1, j-1) \quad \text{when } A[i] = B[j] \]
+</div>
+
+<h3 class="docs-h3">Case 2) \(A[i] \ne B[j]\) — last characters differ</h3>
+
+<p class="docs-p">Example: \(\,abcd\) ↔ \(\,ayce\). The last characters \(d, e\) differ. The cell can be reached by exactly one of three single-step operations:</p>
+
+<ul class="docs-list">
+  <li><strong>Substitute</strong> — \(D(i-1, j-1) + 1\). Replace \(A[i]\) with \(B[j]\) (e.g. \(d \to e\)).</li>
+  <li><strong>Delete</strong> — \(D(i-1, j) + 1\). Drop the last character \(A[i]\) on the TextA side.</li>
+  <li><strong>Add</strong> — \(D(i, j-1) + 1\). Insert \(B[j]\) on the TextA side.</li>
+</ul>
+
+<p class="docs-p">The shortest of the three is the minimum edit distance.</p>
+
+<div class="docs-equation">
+\[ D(i, j) = \min\bigl(\, D(i-1, j-1) + 1,\; D(i-1, j) + 1,\; D(i, j-1) + 1 \,\bigr) \quad \text{when } A[i] \ne B[j] \]
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🎯</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>The recurrence, in one box.</strong></p>
+    <div class="docs-equation">
+\[ D(i, j) = \begin{cases} D(i-1, j-1) & A[i] = B[j] \\[4pt] \min\!\bigl( D(i-1, j-1),\; D(i-1, j),\; D(i, j-1) \bigr) + 1 & A[i] \ne B[j] \end{cases} \]
+    </div>
+    <p class="docs-p">From these two cases, every cell beyond the boundary is determined, and \(D(|A|, |B|)\) is the edit distance of the full strings. <strong>This same recurrence skeleton carries directly over to numeric time series</strong> — which is the heart of DTW, covered next.</p>
+  </div>
+</div>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🚧</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><em>Work in progress — up next: Step 4) extending the recurrence to numeric time series (DTW proper), warping paths, distance metrics (\(L_1, L_2\)), and a worked example on real series.</em></p>
+  </div>
+</div>
+
+    </div>
+  </article>
+</main>
+
+<footer-component></footer-component>
+
+<script>
+(function () {
+  const canvas = document.getElementById('dtw-ts-intro');
+  if (!canvas) return;
+
+  const cssW = canvas.width;
+  const cssH = canvas.height;
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  canvas.width = cssW * dpr;
+  canvas.height = cssH * dpr;
+  canvas.style.width = cssW + 'px';
+  canvas.style.height = cssH + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const W = cssW, H = cssH;
+  const padL = 80, padR = 30, padT = 24, padB = 24;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+  const laneH = plotH / 2;
+
+  const N = 240;
+  const tMax = 22;
+  const A = (t) => Math.sin(t * 0.55) * 0.7 + Math.sin(t * 1.05 + 0.3) * 0.25;
+  const B = (t) => Math.sin((t - 2.4) * 0.55) * 0.65 + Math.sin((t - 1.6) * 1.0) * 0.28 - 0.05;
+
+  const xs = new Array(N + 1);
+  const ya = new Array(N + 1);
+  const yb = new Array(N + 1);
+  for (let i = 0; i <= N; i++) {
+    const t = (i / N) * tMax;
+    xs[i] = t;
+    ya[i] = A(t);
+    yb[i] = B(t);
+  }
+
+  const yMax = 1.2;
+  const px = (t) => padL + (t / tMax) * plotW;
+  const py = (v, lane) => {
+    const baseY = padT + lane * laneH + laneH / 2;
+    return baseY - (v / yMax) * (laneH * 0.42);
+  };
+
+  ctx.strokeStyle = '#eef1f5';
+  ctx.lineWidth = 1;
+  for (let lane = 0; lane < 2; lane++) {
+    const y = padT + lane * laneH + laneH / 2;
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(W - padR, y);
+    ctx.stroke();
+  }
+
+  ctx.strokeStyle = '#cdd5e0';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 4]);
+  for (let i = 0; i <= N; i += 12) {
+    ctx.beginPath();
+    ctx.moveTo(px(xs[i]), py(ya[i], 0));
+    ctx.lineTo(px(xs[i]), py(yb[i], 1));
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  function drawCurve(yArr, lane, color) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.4;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const x = px(xs[i]);
+      const y = py(yArr[i], lane);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  drawCurve(ya, 0, '#003B62');
+  drawCurve(yb, 1, '#2f7d4f');
+
+  ctx.font = "600 14px ui-sans-serif, system-ui, sans-serif";
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#003B62';
+  ctx.fillText('A (series)', 16, padT + laneH / 2);
+  ctx.fillStyle = '#2f7d4f';
+  ctx.fillText('B (series)', 16, padT + laneH + laneH / 2);
+
+  ctx.font = "12px ui-sans-serif, system-ui, sans-serif";
+  ctx.fillStyle = '#7a8290';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('time →', W - padR - 50, H - 6);
+})();
+</script>
+</body>
+</html>

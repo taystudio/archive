@@ -2,116 +2,133 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TAYLEE Document</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE Document">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/Document%20Archive%20CS.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE Document">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
     <!--Style css Link-->
-    <link rel="stylesheet" type="text/css" href="../../css/style.css">
-    <link rel="stylesheet" type="text/css" href="../../css/style document.css">
+    <link rel="stylesheet" type="text/css" href="../../css/style.css?v=20260605-18">
+    <link rel="stylesheet" type="text/css" href="../../css/style document.css?v=20260605-18">
 
     <!--Java script event-->
-    <script src="../pakcage/js/main.js" defer></script>
-    <script src="../../js/components/nav.js" sync></script>
-    <script src="../../js/components/footer.js" sync></script>
-    <script src="../../js/components/header.js" sync></script>
+    <script src="../../js/main.js?v=20260605-18" defer></script>
+    <script src="../../js/components/nav.js?v=20260605-18" sync></script>
+    <script src="../../js/components/footer.js?v=20260605-18" sync></script>
+    <script src="../../js/components/header.js?v=20260605-18" sync></script>
+    <script src="../../js/components/img_comp/imgComponent.js?v=20260605-18" sync></script>
 
     <common-header-component></common-header-component>
-    
-</head>
 
+</head>
 
 
 <body bgproperties="fixed" oncontextmenu='return false'>
 
-    <other-nav-component></other-nav-component>
+    <nav-component></nav-component>
 
-    <div class = "frame"> <!--div for grouping-->
+    <div class="frame">
 
-        <div class="Archive_box">
-            <h4 class="Archive_title"><a href="../TAYLEE documents.html"> Archive with notion </a> </h4> 
-            <h2 class="For_details"> Computer Science from 2022</h2> 
+        <section class="docs-page">
 
-            <div class="Archive_list">
+            <header class="docs-page__header">
+                <p class="docs-page__eyebrow"><a href="../TAYLEE documents.html">← Documents</a></p>
+                <h1 class="docs-page__title">Computer Science</h1>
+                <p class="docs-page__subtitle">Spring · Network · Database · Algorithms — 백엔드/CS 학습 기록 (since 2022)</p>
+            </header>
 
-                <!--Spring notion-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/JAVA-Spring-448e40ac0e2c4a78ac274494b095764f'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image">
-                        <img id="spring-img", alt="box_img", src="../../resources/documentLogo/SpringFramework.png" width=280 height=80>
+            <div class="docs-grid">
+
+                <a class="docs-card" href="posts/java-spring.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <img src="../../resources/documentLogo/SpringFramework.png" alt="Java Spring Framework">
+                        <span class="docs-card__badge">Java / Spring</span>
                     </div>
-    
-                    <div class="box-script"> 
-                        <p class="Ob-title">What is spring Framework?</p>
-                        <p class="Ob-descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">What is Spring Framework?</h2>
+                        <p class="docs-card__meta">Backend</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-                
-                <!--Spring Cloud-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/JAVA-Spring-Cloud-34dd841d73bd47f3994aceccfe14dca8'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="cloud_box_image">
-                        <img id="springcloud-img", alt="box_img", src="../../resources/documentLogo/SpringCloud.png" width=300 height=100>
+                <a class="docs-card" href="posts/spring-cloud.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <img src="../../resources/documentLogo/SpringCloud.png" alt="Spring Cloud">
+                        <span class="docs-card__badge">Spring Cloud</span>
                     </div>
-    
-                    <div class="box-script"> 
-                        <p class="Ob-title">Spring Cloud Projects</p>
-                        <p class="Ob-descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Spring Cloud Projects</h2>
+                        <p class="docs-card__meta">Reactive · MSA</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--Network Server-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/Network-Data-Transporation-238ec9222db248f2836b0c894aa8443c'" style="cursor:pointer;" target='_blank'>
-                
-                    <div class = "box-image" id ="net_box_image">
-                        <img id="network-img", alt="box_img", src="../../resources/documentLogo/sharedIT.jpg" width=270 height=120>
+                <a class="docs-card" href="posts/algorithms.html">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <algo-img></algo-img>
+                        <span class="docs-card__badge">Algorithm</span>
                     </div>
-    
-                    <div class="box-script"> 
-                        <p class="Ob-title">What is network & server?</p>
-                        <p class="Ob-descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">Algorithms</h2>
+                        <p class="docs-card__meta">Problem solving</p>
+                        <span class="docs-card__cta">Read post
+                            <span class="docs-card__cta-arrow" aria-hidden="true">→</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--MongoDB Tips-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/MongoDB-d407f2eb1168443b9e2e630cb7c35cda'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/mongoDB.jpg" width=230 height=120>
+                <a class="docs-card" href="https://jealous-watch-86a.notion.site/Network-Data-Transporation-238ec9222db248f2836b0c894aa8443c" target="_blank" rel="noopener">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <network-img></network-img>
+                        <span class="docs-card__badge">Network</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">No SQL mongoDB</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">What is Network &amp; Server?</h2>
+                        <p class="docs-card__meta">Data transportation</p>
+                        <span class="docs-card__cta docs-card__cta--ext">Open in Notion
+                            <span class="docs-card__cta-arrow" aria-hidden="true">↗</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
-
-                <!--Alogrithm-->
-                <div class = "box" OnClick="location.href ='https://jealous-watch-86a.notion.site/c0a78c15c13c497b9e37085752519249'" style="cursor:pointer;" target='_blank'>
-                    
-                    <div class = "box-image" id ="java_box_image">
-                        <img id="java-img", alt="box_img", src="../../resources/documentLogo/Algorithm.jpg" width=230 height=120>
+                <a class="docs-card" href="https://jealous-watch-86a.notion.site/MongoDB-d407f2eb1168443b9e2e630cb7c35cda" target="_blank" rel="noopener">
+                    <div class="docs-card__media docs-card__media--logo">
+                        <img src="../../resources/documentLogo/mongoDB.jpg" alt="MongoDB">
+                        <span class="docs-card__badge">NoSQL</span>
                     </div>
-
-                    <div class="box-script"> 
-                        <p class="Ob-title" id="java_title">Algorithm</p>
-                        <p class="Ob-descript" id="java_descript"> > Link to Notion <a class="notion"><img id="notion_img", alt="notion_img", src="../../resources/documentLogo/NotionLogo.png" width=16 height=16></a> </p>
-                        <br>
+                    <div class="docs-card__body">
+                        <h2 class="docs-card__title">NoSQL · MongoDB</h2>
+                        <p class="docs-card__meta">Database</p>
+                        <span class="docs-card__cta docs-card__cta--ext">Open in Notion
+                            <span class="docs-card__cta-arrow" aria-hidden="true">↗</span>
+                        </span>
                     </div>
-                </div>
+                </a>
 
             </div>
 
-        </div>
+        </section>
+
     </div>
 
-    <other-footer-component></other-footer-component>
-    
+    <footer-component></footer-component>
+
 </body>
 </html>

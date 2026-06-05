@@ -64,7 +64,7 @@
 }
 
 .gpa{
-    color: rgb(194, 0, 0);
+    color: var(--accent);
     margin-top:30px;
     margin-left:30px;
     font-family: "Montserrat", sans-serif;
@@ -118,7 +118,7 @@
     font-family: "sans-serif";
     font-size: 18px;
     font-weight: 500px;
-    color: rgb(143, 0, 0);
+    color: var(--accent);
 }
 
 /*------------ Activites ---------------*/
@@ -133,7 +133,7 @@
 }
 
 .Resume-activity:hover{
-    color: rgb(163, 0, 0);
+    color: var(--accent-2);
     transition: 0.5s
 }
 
@@ -190,7 +190,7 @@
 }
 
 .git_menu:hover{
-    color: rgb(163, 0, 0);
+    color: var(--accent-2);
     transition: 0.5s
 }
 
@@ -215,12 +215,12 @@
 }
 
 .refer_paper:hover{
-    color: rgb(163, 0, 0);
+    color: var(--accent-2);
     transition: 0.5s
 }
 
 .Orga_menu:hover{
-    color: rgb(163, 0, 0);
+    color: var(--accent-2);
     transition: 0.5s
 }
 
@@ -322,7 +322,7 @@
     font-family: "Montserrat", sans-serif;
     font-size: 18px;
 
-    color: rgb(125, 0, 0);
+    color: var(--accent);
     font-weight: 400px; 
 }
 

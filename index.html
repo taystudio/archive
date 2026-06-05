@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-        
+
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>TAYLEE's page</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="TAYLEE&#x27;s page">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/index.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TAYLEE&#x27;s page">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
 
         <!--Style css Link-->
-        <link rel="stylesheet" type="text/css" href="portfolio/css/style.css">
-        <link rel="stylesheet" type="text/css" href="portfolio/css/style main.css">
-        <link rel="stylesheet" type="text/css" href="portfolio/css/style Info.css">
-        <link rel="stylesheet" type="text/css" href="common/css/index.css">
+        <link rel="stylesheet" type="text/css" href="portfolio/css/style.css?v=20260605-18">
+        <link rel="stylesheet" type="text/css" href="common/css/index.css?v=20260605-18">
 
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PR00E53V0"></script>
@@ -22,121 +35,109 @@
             gtag('config', 'G-0PR00E53V0');
         </script>
 
-        <!-- <script src="portfolio/js/main.js" defer></script> -->
-        <script src="common/js/index.js" defer></script>
-        <script src="portfolio/js/components/header.js" sync></script>
-        <!-- <script src="portfolio/js/components/enter.js" sync></script> -->
-        <script src="portfolio/js/components/info.js" sync></script>
-        <script src="portfolio/js/components/footer.js" defer></script>
-        <!-- <script src="portfolio/js/mouse_effect/clickeffect.js" defer></script> -->
+        <script src="common/js/index.js?v=20260605-18" defer></script>
+        <script src="portfolio/js/components/header.js?v=20260605-18" sync></script>
+        <script src="portfolio/js/components/footer.js?v=20260605-18" defer></script>
 
         <common-header-component></common-header-component>
 
     </head>
 
-    
 
-    <body class="index_frame" bgproperties="fixed">
 
-        <!--Navigation division-->
-        <nav class = "page_navigator"> <!--nav part for work & Information-->
-            <h3 class="page_site-name"><a href="index.html">TAYLEE's</a> <a class="page_name-archive">Page</a></h3>
-                <!--unorder list는 순서만 안매길뿐 같은 항목에 있는 것을 의미-->
-                <li class="nav_list">
-                    <a class="i_nav_menu" href="portfolio/html/TAYLEE Home.html">Portfolio</a>
-                    <a class="i_nav_menu" href="./my-service/">Services</a>
-                    <a class="i_nav_menu" href="https://taehyuklee.tistory.com/">My Blog</a>
-                </li>
-        </nav>  
+    <body class="cv-body">
 
-        <div class="container">
+      <!-- ===================== HERO ===================== -->
+      <section class="cv-hero">
 
-            <div class="background-image">
-                <div class="gray-color"></div>           
+        <header class="cv-topbar">
+          <a class="cv-brand" href="index.html">TAYLEE's <span>Page</span></a>
+          <nav class="cv-nav">
+            <a href="portfolio/html/TAYLEE Home.html">Portfolio</a>
+            <a href="https://taystudios.com/" target="_blank" rel="noopener">Services</a>
+            <a href="https://taystudios.com/blog/en/" target="_blank" rel="noopener">Blog</a>
+          </nav>
+        </header>
 
-                <div class = "vision-banner">
-                    <h1 class ="vision">
-                        My vision<br>
-                        Developing Technology to maintain Balance <br>
-                        between the Natural environment and Human life.<br>
-                    </h1>
-    
-                    <p class = "summary">
-                        &nbsp 1. Becoming a bridge between the physical and digital worlds<br>
-                        &nbsp 2. Developing sustainable technologies<br>
-                        &nbsp 3. Environmental & Mechanical Eng. with IT
-                    </p>
-                </div>
-
-            </div>
-
-            <div id = "index_select">
-                
-                <!-- Portfolio에 관련된 것-->
-                <div id="portfolio">
-
-                    <a id ="portfolio_img" href="portfolio/html/TAYLEE Home.html">
-                        <!-- <img id="portfolio", alt="portfolio", src="portfolio/resources/index/Portfolio.png" width=300 height=300> -->
-                        <img id="portfolio", alt="portfolio", src="./common/assets/images/portfolio.png" width=300 height=300> 
-                        <img id="portfolio_check" alt="portfolio", src="./common/assets/images/mouse-pointer.png">      
-                    </a>
-            
-
-                    <div id="port_text">
-                        My Portfolio page
-                    </div>
-                </div>
-        
-                <div id="line"> </div>
-        
-                <!-- Open API Block에 관련된 것 -->
-                <div id="api" onmouseenter="mouseenterHandler()" onmouseleave="mouseleaveHandler()">
-                    <a id = "openapi_img" href="./my-service/index.html">
-                        <!-- <img id="openapi", alt="openapi", src="portfolio/resources/index/Open API.png" width=300 height=300> -->
-                        <img id="openapi", alt="openapi", src="./common/assets/images/gear.png" width=300 height=300>
-                    </a>
-                    <img id="api_img_text", alt="openapi", src="./common/assets/images/api.png" width=100 height=100>
-                    <div id="api_text">
-                        My Open-APIs page
-                    </div>
-        
-                </div>
- 
-            </div>
-        
-        
-            <div class="wrapper">
-                <div class="typing-demo"> 
-                </div>
-            </div>                
-            
-            <br><br><br>
-
-            <div id="arrow-page" class="go-page" onclick="goPage()"> 
-                <div class="arrow-down">
-                    <a id = "arrow-down" href="#about">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </a>
-                </div>
-            </div>
-            
-        <div id = "imgHoverEvent" class="imgHoverEvent event1">
-            <div id="hoverBox" class="hoverBox">
-                <info-component></info-component>
-            </div>
+        <div class="cv-hero__inner">
+          <p class="cv-eyebrow">TAEHYUK&nbsp;LEE&nbsp;·&nbsp;ENGINEER</p>
+          <h1 class="cv-title">
+            Bridging the <em>physical</em><br>
+            and <em>digital</em> worlds.
+          </h1>
+          <p class="cv-lead">
+            Environmental &amp; Mechanical engineering with IT — developing sustainable
+            technology that keeps balance between the natural environment and human life.
+            Aiming to stand at the top of the engineering field as a CTO.
+          </p>
+          <div class="cv-cta">
+            <a class="cv-btn cv-btn--primary" href="portfolio/html/TAYLEE Home.html">View Portfolio</a>
+            <a class="cv-btn cv-btn--ghost" href="https://taystudios.com/blog/en/" target="_blank" rel="noopener">My Blog ↗</a>
+          </div>
         </div>
 
-        <!-- <div class="container2"></div> -->
+        <a class="cv-scroll" href="#cv-explore" aria-label="Scroll to explore">
+          <span class="cv-scroll__txt">Explore</span>
+          <span class="cv-scroll__chev"></span>
+        </a>
+      </section>
+
+
+      <!-- ===================== ENTRY CARDS ===================== -->
+      <section class="cv-explore" id="cv-explore">
+        <p class="cv-explore__eyebrow">WHERE TO GO</p>
+        <h2 class="cv-explore__title">Three places to explore</h2>
+
+        <div class="cv-cards">
+
+          <a class="cv-card" href="portfolio/html/TAYLEE Home.html">
+            <span class="cv-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="13" width="34" height="26" rx="3"/>
+                <path d="M18 13v-2a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v2"/>
+                <path d="M7 22h34"/>
+              </svg>
+            </span>
+            <h3 class="cv-card__title">Portfolio</h3>
+            <p class="cv-card__desc">Projects, technical documents &amp; research across engineering and IT.</p>
+            <span class="cv-card__more">Enter <span class="cv-card__arrow">→</span></span>
+          </a>
+
+          <a class="cv-card" href="https://taystudios.com/" target="_blank" rel="noopener">
+            <span class="cv-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="24" cy="24" r="6.5"/>
+                <path d="M24 6.5v5M24 36.5v5M6.5 24h5M36.5 24h5M11.6 11.6l3.6 3.6M32.8 32.8l3.6 3.6M36.4 11.6l-3.6 3.6M15.2 32.8l-3.6 3.6"/>
+              </svg>
+            </span>
+            <h3 class="cv-card__title">Services <span class="cv-card__ext">↗</span></h3>
+            <p class="cv-card__desc"><strong>TAYSTUDIO</strong> — a suite of 36+ free, privacy-first web tools (calculators, image · PDF · video) that run entirely in your browser, no sign-up.</p>
+            <span class="cv-card__more">Open <span class="cv-card__arrow">→</span></span>
+          </a>
+
+          <a class="cv-card" href="https://taystudios.com/blog/en/" target="_blank" rel="noopener">
+            <span class="cv-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 8h16l8 8v24a0 0 0 0 1 0 0H12a0 0 0 0 1 0 0V8z"/>
+                <path d="M28 8v8h8"/>
+                <path d="M18 26h12M18 32h12"/>
+              </svg>
+            </span>
+            <h3 class="cv-card__title">Blog <span class="cv-card__ext">↗</span></h3>
+            <p class="cv-card__desc">Engineering notes, problem-solving write-ups and ideas in long form.</p>
+            <span class="cv-card__more">Read <span class="cv-card__arrow">→</span></span>
+          </a>
+
+        </div>
+
+        <p class="cv-foot-note">
+          Looking for who I am? See the
+          <a href="portfolio/html/TAYLEE Info.html">About&nbsp;&amp;&nbsp;CV</a> page.
+        </p>
+      </section>
+
+      <index-footer-component></index-footer-component>
 
     </body>
 
-    <index-footer-component></index-footer-component>
-
 </html>
-
-<style>
-
-
-</style>

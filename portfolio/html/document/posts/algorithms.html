@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>알고리즘 공부 — TAYLEE Archive</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="알고리즘 공부 — TAYLEE Archive">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/posts/algorithms.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="알고리즘 공부 — TAYLEE Archive">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="../../../css/style.css?v=20260605-18">
+<link rel="stylesheet" type="text/css" href="../posts.css?v=20260605-18">
+
+<script src="../../../js/main.js?v=20260605-18" defer></script>
+<script src="../../../js/components/nav.js?v=20260605-18" sync></script>
+<script src="../../../js/components/footer.js?v=20260605-18" sync></script>
+<script src="../../../js/components/header.js?v=20260605-18" sync></script>
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+<common-header-component></common-header-component>
+</head>
+<body>
+<nav-component></nav-component>
+
+<main class="docs-post">
+  <article class="docs-post__article">
+    <header class="docs-post__header">
+      <p class="docs-post__eyebrow"><a href="../../TAYLEE documents.html">← Documents</a></p>
+      <h1 class="docs-post__title">알고리즘 공부</h1>
+    </header>
+    <div class="docs-post__body">
+<div class="docs-spacer"></div><h4 class="docs-h4">Java 알고리즘 </h4><div class="docs-spacer"></div><aside class="docs-callout"><span class="docs-callout__icon">💡</span><div class="docs-callout__body">Java로 알고리즘을 풀기전에 Java 표준이라 할수있는 Library들을 제대로 익히는 것은 필수다<br></div></aside><div class="docs-spacer"></div><aside class="docs-callout"><span class="docs-callout__icon">📎</span><div class="docs-callout__body">알고리즘 - 저지<br></div></aside><div class="docs-spacer"></div><pre class="docs-code"><code data-lang="Java">import java.util.*;
+import java.io.*;
+
+
+public class Main
+{
+
+    private static int N, W;
+    private static ArrayList&lt;int[]&gt; list = new ArrayList&lt;&gt;();
+
+    public static void print(){
+
+    }
+
+    public static void main(String args[]) throws Exception
+    {
+
+        Scanner sc = new Scanner(System.in);
+
+        W = sc.nextInt();
+        N = sc.nextInt();
+
+        for(int i=0; i&lt;N; i++){
+            int[] newInt = new int[] {sc.nextInt(), sc.nextInt()}; //이거 정확히 사용하는 방법
+            list.add(newInt);
+        }
+
+
+
+        for(int i=0; i&lt;list.size(); i++){
+            System.out.println(list.get(i)[1]);
+        }
+
+        //이 부분들 좀 확실히 확장성을 생각해보자.
+        Collections.sort(list, Comparator.comparing());
+
+    }
+}</code></pre><div class="docs-spacer"></div>
+    </div>
+  </article>
+</main>
+
+<footer-component></footer-component>
+</body>
+</html>

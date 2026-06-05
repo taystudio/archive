@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>강화학습 정리 — TAYLEE Archive</title>
+    <!-- Open Graph / social share -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TAYLEE's Archive">
+    <meta property="og:title" content="강화학습 정리 — TAYLEE Archive">
+    <meta property="og:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta property="og:url" content="https://taehyuklee.github.io/Archive/portfolio/html/document/posts/reinforcement-learning.html">
+    <meta property="og:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="강화학습 정리 — TAYLEE Archive">
+    <meta name="twitter:description" content="Engineering portfolio — projects, technical documents and research across backend, cloud, AI and CFD.">
+    <meta name="twitter:image" content="https://taehyuklee.github.io/Archive/og-image.jpg">
+
+
+<link rel="stylesheet" type="text/css" href="../../../css/style.css?v=20260605-18">
+<link rel="stylesheet" type="text/css" href="../posts.css?v=20260605-18">
+
+<script src="../../../js/main.js?v=20260605-18" defer></script>
+<script src="../../../js/components/nav.js?v=20260605-18" sync></script>
+<script src="../../../js/components/footer.js?v=20260605-18" sync></script>
+<script src="../../../js/components/header.js?v=20260605-18" sync></script>
+
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}]});"></script>
+
+<common-header-component></common-header-component>
+</head>
+<body>
+<nav-component></nav-component>
+
+<main class="docs-post">
+  <article class="docs-post__article">
+    <header class="docs-post__header">
+      <p class="docs-post__eyebrow"><a href="../../TAYLEE documents.html">← Documents</a></p>
+      <h1 class="docs-post__title">강화학습 (Reinforcement Learning)</h1>
+    </header>
+    <div class="docs-post__body">
+
+<p class="docs-p">강화학습을 <strong>MDP(Markov Decision Process)</strong> 관점에서 바닥부터 정리한 글이다. 한 줄기로 꿰면 — <em>5가지 요소 → Markov Process → MDP → 가치함수(V, Q)와 Bellman 방정식 → (모델 기반) Dynamic Programming → (모델 free) Monte-Carlo · Temporal Difference → SARSA · Q-learning</em>.</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">🎮</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>한 줄 정의</strong> — 사람은 주변 환경(사회·자연) 속에서 <em>경험</em>을 통해 <em>자신의 이득(보상)</em>이 되는 방향으로 행동을 학습한다. 강화학습은 이 메커니즘을 그대로 알고리즘으로 옮긴 것이다. Agent 가 Environment 속에서 보상을 최대화하는 <strong>정책(Policy)</strong> 을 찾는 것이 목표다.</p>
+  </div>
+</div>
+
+<hr class="docs-divider">
+
+<h2 class="docs-h2">1. 강화학습의 5가지 요소</h2>
+
+<p class="docs-p">위 문장에서 알고리즘에 필요한 개념을 뽑으면 다섯 가지다.</p>
+
+<ul class="docs-list">
+  <li><strong>Agent</strong> — 행동하는 학습 주체 (사람)</li>
+  <li><strong>Environment</strong> — 주변 환경 (불확실성, uncertainty 을 포함)</li>
+  <li><strong>Action</strong> — Agent 가 환경에 취하는 행동</li>
+  <li><strong>Reward</strong> — 행동 주체에게 주어지는 이득(보상)</li>
+  <li><strong>State</strong> — 환경 속 주체의 상황·위치 상태</li>
+</ul>
+
+<div class="docs-fig">
+<svg viewBox="0 0 480 200" width="480" height="200" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="14">
+  <rect x="120" y="24" width="240" height="48" rx="10" fill="#eef2f7" stroke="#94a3b8"/>
+  <text x="240" y="53" text-anchor="middle" font-weight="700" fill="#0f172a">Environment</text>
+  <rect x="120" y="128" width="240" height="48" rx="10" fill="#e8f3fc" stroke="#0078d7"/>
+  <text x="240" y="157" text-anchor="middle" font-weight="700" fill="#0f172a">Agent</text>
+  <!-- action: agent -> env (left side, up) -->
+  <path d="M150 128 C110 108 110 92 150 72" fill="none" stroke="#0e8b87" stroke-width="2.5"/>
+  <polygon points="150,72 138,76 145,84" fill="#0e8b87"/>
+  <text x="86" y="104" fill="#0e8b87" font-size="13">action</text>
+  <!-- state, reward: env -> agent (right side, down) -->
+  <path d="M330 72 C372 92 372 108 330 128" fill="none" stroke="#0078d7" stroke-width="2.5"/>
+  <polygon points="330,128 342,124 335,116" fill="#0078d7"/>
+  <text x="356" y="104" fill="#0078d7" font-size="13">state, reward</text>
+</svg>
+<figcaption>Agent–Environment 상호작용: 행동을 하면 상태와 보상이 돌아온다 (Markov Decision Process)</figcaption>
+</div>
+
+<h2 class="docs-h2">2. Markov Process → MRP → MDP</h2>
+
+<p class="docs-p">강화학습의 토대는 <strong>Markov Process</strong> 다. 다음 상태가 <em>과거 전체 history 가 아니라 현재 상태만</em> 으로 결정된다는 성질(Markov property)이다.</p>
+
+<div class="docs-equation">\[ \mathbb{P}\big[s_{t+1}\mid s_t\big] = \mathbb{P}\big[s_{t+1}\mid s_1,\dots,s_t\big] \]</div>
+
+<p class="docs-p">여기에 단계별로 개념을 쌓는다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 520 130" width="520" height="130" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="13">
+  <g fill="#0f172a">
+    <circle cx="60" cy="70" r="20" fill="#fff" stroke="#94a3b8"/><text x="60" y="74" text-anchor="middle">sₜ₋₁</text>
+    <circle cx="200" cy="70" r="20" fill="#fff" stroke="#94a3b8"/><text x="200" y="74" text-anchor="middle">sₜ</text>
+    <circle cx="340" cy="70" r="20" fill="#fff" stroke="#94a3b8"/><text x="340" y="74" text-anchor="middle">sₜ₊₁</text>
+    <circle cx="470" cy="70" r="14" fill="#fff" stroke="#cbd5e1"/>
+  </g>
+  <g fill="none" stroke="#0078d7" stroke-width="2">
+    <path d="M80 64 C130 44 150 44 180 60"/><path d="M220 64 C270 44 290 44 320 60"/><path d="M360 66 C400 52 430 52 456 62"/>
+  </g>
+  <g fill="#0078d7"><polygon points="180,60 170,57 173,67"/><polygon points="320,60 310,57 313,67"/><polygon points="456,62 446,59 449,69"/></g>
+  <g fill="#0e8b87" font-size="12"><text x="120" y="40">P (transition)</text><text x="262" y="40">P</text></g>
+  <g fill="#b45309" font-size="12"><text x="120" y="100">R (reward)</text><text x="262" y="100">a, π (action·policy)</text></g>
+</svg>
+<figcaption>Markov Process(상태 전이) + Reward = MRP, 거기에 Action·Policy 추가 = MDP</figcaption>
+</div>
+
+<ul class="docs-list">
+  <li><strong>Markov Process (MP)</strong> — 상태 전이 \(P\) 만 있는 과정</li>
+  <li><strong>Markov Reward Process (MRP)</strong> — 상태 변화에 따른 <em>Reward</em> 추가</li>
+  <li><strong>Markov Decision Process (MDP)</strong> — <em>Action</em> 까지 추가. 5-tuple \(\langle S, P, A, \gamma, R\rangle\). 상태 \(s_t\) 에서 행동을 고를 확률 = <strong>정책(Policy) \(\pi\)</strong></li>
+</ul>
+
+<h2 class="docs-h2">3. 가치함수 — State value · Action value · Return</h2>
+
+<p class="docs-p">목적을 가지고 행동하며 보상을 최대화하려면, “어떤 상태/행동이 얼마나 좋은가”를 수치화해야 한다. 두 가지 가치함수가 도입된다.</p>
+
+<ul class="docs-list">
+  <li><strong>State value function</strong> \(V(s)\) — 각 상태의 가치</li>
+  <li><strong>Action value function</strong> \(Q(s,a)\) — 어떤 상태에서 특정 행동을 했을 때의 가치</li>
+</ul>
+
+<p class="docs-p">현재 상태의 가치는 “그 다음 step 들의 Reward 가 얼마나 있느냐”에 달려 있다. 미래 보상을 종합하는 개념이 <strong>Return</strong> \(G_t\) 이며, 가까운 미래에 가중치를 주기 위해 <strong>할인율(discounted factor) \(\gamma\in[0,1]\)</strong> 을 쓴다.</p>
+
+<div class="docs-equation">\[ G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots = \sum_{k=0}^{\infty}\gamma^{k} R_{t+k+1} \]</div>
+
+<div class="docs-equation">\[ V_\pi(s) = \mathbb{E}\big[G_t \mid S_t = s\big], \qquad Q_\pi(s,a) = \mathbb{E}\big[G_t \mid S_t=s,\ A_t=a\big] \]</div>
+
+<p class="docs-p">상태 \(s_t\) 에서 정책 \(\pi(a\mid s)\) 로 행동을 고르고, 그 행동마다 전이확률 \(P\) 와 보상 \(R\) 로 다음 상태가 갈라진다. 이렇게 펼치면 아래와 같은 <strong>트리(tree)</strong> 가 되고, 경로 끝에는 Success(보상)·Fail(벌점)이 있다. \(V_\pi(s)\) 는 그 상태에서 갈 수 있는 모든 Reward 의 기댓값, \(Q_\pi(s,a)\) 는 특정 행동을 했을 때의 기댓값이다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 720 320" width="720" height="320" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <!-- root state (center axis y=160) -->
+  <circle cx="60" cy="160" r="20" fill="#fff" stroke="#0078d7" stroke-width="2"/><text x="60" y="164" text-anchor="middle">sₜ</text>
+  <text x="60" y="200" text-anchor="middle" fill="#0078d7" font-size="11">Vπ(sₜ)</text>
+  <!-- branches: root -> action dots -->
+  <g stroke="#475569" stroke-width="1.5" fill="none">
+    <path d="M78 150 C135 118 165 98 204 90"/>
+    <path d="M78 170 C135 202 165 222 204 230"/>
+  </g>
+  <text x="124" y="114" text-anchor="middle" fill="#64748b" font-size="11">π(a₁|sₜ)</text>
+  <text x="124" y="212" text-anchor="middle" fill="#64748b" font-size="11">π(a₂|sₜ)</text>
+  <!-- action dots (mid of each state pair) -->
+  <circle cx="210" cy="88" r="6" fill="#0f172a"/><text x="210" y="72" text-anchor="middle" fill="#0e8b87">Q(sₜ,a₁)</text>
+  <circle cx="210" cy="232" r="6" fill="#0f172a"/><text x="210" y="252" text-anchor="middle" fill="#0e8b87">Q(sₜ,a₂)</text>
+  <!-- branches: actions -> next states -->
+  <g stroke="#0078d7" stroke-width="1.3" fill="none">
+    <path d="M215 84 C275 70 305 60 343 54"/><path d="M215 92 C275 104 305 114 343 122"/>
+    <path d="M215 228 C275 214 305 204 343 198"/><path d="M215 236 C275 250 305 260 343 266"/>
+  </g>
+  <text x="280" y="58" text-anchor="middle" fill="#b45309" font-size="10">P, R</text>
+  <text x="280" y="262" text-anchor="middle" fill="#b45309" font-size="10">P, R</text>
+  <!-- next states (even spacing, 4 rows at 52/124/196/268) -->
+  <g fill="#fff" stroke="#94a3b8"><circle cx="360" cy="52" r="16"/><circle cx="360" cy="124" r="16"/><circle cx="360" cy="196" r="16"/><circle cx="360" cy="268" r="16"/></g>
+  <g fill="#475569" font-size="10"><text x="360" y="55" text-anchor="middle">s′</text><text x="360" y="127" text-anchor="middle">s′</text><text x="360" y="199" text-anchor="middle">s′</text><text x="360" y="271" text-anchor="middle">s′</text></g>
+  <!-- leaves -->
+  <g stroke="#475569" stroke-width="1.2" fill="none">
+    <path d="M376 52 H472"/><path d="M376 124 H472"/><path d="M376 196 H472"/><path d="M376 268 H472"/>
+  </g>
+  <rect x="474" y="39" width="96" height="26" rx="6" fill="#e9f7f3" stroke="#16a34a"/><text x="522" y="56" text-anchor="middle" fill="#16a34a">Success</text>
+  <text x="478" y="128" fill="#64748b">Vπ(sₜ₊₁) …</text>
+  <text x="478" y="200" fill="#64748b">Vπ(sₜ₊₁) …</text>
+  <rect x="474" y="255" width="96" height="26" rx="6" fill="#fef2f2" stroke="#e11d48"/><text x="522" y="272" text-anchor="middle" fill="#e11d48">Fail</text>
+  <text x="610" y="164" text-anchor="middle" fill="#94a3b8">⋯</text>
+</svg>
+<figcaption>[Figure 05] MDP tree — 상태 → (정책 π) 행동 → (전이 P·보상 R) 다음 상태 → … → Success/Fail</figcaption>
+</div>
+
+<p class="docs-p">중요한 점 — Reward 와 가치함수는 환경의 불확실성(transition probability) 때문에 <strong>확률변수(random variable)</strong> 다. 그래서 실제로는 참값 \(V_\pi(s)_{true}\) 를 알 수 없고, 여러 <strong>표본(Episode)</strong> 의 평균으로 <em>추정</em> 한다(모집단 vs 표본).</p>
+
+<h2 class="docs-h2">4. Bellman 기대 방정식</h2>
+
+<p class="docs-p">Return 은 무한급수처럼 보이지만, 핵심은 <strong>현재 상태의 가치가 “다음 step 의 Reward + 다음 상태의 가치”로 재귀적으로 결정</strong> 된다는 것이다. 가치함수의 정의에서 출발해 Return 을 한 step 분리하면 자기 자신이 다시 나타난다.</p>
+
+<div class="docs-equation">\[ \begin{aligned}
+V_\pi(s) &= \mathbb{E}\big[\,G_t \mid S_t = s\,\big] \\[2pt]
+&= \mathbb{E}\big[\,R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots \mid S_t = s\,\big] \\[2pt]
+&= \mathbb{E}\big[\,R_{t+1} + \gamma\,(R_{t+2} + \gamma R_{t+3} + \cdots) \mid S_t = s\,\big] \\[2pt]
+&= \mathbb{E}\big[\,R_{t+1} + \gamma\,G_{t+1} \mid S_t = s\,\big] \\[2pt]
+&= \mathbb{E}\big[\,R_{t+1} + \gamma\,V_\pi(s_{t+1}) \mid S_t = s\,\big]
+\end{aligned} \]</div>
+
+<p class="docs-p">마지막 줄이 <strong>Bellman expectation equation</strong> 이다 — 무한급수가 “바로 다음 보상 + 할인된 다음 상태의 가치”라는 한 step 재귀로 접힌다.</p>
+
+<p class="docs-p">정책과 전이확률로 펼치면, \(V\) 와 \(Q\) 의 관계로도 쓸 수 있다.</p>
+
+<div class="docs-equation">\[ V_\pi(s) = \sum_{a\in A}\pi(a\mid s)\,Q_\pi(s,a) = \sum_{a\in A}\pi(a\mid s)\left(R_s^a + \sum_{s'\in S}P_{ss'}^a\,V_\pi(s')\right) \]</div>
+
+<p class="docs-p">기댓값(평균)을 계산하려면 확률적 요소인 <strong>Transition probability</strong> 와 <strong>Policy</strong> 를 알아야 한다 — 여기서 네 가지 의문이 생긴다.</p>
+
+<div class="docs-callout">
+  <div class="docs-callout__icon">❓</div>
+  <div class="docs-callout__body">
+    <p class="docs-p"><strong>① 가치함수</strong> 는 무한급수인데 어떻게 계산하나? &nbsp; <strong>② Transition probability</strong> 는 누가 정하나(=환경의 noise·불확실성, pdf 로 존재하지만 우리는 모름)? &nbsp; <strong>③ Reward</strong> 는 누가 정하나(=우리가 agent 에게 설계해 주는 reward rule)? &nbsp; <strong>④ Policy</strong> 는 어떻게 개선(update)하나?</p>
+  </div>
+</div>
+
+<p class="docs-p"><strong>Transition probability</strong> 는 환경 안의 noise(불확실성)다. 같은 행동을 해도 여러 case 의 state 로 나뉜다 — 예를 들어 30N 의 힘으로 비행기를 날리는데 주변 바람(noise)에 의해 3m 갈 수도, 4m 갈 수도, 2m 갈 수도 있다. 즉 Transition probability 는 우리가 모르는 어떤 확률분포(pdf)로 존재하며, 결국 <strong>표본(Sampling)으로 추정</strong> 할 수밖에 없다. <strong>Reward</strong> 는 우리가 agent 에게 설계해 알려주는 <strong>reward rule</strong> 이다. 아래 미로 예시처럼 “다음 방으로 넘어갈 때마다 −10, 함정 −40, 탈출 +150” 같은 규칙을 준다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 460 240" width="460" height="240" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <g stroke="#94a3b8" stroke-width="1" fill="#fff">
+    <rect x="40" y="40" width="64" height="50"/><rect x="104" y="40" width="64" height="50"/><rect x="168" y="40" width="64" height="50"/><rect x="232" y="40" width="64" height="50"/><rect x="296" y="40" width="64" height="50"/>
+    <rect x="40" y="90" width="64" height="50"/><rect x="104" y="90" width="64" height="50"/><rect x="168" y="90" width="64" height="50"/><rect x="232" y="90" width="64" height="50"/><rect x="296" y="90" width="64" height="50"/>
+    <rect x="40" y="140" width="64" height="50"/><rect x="104" y="140" width="64" height="50"/><rect x="168" y="140" width="64" height="50"/><rect x="232" y="140" width="64" height="50"/><rect x="296" y="140" width="64" height="50"/>
+  </g>
+  <rect x="40" y="140" width="64" height="50" fill="#e8f3fc" stroke="#0078d7"/><text x="72" y="169" text-anchor="middle" fill="#003B62" font-weight="700">Start</text>
+  <rect x="168" y="90" width="64" height="50" fill="#fef2f2" stroke="#e11d48"/><text x="200" y="112" text-anchor="middle" fill="#e11d48" font-size="11">함정</text><text x="200" y="128" text-anchor="middle" fill="#e11d48" font-size="11">−40</text>
+  <rect x="296" y="40" width="64" height="50" fill="#e9f7f3" stroke="#16a34a"/><text x="328" y="62" text-anchor="middle" fill="#16a34a" font-size="11">탈출</text><text x="328" y="78" text-anchor="middle" fill="#16a34a" font-size="11">+150</text>
+  <!-- path arrows -->
+  <g stroke="#0e8b87" stroke-width="2.5" fill="#0e8b87">
+    <line x1="72" y1="140" x2="72" y2="98"/><polygon points="72,92 68,100 76,100"/>
+    <line x1="104" y1="65" x2="160" y2="65"/><polygon points="166,65 158,61 158,69"/>
+    <line x1="232" y1="65" x2="290" y2="65"/><polygon points="296,65 288,61 288,69"/>
+  </g>
+  <text x="378" y="150" fill="#64748b" font-size="11">Reward rule</text>
+  <text x="378" y="168" fill="#64748b" font-size="11">· 이동 −10</text>
+  <text x="378" y="184" fill="#64748b" font-size="11">· 함정 −40</text>
+  <text x="378" y="200" fill="#64748b" font-size="11">· 탈출 +150</text>
+</svg>
+<figcaption>[Figure 12] 미로 예시 — agent 가 설계된 reward rule 을 따라 탈출(보상 최대화) 경로를 학습</figcaption>
+</div>
+
+<h2 class="docs-h2">5. 모델 기반 — Dynamic Programming &amp; Policy Iteration</h2>
+
+<p class="docs-p">먼저 이상적인 경우. 환경(전이확률·Reward)을 <strong>전부 안다</strong> 고 가정하면, Bellman 방정식을 반복 적용해 가치를 채워 나갈 수 있다(<strong>Dynamic Programming / Planning</strong>). 환경의 모든 상태를 훑어 계산하므로 <em>full-width backup</em> 이라 부른다.</p>
+
+<ol class="docs-list">
+  <li>Policy 를 임의로 설정(균등 확률)</li>
+  <li>\(V_\pi(s)\) 를 임의 값(보통 0)으로 초기화</li>
+  <li>Bellman 방정식을 <strong>iterative</strong> 하게 적용해 \(V_\pi(s)\) 를 수렴시킴 (Evaluation)</li>
+  <li>새로 계산된 가치를 토대로 가치가 높은 쪽으로 Policy 를 조정 (Improvement, <strong>greedy</strong>)</li>
+</ol>
+
+<div class="docs-equation">\[ \pi'(a\mid s) = \arg\max_{a\in A} V\big(s_{t+1}\big) \qquad(\text{greedy improvement}) \]</div>
+
+<div class="docs-fig">
+<svg viewBox="0 0 520 150" width="520" height="150" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="13">
+  <rect x="40" y="50" width="180" height="50" rx="10" fill="#e8f3fc" stroke="#0078d7"/>
+  <text x="130" y="72" text-anchor="middle" font-weight="700" fill="#0f172a">Evaluation</text>
+  <text x="130" y="90" text-anchor="middle" fill="#64748b" font-size="11">가치함수 계산 (Prediction)</text>
+  <rect x="300" y="50" width="180" height="50" rx="10" fill="#e9f7f3" stroke="#0e8b87"/>
+  <text x="390" y="72" text-anchor="middle" font-weight="700" fill="#0f172a">Improvement</text>
+  <text x="390" y="90" text-anchor="middle" fill="#64748b" font-size="11">Policy update (Control)</text>
+  <path d="M220 64 C260 50 260 50 300 64" fill="none" stroke="#475569" stroke-width="2"/><polygon points="300,64 290,60 291,70" fill="#475569"/>
+  <path d="M300 88 C260 102 260 102 220 88" fill="none" stroke="#475569" stroke-width="2"/><polygon points="220,88 230,92 229,82" fill="#475569"/>
+  <text x="260" y="128" text-anchor="middle" fill="#64748b" font-size="12">반복 → π*, V* (Optimal)</text>
+</svg>
+<figcaption>Policy Iteration: 평가(Evaluation)와 개선(Improvement)을 번갈아 → 최적 정책·가치로 수렴</figcaption>
+</div>
+
+<h2 class="docs-h2">6. 모델 free — Monte-Carlo</h2>
+
+<p class="docs-p">현실에서는 환경(전이확률)을 <strong>모른다</strong>. 그래서 전체를 계산하는 대신 <em>실제 경험한 데이터로 value 를 backup</em> 해 업데이트한다(<strong>model-free</strong>). 첫 번째 방법이 <strong>Monte-Carlo(MC)</strong> 다.</p>
+
+<p class="docs-p">MC 는 <strong>Episode 마다</strong> random sampling 으로 경로를 끝까지 진행한 뒤, 그 Return \(G_t\) 들의 평균으로 가치를 추정한다. 매번 평균을 다시 구하지 않도록 <strong>incremental(점증) 형태</strong> 로 쓴다.</p>
+
+<div class="docs-fig">
+<svg viewBox="0 0 560 200" width="560" height="200" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <!-- state node -->
+  <circle cx="70" cy="100" r="16" fill="#fff" stroke="#0078d7" stroke-width="2"/><text x="70" y="104" text-anchor="middle">s</text>
+  <!-- three episode trajectories -->
+  <path d="M86 100 C180 40 300 60 420 50" fill="none" stroke="#16a34a" stroke-width="2"/>
+  <path d="M86 100 C180 120 300 100 420 110" fill="none" stroke="#0078d7" stroke-width="2"/>
+  <path d="M86 100 C180 150 300 170 420 165" fill="none" stroke="#b45309" stroke-width="2"/>
+  <g font-size="11">
+    <text x="430" y="54" fill="#16a34a">Episode 1 → G₁</text>
+    <text x="430" y="114" fill="#0078d7">Episode 2 → G₂</text>
+    <text x="430" y="169" fill="#b45309">Episode 3 → G₃</text>
+  </g>
+  <text x="60" y="150" fill="#64748b" font-size="11">상태 s 를 지나는 여러 Episode</text>
+  <text x="70" y="190" fill="#0f172a">V(s) = (G₁ + G₂ + G₃ + ⋯) / N</text>
+</svg>
+<figcaption>[Figure 15] Monte-Carlo — 상태 s 를 지난 여러 Episode 의 Return 평균으로 V(s) 추정</figcaption>
+</div>
+
+<p class="docs-p">\(N\) 번째 Episode 까지의 평균은 \(N\)−1 번째까지의 평균(=기존 추정값)으로 다시 쓸 수 있다. \(N\) 번째 Return 만 새로 분리하면 다음과 같이 점증 형태가 나온다.</p>
+
+<div class="docs-equation">\[ \begin{aligned}
+V(s_t)^{(N)} &= \frac{1}{N(s_t)}\sum_{i=1}^{N} G_{t,i}
+= \frac{1}{N(s_t)}\Big[\,G_{t,N} + \sum_{i=1}^{N-1} G_{t,i}\,\Big] \\[4pt]
+&= \frac{1}{N(s_t)}\Big[\,G_{t,N} + (N-1)\,V(s_t)^{(N-1)}\,\Big] \\[4pt]
+&= V(s_t)^{(N-1)} + \frac{1}{N(s_t)}\Big[\,G_{t,N} - V(s_t)^{(N-1)}\,\Big]
+\end{aligned} \]</div>
+
+<p class="docs-p">즉 매번 전체 평균을 다시 구하지 않고 “기존 추정값 + (새 Episode 의 Return − 기존 추정값)의 일부”로 갱신한다.</p>
+
+<div class="docs-equation">\[ V(s_t) \leftarrow V(s_t) + \frac{1}{N(s_t)}\big[\,G_t - V(s_t)\,\big] \]</div>
+
+<p class="docs-p">\(\tfrac{1}{N}\) 을 일반적인 학습률 \(\alpha\) 로 바꿔 쓰면 \(V(s_t)\leftarrow V(s_t)+\alpha\,[\,G_t-V(s_t)\,]\) 가 된다. 여기서 “전체 Return \(G_t\)” 대신 “한 step 추정 \(R_{t+1}+\gamma V(s_{t+1})\)”을 넣으면 바로 다음 절의 TD 가 된다.</p>
+
+<h2 class="docs-h2">7. 모델 free — Temporal Difference</h2>
+
+<p class="docs-p">MC 가 Episode 가 <em>끝나야</em> 업데이트한다면, <strong>Temporal Difference(TD)</strong> 는 Episode 안에서 <strong>매 time step 마다</strong> 업데이트한다. 다음 한 step 의 추정값으로 현재를 갱신하는 것(bootstrapping)이다.</p>
+
+<div class="docs-equation">\[ V(s_t) \leftarrow V(s_t) + \alpha\big[\,\underbrace{R_{t+1} + \gamma V(s_{t+1})}_{\text{TD target}} - V(s_t)\,\big] \]</div>
+
+<p class="docs-p">대괄호 안이 <strong>TD error</strong> 다. 한 단계 미래의 값(\(R_{t+1}+\gamma V(s_{t+1})\))으로 현재 값을 보정한다. \(\alpha\) 는 가치를 업데이트할 때의 속도를 조절하는 <strong>학습률(learning rate)</strong> 이다.</p>
+
+<h2 class="docs-h2">8. MC vs TD — 편향과 분산</h2>
+
+<p class="docs-p">두 방법은 모두 참값(true value)을 추정하지만 성격이 다르다. MC 는 Episode 전체 Return 을 쓰기에 <strong>분산이 크고 편향은 작다</strong>(정확도, accuracy). TD 는 한 step 의 추정을 쓰기에 <strong>분산이 작고 편향은 크다</strong>(정밀도, precision).</p>
+
+<div class="docs-fig-row">
+  <figure class="docs-fig">
+    <canvas id="cvMC" width="260" height="240"></canvas>
+    <figcaption><strong>Monte-Carlo</strong> — High variance · Low bias</figcaption>
+  </figure>
+  <figure class="docs-fig">
+    <canvas id="cvTD" width="260" height="240"></canvas>
+    <figcaption><strong>Temporal Difference</strong> — Low variance · High bias</figcaption>
+  </figure>
+</div>
+
+<div class="docs-fig">
+<svg viewBox="0 0 560 200" width="560" height="200" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="12">
+  <!-- MC: full episode backup -->
+  <text x="150" y="26" text-anchor="middle" fill="#16a34a" font-weight="700">MC — 전체 Episode backup</text>
+  <g>
+    <circle cx="40" cy="70" r="13" fill="#fff" stroke="#0078d7"/><text x="40" y="74" text-anchor="middle" font-size="10">sₜ</text>
+    <circle cx="100" cy="70" r="6" fill="#0f172a"/>
+    <circle cx="160" cy="70" r="13" fill="#fff" stroke="#94a3b8"/>
+    <circle cx="220" cy="70" r="6" fill="#0f172a"/>
+    <circle cx="280" cy="70" r="13" fill="#94a3b8" stroke="#475569"/><text x="280" y="74" text-anchor="middle" font-size="9" fill="#fff">T</text>
+  </g>
+  <g stroke="#16a34a" stroke-width="2" fill="none"><path d="M53 70 H94"/><path d="M106 70 H147"/><path d="M173 70 H214"/><path d="M226 70 H267"/></g>
+  <text x="150" y="100" text-anchor="middle" fill="#64748b" font-size="11">종단(T)까지 가서 Return G 로 backup</text>
+  <!-- TD: one-step backup -->
+  <text x="430" y="26" text-anchor="middle" fill="#0078d7" font-weight="700">TD — 한 step backup</text>
+  <g>
+    <circle cx="360" cy="70" r="13" fill="#fff" stroke="#0078d7"/><text x="360" y="74" text-anchor="middle" font-size="10">sₜ</text>
+    <circle cx="430" cy="70" r="6" fill="#0f172a"/>
+    <circle cx="500" cy="70" r="13" fill="#fff" stroke="#94a3b8"/><text x="500" y="74" text-anchor="middle" font-size="9">sₜ₊₁</text>
+  </g>
+  <g stroke="#0078d7" stroke-width="2" fill="none"><path d="M373 70 H424"/><path d="M436 70 H487"/></g>
+  <text x="430" y="100" text-anchor="middle" fill="#64748b" font-size="11">R + γV(sₜ₊₁) 로 한 칸만 backup</text>
+  <text x="280" y="150" text-anchor="middle" fill="#0f172a" font-size="11">MC = 분산↑·편향↓ (Jacobi)　|　TD = 분산↓·편향↑ (Gauss–Seidel)</text>
+</svg>
+<figcaption>[Figure 18] MC 는 Episode 가 끝나야 전체를 backup, TD 는 매 step 한 칸씩 backup(bootstrapping)</figcaption>
+</div>
+
+<p class="docs-p">비유하면 MC 는 Jacobi method, TD 는 Gauss–Seidel method 에 가깝다. 실제로는 MC 기반 위에 매 Episode 마다 TD 로 step 업데이트를 더해 둘을 함께 쓴다.</p>
+
+<h2 class="docs-h2">9. Control — ε-greedy 와 SARSA</h2>
+
+<p class="docs-p">가치를 평가(Prediction)했다면 이제 Policy 를 갱신(Control)해야 한다. 그런데 model-free 에서는 greedy 만 쓰면 <strong>탐험(Exploration)</strong> 이 부족해 가본 길만 가게 되어 지역 최적(local optimum)에 빠진다. 그래서 일정 확률 \(\varepsilon\) 로 다른 행동도 시도하는 <strong>ε-greedy</strong> 를 쓴다.</p>
+
+<div class="docs-equation">\[ \pi(a\mid s)=\begin{cases} \arg\max_{a} Q(s,a), & \text{prob } 1-\varepsilon\\[4pt] \text{random action}, & \text{prob } \varepsilon \end{cases} \]</div>
+
+<p class="docs-p">또한 model-free 에서는 \(V\) 가 아니라 <strong>\(Q\)(action value)</strong> 로 Policy 를 갱신한다. greedy(\(V\)) 를 쓰려면 전이확률(TP)이 필요한데 우리는 그것을 모르기 때문이다. \(Q\) 는 행동까지 포함하므로 TP 없이 바로 행동을 고를 수 있다.</p>
+
+<p class="docs-p">TD 기반으로 \(Q\) 를 갱신하는 대표 알고리즘이 <strong>SARSA</strong>(on-policy)다. Prediction(SARSA) ⇄ Control(ε-greedy Q) 의 Policy Iteration 으로 최적에 수렴한다.</p>
+
+<div class="docs-equation">\[ Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \alpha\big[\,R_{t+1} + \gamma\,Q(s_{t+1},a_{t+1}) - Q(s_t,a_t)\,\big] \]</div>
+
+<h2 class="docs-h2">10. Off-policy 와 Q-learning</h2>
+
+<p class="docs-p">SARSA 같은 <strong>on-policy</strong> 는 행동에 쓰는 정책과 학습하는 정책이 같아, ε-greedy 의 탐험 때문에 수렴 속도가 느리다. 이를 보완한 것이 <strong>off-policy</strong> — 행동하는 정책과 학습하는 정책을 분리한다.</p>
+
+<ul class="docs-list">
+  <li><strong>Behavior Policy</strong> \(\mu\) — 실제 행동 (ε-greedy, 탐험 담당)</li>
+  <li><strong>Target Policy</strong> \(\pi\) — 학습·개선 대상 (greedy, 수렴 속도 개선)</li>
+</ul>
+
+<p class="docs-p">대표적인 off-policy 가 <strong>Q-learning</strong> 이다. 다음 상태에서 <em>실제 한 행동</em>이 아니라 <em>가능한 최선의 행동(\(\max\))</em>으로 target 을 계산한다.</p>
+
+<div class="docs-equation">\[ Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \alpha\Big[\,R_{t+1} + \gamma\,\max_{a} Q(s_{t+1},a) - Q(s_t,a_t)\,\Big] \]</div>
+
+<div class="docs-fig">
+<svg viewBox="0 0 560 210" width="560" height="210" xmlns="http://www.w3.org/2000/svg" font-family="Montserrat,sans-serif" font-size="11.5">
+  <!-- SARSA -->
+  <text x="150" y="24" text-anchor="middle" fill="#0078d7" font-weight="700">SARSA (on-policy)</text>
+  <g>
+    <circle cx="40" cy="78" r="13" fill="#fff" stroke="#0078d7"/><text x="40" y="82" text-anchor="middle" font-size="10">sₜ</text>
+    <circle cx="110" cy="78" r="6" fill="#0f172a"/><text x="110" y="62" text-anchor="middle">aₜ</text>
+    <circle cx="190" cy="78" r="13" fill="#fff" stroke="#94a3b8"/><text x="190" y="82" text-anchor="middle" font-size="9">sₜ₊₁</text>
+    <circle cx="260" cy="78" r="6" fill="#0e8b87"/><text x="260" y="62" text-anchor="middle" fill="#0e8b87">aₜ₊₁</text>
+  </g>
+  <g stroke="#475569" stroke-width="1.8" fill="none"><path d="M53 78 H104"/><path d="M116 78 H177"/><path d="M203 78 H254"/></g>
+  <text x="150" y="120" text-anchor="middle" fill="#64748b">실제 취한 행동 aₜ₊₁ 의 Q 로 backup</text>
+  <text x="150" y="138" text-anchor="middle" fill="#475569" font-size="10">Q(sₜ,aₜ) ← R + γ Q(sₜ₊₁, aₜ₊₁)</text>
+  <!-- Q-learning -->
+  <text x="430" y="24" text-anchor="middle" fill="#e11d48" font-weight="700">Q-learning (off-policy)</text>
+  <g>
+    <circle cx="330" cy="78" r="13" fill="#fff" stroke="#0078d7"/><text x="330" y="82" text-anchor="middle" font-size="10">sₜ</text>
+    <circle cx="400" cy="78" r="6" fill="#0f172a"/><text x="400" y="62" text-anchor="middle">aₜ</text>
+    <circle cx="470" cy="78" r="13" fill="#fff" stroke="#94a3b8"/><text x="470" y="82" text-anchor="middle" font-size="9">sₜ₊₁</text>
+    <circle cx="528" cy="56" r="6" fill="#e11d48"/><circle cx="528" cy="100" r="6" fill="#cbd5e1"/>
+  </g>
+  <g stroke="#475569" stroke-width="1.8" fill="none"><path d="M343 78 H394"/><path d="M406 78 H457"/></g>
+  <g stroke="#e11d48" stroke-width="1.6" fill="none"><path d="M483 72 L522 58"/></g>
+  <g stroke="#cbd5e1" stroke-width="1.4" fill="none"><path d="M483 84 L522 98"/></g>
+  <text x="495" y="50" fill="#e11d48" font-size="10">max</text>
+  <text x="430" y="138" text-anchor="middle" fill="#64748b">최선의 행동(max)의 Q 로 backup</text>
+  <text x="430" y="156" text-anchor="middle" fill="#475569" font-size="10">Q(sₜ,aₜ) ← R + γ maxₐ Q(sₜ₊₁, a)</text>
+</svg>
+<figcaption>[Figure 21·24] SARSA 는 실제 취한 행동으로, Q-learning 은 가능한 최선(max)의 행동으로 target 을 잡는다</figcaption>
+</div>
+
+<p class="docs-p">행동은 Behavior policy(ε-greedy)로 탐험하면서, 학습 target 은 greedy(\(\max\))로 잡아 연산 속도와 수렴을 함께 잡는다.</p>
+
+<h2 class="docs-h2">11. 정리</h2>
+
+<p class="docs-p">강화학습은 결국 <strong>Environment·Agent 의 학습 요소를 MDP 로 모델링</strong> 하고, 가치(Value)를 <em>Prediction</em>(얼마나 좋은가) 한 뒤 Policy 를 <em>Control</em>(어떻게 개선) 하는 과정이다. 환경을 알면 Dynamic Programming, 모르면 Monte-Carlo · Temporal Difference 로 경험에서 backup 하며, 탐험을 위해 ε-greedy 를, 수렴을 위해 off-policy(Q-learning)를 쓴다.</p>
+
+<!-- ============ 원본 PPT 슬라이드 (접이식) ============ -->
+<details class="docs-slides">
+  <summary>원본 PPT 슬라이드 보기 <span class="docs-slides__hint">(전체 그림·예시 41장 — MDP tree, grid 예시, backup diagram 등 상세)</span></summary>
+  <div class="docs-slides__grid">
+    <img src="assets/reinforcement-learning/2c08bbb05cf0.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/62e29b45922b.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/e78461dce016.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/13ae5ca3fceb.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/7860d5ce3d1a.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/dc72540b9b39.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/108725b7e25d.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/50d3147ebfc3.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/ba00a012550d.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/2855d508a217.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/10788dea6f81.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/4412b5c08b1b.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/71f7b40a3a10.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/d7af2d8e0351.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/caa357ed9740.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/09fbf4b7b313.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/587063725cf4.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/8a272606f19c.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/d083f8e5550c.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/7409e15ef453.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/66e87a52fcfb.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/f45434259b09.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/e2e86af73f0e.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/9db6ca23a870.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/4a6de0b5e55c.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/00d28fba6cdd.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/a69f6a646669.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/c778a8a871c1.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/688f39857bd1.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/060b02e025e9.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/5515f19e75c7.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/56911c5e5331.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/04798892aa6c.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/c29966d1354d.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/579c2daa081f.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/90ec430aa429.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/0717de68d44e.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/5424801be9ea.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/d5a8b31e3e85.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/d75457ad2c6f.png" alt="slide" loading="lazy">
+    <img src="assets/reinforcement-learning/e9f721c885b7.png" alt="slide" loading="lazy">
+  </div>
+</details>
+
+    </div>
+  </article>
+</main>
+
+<footer-component></footer-component>
+
+<script>
+(function(){
+  function rng(seed){var s=seed>>>0;return function(){s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
+  function gauss(r){var u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283185307*v);}
+  function bullseye(id,opt){
+    var c=document.getElementById(id); if(!c) return;
+    var ctx=c.getContext('2d'), W=c.width, H=c.height, cx=W/2, cy=H/2-6;
+    ctx.clearRect(0,0,W,H);
+    // rings
+    var rings=[78,58,38,18];
+    ctx.lineWidth=1.4;
+    rings.forEach(function(R,i){ ctx.beginPath(); ctx.strokeStyle=i%2?"#cbd5e1":"#94a3b8"; ctx.arc(cx,cy,R,0,6.2832); ctx.stroke(); });
+    // center (true value)
+    ctx.fillStyle="#e11d48"; ctx.beginPath(); ctx.arc(cx,cy,3.5,0,6.2832); ctx.fill();
+    // shots
+    var r=rng(opt.seed), n=24;
+    ctx.fillStyle="#0078d7";
+    for(var i=0;i<n;i++){
+      var px=cx+opt.bias+gauss(r)*opt.spread;
+      var py=cy+opt.biasY+gauss(r)*opt.spread;
+      ctx.globalAlpha=.8; ctx.beginPath(); ctx.arc(px,py,3,0,6.2832); ctx.fill();
+    }
+    ctx.globalAlpha=1; ctx.fillStyle="#64748b"; ctx.font="12px Montserrat, sans-serif"; ctx.textAlign="center";
+    ctx.fillText("● true value", cx, H-6);
+    ctx.textAlign="left";
+  }
+  function run(){
+    bullseye("cvMC",{seed:7, bias:0, biasY:0, spread:24});     // low bias, high variance
+    bullseye("cvTD",{seed:21, bias:26, biasY:-16, spread:7});  // high bias, low variance
+  }
+  if(document.readyState!=="loading") run(); else document.addEventListener("DOMContentLoaded",run);
+})();
+</script>
+
+<script>
+/* 긴 본문을 H2 섹션 단위 페이지로 나누고 prev/next 네비게이션 추가.
+   원본 PPT 슬라이드(.docs-slides)는 페이지에서 제외되어 항상 맨 아래에 남는다. */
+(function(){
+  var body=document.querySelector('.docs-post__body'); if(!body) return;
+  var slides=body.querySelector('.docs-slides');
+  var kids=[].slice.call(body.children);
+  var perPage=3, inPage=0;
+  var pages=[], cur=document.createElement('div'); cur.className='docs-page';
+  kids.forEach(function(n){
+    if(n===slides) return;
+    if(n.tagName==='H2'){ if(inPage>=perPage && cur.childNodes.length){ pages.push(cur); cur=document.createElement('div'); cur.className='docs-page'; inPage=0; } inPage++; }
+    cur.appendChild(n);
+  });
+  if(cur.childNodes.length) pages.push(cur);
+  if(pages.length<2) return;
+  pages.forEach(function(p){ body.insertBefore(p, slides||null); });
+  var nav=document.createElement('div'); nav.className='docs-pagenav';
+  var prev=document.createElement('button'); prev.className='docs-pagebtn'; prev.type='button'; prev.textContent='← 이전';
+  var ctr=document.createElement('span'); ctr.className='docs-pagecounter';
+  var next=document.createElement('button'); next.className='docs-pagebtn'; next.type='button'; next.textContent='다음 →';
+  nav.appendChild(prev); nav.appendChild(ctr); nav.appendChild(next);
+  body.insertBefore(nav, slides||null);
+  var idx=0;
+  function show(i){ idx=Math.max(0,Math.min(pages.length-1,i)); pages.forEach(function(p,k){p.hidden=(k!==idx);}); ctr.textContent=(idx+1)+' / '+pages.length; prev.disabled=idx===0; next.disabled=idx===pages.length-1; }
+  function go(i){ show(i); var h=document.querySelector('.docs-post__header'); if(h) h.scrollIntoView({behavior:'smooth',block:'start'}); }
+  prev.addEventListener('click',function(){go(idx-1);});
+  next.addEventListener('click',function(){go(idx+1);});
+  show(0);
+})();
+</script>
+
+</body>
+</html>
